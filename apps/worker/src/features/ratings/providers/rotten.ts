@@ -1,9 +1,57 @@
-class RottentTomatoesProvider {
-    constructor() {}
+import puppeteer from "puppeteer";
 
-    async getMovie(movieName: string) {}
-    async getScore(movieId: string) {}
-    async getAudienceScore(movieId: string) {}
-}
+export const getRottenTomatoesScores = async (name: string) => {
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
 
-export default new RottentTomatoesProvider();
+    try {
+        const searchUrl = `https://www.rottentomatoes.com/search?search=${encodeURIComponent(
+            name
+        )}`;
+        await page.goto(searchUrl, { waitUntil: "domcontentloaded" });
+
+        const mediaRowSelector =
+            "#search-results search-page-result:nth-child(2) search-page-media-row";
+        await page.waitForSelector(mediaRowSelector, { timeout: 10000 });
+
+        const movieUrl = await page.$eval(`${mediaRowSelector} a`, (el) =>
+            el.getAttribute("href")
+        );
+
+        if (!movieUrl)
+            throw new Error(
+                "Aucun lien de film trouvé dans le premier résultat"
+            );
+
+        const fullMovieUrl = `${movieUrl}`;
+        console.log(`🔗 Redirection vers : ${fullMovieUrl}`);
+
+        await page.goto(movieUrl, { waitUntil: "domcontentloaded" });
+
+        const criticsSelector =
+            "#modules-wrap > div.media-scorecard.no-border > media-scorecard > rt-text:nth-child(3)";
+        const audienceSelector =
+            "#modules-wrap > div.media-scorecard.no-border > media-scorecard > rt-text:nth-child(7)";
+        await page.waitForSelector(criticsSelector, { timeout: 10000 });
+
+        const criticsRatings = await page.$eval(
+            criticsSelector,
+            (el) => el.textContent?.trim() || "N/A"
+        );
+        const audienceRatings = await page.$eval(
+            audienceSelector,
+            (el) => el.textContent?.trim() || "N/A"
+        );
+
+        return {
+            name,
+            url: fullMovieUrl,
+            criticsRatings,
+            audienceRatings,
+        };
+    } catch (error) {
+        if (error instanceof Error) console.error("❌ Erreur :", error.message);
+    } finally {
+        await browser.close();
+    }
+};

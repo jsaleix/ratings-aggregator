@@ -1,2 +1,7 @@
 .env
 node_modules
+
+# Prisma related
+/out
+/generated/prisma
+/generated
