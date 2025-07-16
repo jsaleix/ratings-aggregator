@@ -1,6 +1,5 @@
 import { Job, Queue } from "bullmq";
-import { movieService, ratingService } from "..";
-import { ratingWorker } from "../workers";
+import { movieService, ratingQueue } from "..";
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 
 const movieJobsTypeValues = {
@@ -22,8 +21,6 @@ type MovieJob = {
         name?: string;
     };
 };
-
-const ratingQueue = new Queue(QUEUES.rating, { connection: RedisMqConnection });
 
 export const movieHandler = async (job: Job<MovieJob>) => {
     const { type, payload } = job.data;
@@ -54,36 +51,7 @@ export const movieHandler = async (job: Job<MovieJob>) => {
                 throw new Error(
                     `Missing movieId from add-movie-with-ratings:id`
                 );
-            res = await movieService
-                .addMovieById(payload.movieId)
-                .then(async (movie) => {
-                    await ratingQueue.addBulk([
-                        {
-                            name: `set-rating:rotten:${movie.id}`,
-                            data: {
-                                type: "set-rating:rotten",
-                                payload: {
-                                    movieId: movie.id,
-                                    name: movie.title,
-                                },
-                            },
-                        },
-                        {
-                            name: `set-rating:imdb:${movie.id}`,
-                            data: {
-                                type: "set-rating:imdb",
-                                payload: { movieId: movie.id },
-                            },
-                        },
-                        {
-                            name: `set-rating:letterboxd:${movie.id}`,
-                            data: {
-                                type: "set-rating:letterboxd",
-                                payload: { movieId: movie.id },
-                            },
-                        },
-                    ]);
-                });
+            movieService.addMovieById(payload.movieId).then(gatherRatings);
             break;
 
         case movieJobsTypeValues["add-movie-with-ratings:name"]:
@@ -91,7 +59,36 @@ export const movieHandler = async (job: Job<MovieJob>) => {
                 throw new Error(
                     `Missing name from add-movie-with-ratings:name`
                 );
-            res = await movieService.addMovieByName(payload.name);
+            movieService.addMovieByName(payload.name).then(gatherRatings);
             break;
     }
 };
+
+async function gatherRatings(movie: any) {
+    await ratingQueue.addBulk([
+        {
+            name: `set-rating:rotten:${movie.id}`,
+            data: {
+                type: "set-rating:rotten",
+                payload: {
+                    movieId: movie.id,
+                    name: movie.title,
+                },
+            },
+        },
+        {
+            name: `set-rating:imdb:${movie.id}`,
+            data: {
+                type: "set-rating:imdb",
+                payload: { movieId: movie.id },
+            },
+        },
+        {
+            name: `set-rating:letterboxd:${movie.id}`,
+            data: {
+                type: "set-rating:letterboxd",
+                payload: { movieId: movie.id },
+            },
+        },
+    ]);
+}
