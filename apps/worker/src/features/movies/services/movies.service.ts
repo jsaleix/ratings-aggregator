@@ -30,8 +30,7 @@ class MovieService {
         console.log(`🟦 Adding movie ${movieName}`);
         const movieResponse = await this.tmdbService.findMovie(movieName);
         if (!movieResponse || movieResponse.length === 0) {
-            console.log(`🟥 Movie ${movieName} not found`);
-            return;
+            throw new Error(`🟥 Movie ${movieName} not found`);
         }
         const movieData = this.tmdbService.mapApiResponseToModel(
             movieResponse[0]
@@ -41,6 +40,20 @@ class MovieService {
         });
 
         return createdMovie;
+    }
+
+    async getMovieById(movieId: string) {
+        const movie = await this.db.movie.findUnique({
+            where: {
+                id: movieId,
+            },
+        });
+
+        if (!movie) {
+            throw new Error(`Movie with ID ${movieId} not found`);
+        }
+
+        return movie;
     }
 }
 

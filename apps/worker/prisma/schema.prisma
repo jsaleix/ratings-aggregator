@@ -18,7 +18,7 @@ model Movie {
   id           String         @id @default(uuid())
   title        String
   createdAt    DateTime       @default(now()) @db.Timestamp(6)
-  tmdbId       Int         @unique
+  tmdbId       Int            @unique
   tagLine      String
   summary      String
   runtime      Int
@@ -36,7 +36,7 @@ model Movie_Rating {
   ratingSource String
   value        String
   ratingUnit   RatingUnit
-  extra        String
+  extra        String     @default("")
 }
 
 enum RatingUnit {

@@ -1,12 +1,13 @@
-import { Job } from "bullmq";
-
-import MovieService from "../../features/movies/services/movies.service";
-import TMDBService from "../../features/movies/services/tmdb.service";
-import { db } from "../../core/db";
+import { Job, Queue } from "bullmq";
+import { movieService, ratingService } from "..";
+import { ratingWorker } from "../workers";
+import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 
 const movieJobsTypeValues = {
     "add-movie:id": "add-movie:id",
     "add-movie:name": "add-movie:name",
+    "add-movie-with-ratings:id": "add-movie-with-ratings:id",
+    "add-movie-with-ratings:name": "add-movie-with-ratings:name",
 } as const;
 
 const movieJobsTypeArr = Object.values(movieJobsTypeValues);
@@ -22,8 +23,7 @@ type MovieJob = {
     };
 };
 
-const tmdbService = new TMDBService();
-const movieService = new MovieService(db, tmdbService);
+const ratingQueue = new Queue(QUEUES.rating, { connection: RedisMqConnection });
 
 export const movieHandler = async (job: Job<MovieJob>) => {
     const { type, payload } = job.data;
@@ -41,14 +41,57 @@ export const movieHandler = async (job: Job<MovieJob>) => {
             if (!payload.movieId)
                 throw new Error(`Missing movieId from add-movie:id`);
             res = await movieService.addMovieById(payload.movieId);
-            job.returnvalue = res;
-
             break;
+
         case movieJobsTypeValues["add-movie:name"]:
             if (!payload.name)
                 throw new Error(`Missing name from add-movie:name`);
             res = await movieService.addMovieByName(payload.name);
-            job.returnvalue = res;
+            break;
+
+        case movieJobsTypeValues["add-movie-with-ratings:id"]:
+            if (!payload.movieId)
+                throw new Error(
+                    `Missing movieId from add-movie-with-ratings:id`
+                );
+            res = await movieService
+                .addMovieById(payload.movieId)
+                .then(async (movie) => {
+                    await ratingQueue.addBulk([
+                        {
+                            name: `set-rating:rotten:${movie.id}`,
+                            data: {
+                                type: "set-rating:rotten",
+                                payload: {
+                                    movieId: movie.id,
+                                    name: movie.title,
+                                },
+                            },
+                        },
+                        {
+                            name: `set-rating:imdb:${movie.id}`,
+                            data: {
+                                type: "set-rating:imdb",
+                                payload: { movieId: movie.id },
+                            },
+                        },
+                        {
+                            name: `set-rating:letterboxd:${movie.id}`,
+                            data: {
+                                type: "set-rating:letterboxd",
+                                payload: { movieId: movie.id },
+                            },
+                        },
+                    ]);
+                });
+            break;
+
+        case movieJobsTypeValues["add-movie-with-ratings:name"]:
+            if (!payload.name)
+                throw new Error(
+                    `Missing name from add-movie-with-ratings:name`
+                );
+            res = await movieService.addMovieByName(payload.name);
             break;
     }
 };

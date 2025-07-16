@@ -1,4 +1,5 @@
 import { Job } from "bullmq";
+import { movieService, ratingService } from "..";
 
 const ratingJobsTypeValues = {
     "set-rating:rotten": "set-rating:rotten",
@@ -16,7 +17,6 @@ type RatingJob = {
     type: RatingJobType;
     payload: {
         movieId: string;
-        name: string;
     };
 };
 
@@ -27,6 +27,11 @@ export const ratingHandler = async (job: Job<RatingJob>) => {
         throw new Error(`❌ Unknown job type: ${type}`);
     }
 
+    const { movieId } = job.data.payload;
+
+    const movie = await movieService.getMovieById(movieId);
+    let res: any = undefined;
+
     switch (type) {
         case ratingJobsTypeValues["set-rating:allocine"]:
             break;
@@ -35,6 +40,7 @@ export const ratingHandler = async (job: Job<RatingJob>) => {
         case ratingJobsTypeValues["set-rating:letterboxd"]:
             break;
         case ratingJobsTypeValues["set-rating:rotten"]:
+            res = await ratingService.setRottenRatings(movieId, movie.title);
             break;
     }
 
