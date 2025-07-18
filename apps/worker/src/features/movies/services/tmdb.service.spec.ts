@@ -26,7 +26,7 @@ describe("TMDBService", () => {
                 json: async () => mockMovie,
             });
             const movieId = 550; // Example movie ID
-            const movie = await tmdbService.getMovie(movieId);
+            const movie = await tmdbService.getMovieById(movieId);
             expect(movie).toHaveProperty("id", movieId);
             expect(movie).toHaveProperty("title");
         });
@@ -35,7 +35,7 @@ describe("TMDBService", () => {
             (global.fetch as jest.Mock).mockResolvedValue({
                 ok: false,
             });
-            await expect(tmdbService.getMovie(550)).rejects.toThrow();
+            await expect(tmdbService.getMovieById(550)).rejects.toThrow();
         });
     });
 

@@ -7,7 +7,7 @@ const authHeaders = { Authorization: `Bearer ${TMDB_TOKEN}` };
 class TMDBService {
     constructor() {}
 
-    async getMovie(movieId: number): Promise<TMDBGetMovieType> {
+    async getMovieById(movieId: number): Promise<TMDBGetMovieType> {
         const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`;
         const res = await fetch(url, {
             method: "GET",

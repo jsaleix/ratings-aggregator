@@ -37,7 +37,7 @@ export const movieHandler = async (job: Job<MovieJob>) => {
         case movieJobsTypeValues["add-movie:id"]:
             if (!payload.movieId)
                 throw new Error(`Missing movieId from add-movie:id`);
-            res = await movieService.addMovieById(payload.movieId);
+            res = await movieService.addMovieByTMDBId(payload.movieId);
             break;
 
         case movieJobsTypeValues["add-movie:name"]:
@@ -51,7 +51,7 @@ export const movieHandler = async (job: Job<MovieJob>) => {
                 throw new Error(
                     `Missing movieId from add-movie-with-ratings:id`
                 );
-            movieService.addMovieById(payload.movieId).then(gatherRatings);
+            movieService.addMovieByTMDBId(payload.movieId).then(gatherRatings);
             break;
 
         case movieJobsTypeValues["add-movie-with-ratings:name"]:

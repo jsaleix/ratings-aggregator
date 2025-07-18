@@ -28,11 +28,11 @@ describe("MovieService", () => {
         movieService = new MovieService(prismaMock, tmdbService);
     });
 
-    describe("addMovieById", () => {
+    describe("addMovieByTMDBId", () => {
         it("the movies already exists so it should return it", async () => {
             prismaMock.movie.findFirst.mockResolvedValue(existingMovie);
             const movieId = existingMovie.tmdbId;
-            const movieResponse = await movieService.addMovieById(movieId);
+            const movieResponse = await movieService.addMovieByTMDBId(movieId);
             expect(movieResponse).toEqual(existingMovie);
         });
 
@@ -46,7 +46,7 @@ describe("MovieService", () => {
                 runtime: 150,
             };
 
-            tmdbService.getMovie = jest
+            tmdbService.getMovieById = jest
                 .fn()
                 .mockResolvedValue(mockMovieResponse);
             tmdbService.mapApiResponseToModel = jest.fn().mockReturnValue({
@@ -68,7 +68,7 @@ describe("MovieService", () => {
                 createdAt: new Date(),
             });
 
-            const result = await movieService.addMovieById(tmdbId);
+            const result = await movieService.addMovieByTMDBId(tmdbId);
             expect(prismaMock.movie.create).toHaveBeenCalledWith({
                 data: {
                     tmdbId: tmdbId,
@@ -142,11 +142,10 @@ describe("MovieService", () => {
             expect(result).toHaveProperty("title", movieName);
         });
 
-        it("should return undefined if no movies found", async () => {
+        it("should throw an error if no movies found", async () => {
             const movieName = "Nonexistent Movie";
             tmdbService.findMovie = jest.fn().mockResolvedValue([]);
-            const result = await movieService.addMovieByName(movieName);
-            expect(result).toBeUndefined();
+            await expect(movieService.addMovieByName(movieName)).rejects.toThrow();
         });
     });
 });

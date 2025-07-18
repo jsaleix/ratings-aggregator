@@ -10,14 +10,10 @@ class MovieService {
         this.db = db;
     }
 
-    async addMovieById(movieId: number) {
-        const movieExists = await this.db.movie.findFirst({
-            where: {
-                tmdbId: movieId,
-            },
-        });
+    async addMovieByTMDBId(tmdbId: number) {
+        const movieExists = await this.getMovieByTMDBId(tmdbId);
         if (movieExists) return movieExists;
-        const movieResponse = await this.tmdbService.getMovie(movieId);
+        const movieResponse = await this.tmdbService.getMovieById(tmdbId);
         const movieData = this.tmdbService.mapApiResponseToModel(movieResponse);
         const createdMovie = await this.db.movie.create({
             data: movieData,
@@ -26,6 +22,7 @@ class MovieService {
         return createdMovie;
     }
 
+    // Useless actually
     async addMovieByName(movieName: string) {
         console.log(`🟦 Adding movie ${movieName}`);
         const movieResponse = await this.tmdbService.findMovie(movieName);
@@ -54,6 +51,16 @@ class MovieService {
         }
 
         return movie;
+    }
+
+    async getMovieByTMDBId(tmdbId: number) {
+        const movie = await this.db.movie.findFirst({
+            where: {
+                tmdbId,
+            },
+        });
+
+        return movie ? movie : null;
     }
 }
 
