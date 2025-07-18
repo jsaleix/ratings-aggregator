@@ -2,7 +2,7 @@
 node_modules
 
 # Prisma related
-/out
+/out/*
 /generated/prisma
 /generated
 /coverage/*
