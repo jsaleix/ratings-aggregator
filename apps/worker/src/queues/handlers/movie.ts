@@ -3,10 +3,8 @@ import MovieService from "../../features/movies/services/movies.service";
 import { MovieType } from "../../features/movies/types/db";
 
 const movieJobsTypeValues = {
-    addMovieById: "add-movie:id",
-    addMovieByName: "add-movie:name",
-    addMovieWithRatingsById: "add-movie-with-ratings:id",
-    addMovieWithRatingsByName: "add-movie-with-ratings:name",
+    addMovieByTMDBId: "add-movie:tmdbId",
+    addMovieWithRatingsByTMDBId: "add-movie-with-ratings:tmdbId",
 } as const;
 
 const movieJobsTypeArr = Object.values(movieJobsTypeValues);
@@ -17,8 +15,7 @@ type MovieJobType =
 type MovieJob = {
     type: MovieJobType;
     payload: {
-        tmdbId?: number;
-        name?: string;
+        tmdbId: number;
     };
 };
 
@@ -40,25 +37,12 @@ class MovieHandler {
         let res: any = null;
 
         switch (type) {
-            case movieJobsTypeValues.addMovieById:
-                if (!payload.tmdbId)
-                    throw new Error(`Missing tmdbId from add-movie:id`);
+            case movieJobsTypeValues.addMovieByTMDBId:
                 res = await this.movieService.addMovieByTMDBId(payload.tmdbId);
                 job.updateProgress(100);
                 break;
 
-            case movieJobsTypeValues.addMovieByName:
-                if (!payload.name)
-                    throw new Error(`Missing name from add-movie:name`);
-                res = await this.movieService.addMovieByName(payload.name);
-                job.updateProgress(100);
-                break;
-
-            case movieJobsTypeValues.addMovieWithRatingsById:
-                if (!payload.tmdbId)
-                    throw new Error(
-                        `Missing tmdbId from add-movie-with-ratings:id`
-                    );
+            case movieJobsTypeValues.addMovieWithRatingsByTMDBId:
                 const movie = await this.movieService.addMovieByTMDBId(
                     payload.tmdbId
                 );
@@ -66,16 +50,6 @@ class MovieHandler {
 
                 await this.gatherRatings(movie);
                 job.updateProgress(100);
-                break;
-
-            case movieJobsTypeValues.addMovieWithRatingsByName:
-                if (!payload.name)
-                    throw new Error(
-                        `Missing name from add-movie-with-ratings:name`
-                    );
-                await this.movieService
-                    .addMovieByName(payload.name)
-                    .then(this.gatherRatings);
                 break;
         }
     }
