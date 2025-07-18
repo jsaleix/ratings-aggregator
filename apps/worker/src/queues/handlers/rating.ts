@@ -1,6 +1,7 @@
 import { Job } from "bullmq";
 import MovieService from "../../features/movies/services/movies.service";
 import RatingService from "../../features/ratings/services/rating.service";
+import { MovieRatingsStatus } from "../../config/movies";
 
 const ratingJobsTypeValues = {
     "set-rating:rotten": "set-rating:rotten",
@@ -40,6 +41,9 @@ class RatingHandler {
         if (!movie) {
             throw new Error(`Movie with ID ${movieId} not found`);
         }
+
+        console.log(`Processing job [${job.id}] of type "${type}"`);
+
         let res: any = undefined;
 
         switch (type) {
@@ -57,7 +61,14 @@ class RatingHandler {
                 break;
         }
 
-        console.log(`Processing job [${job.id}] of type "${type}"`);
+        // I put it here because the queue.on('completed') does not exist apparently
+        if (movie.ratings_status === MovieRatingsStatus.pending) {
+            await this.movieService.updateMovieRatingsStatus(
+                movieId,
+                MovieRatingsStatus.completed
+            );
+        }
+        return res;
     }
 }
 

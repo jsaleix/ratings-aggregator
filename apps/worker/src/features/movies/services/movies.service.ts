@@ -1,4 +1,5 @@
 import { PrismaClient } from "../../../../generated/prisma";
+import { MovieRatingsStatusType } from "../../../config/movies";
 import { MovieType } from "../types/db";
 import TMDBService from "./tmdb.service";
 
@@ -21,6 +22,18 @@ class MovieService {
         });
 
         return createdMovie;
+    }
+
+    async updateMovieRatingsStatus(
+        movieId: string,
+        ratingsStatus: MovieRatingsStatusType
+    ) {
+        const updatedMovie = await this.db.movie.update({
+            where: { id: movieId },
+            data: { ratings_status: ratingsStatus },
+        });
+
+        return updatedMovie;
     }
 
     // Useless actually
