@@ -1,12 +1,12 @@
 import { Job, Queue } from "bullmq";
-import { movieService, ratingQueue } from "..";
-import { QUEUES, RedisMqConnection } from "../../config/bullmq";
+import MovieService from "../../features/movies/services/movies.service";
+import { MovieType } from "../../features/movies/types/db";
 
 const movieJobsTypeValues = {
-    "add-movie:id": "add-movie:id",
-    "add-movie:name": "add-movie:name",
-    "add-movie-with-ratings:id": "add-movie-with-ratings:id",
-    "add-movie-with-ratings:name": "add-movie-with-ratings:name",
+    addMovieById: "add-movie:id",
+    addMovieByName: "add-movie:name",
+    addMovieWithRatingsById: "add-movie-with-ratings:id",
+    addMovieWithRatingsByName: "add-movie-with-ratings:name",
 } as const;
 
 const movieJobsTypeArr = Object.values(movieJobsTypeValues);
@@ -17,78 +17,97 @@ type MovieJobType =
 type MovieJob = {
     type: MovieJobType;
     payload: {
-        movieId?: number;
+        tmdbId?: number;
         name?: string;
     };
 };
 
-export const movieHandler = async (job: Job<MovieJob>) => {
-    const { type, payload } = job.data;
+class MovieHandler {
+    constructor(
+        private ratingQueue: Queue,
+        private movieService: MovieService
+    ) {}
 
-    if (!movieJobsTypeArr.includes(type)) {
-        throw new Error(`❌ Unknown job type: ${type}`);
+    async handle(job: Job<MovieJob>) {
+        const { type, payload } = job.data;
+
+        if (!movieJobsTypeArr.includes(type)) {
+            throw new Error(`❌ Unknown job type: ${type}`);
+        }
+
+        console.log(`Processing job [${job.id}] of type "${type}"`);
+
+        let res: any = null;
+
+        switch (type) {
+            case movieJobsTypeValues.addMovieById:
+                if (!payload.tmdbId)
+                    throw new Error(`Missing tmdbId from add-movie:id`);
+                res = await this.movieService.addMovieByTMDBId(payload.tmdbId);
+                job.updateProgress(100);
+                break;
+
+            case movieJobsTypeValues.addMovieByName:
+                if (!payload.name)
+                    throw new Error(`Missing name from add-movie:name`);
+                res = await this.movieService.addMovieByName(payload.name);
+                job.updateProgress(100);
+                break;
+
+            case movieJobsTypeValues.addMovieWithRatingsById:
+                if (!payload.tmdbId)
+                    throw new Error(
+                        `Missing tmdbId from add-movie-with-ratings:id`
+                    );
+                const movie = await this.movieService.addMovieByTMDBId(
+                    payload.tmdbId
+                );
+                job.updateProgress(50);
+
+                await this.gatherRatings(movie);
+                job.updateProgress(100);
+                break;
+
+            case movieJobsTypeValues.addMovieWithRatingsByName:
+                if (!payload.name)
+                    throw new Error(
+                        `Missing name from add-movie-with-ratings:name`
+                    );
+                await this.movieService
+                    .addMovieByName(payload.name)
+                    .then(this.gatherRatings);
+                break;
+        }
     }
 
-    console.log(`Processing job [${job.id}] of type "${type}"`);
-
-    let res: any = null;
-
-    switch (type) {
-        case movieJobsTypeValues["add-movie:id"]:
-            if (!payload.movieId)
-                throw new Error(`Missing movieId from add-movie:id`);
-            res = await movieService.addMovieByTMDBId(payload.movieId);
-            break;
-
-        case movieJobsTypeValues["add-movie:name"]:
-            if (!payload.name)
-                throw new Error(`Missing name from add-movie:name`);
-            res = await movieService.addMovieByName(payload.name);
-            break;
-
-        case movieJobsTypeValues["add-movie-with-ratings:id"]:
-            if (!payload.movieId)
-                throw new Error(
-                    `Missing movieId from add-movie-with-ratings:id`
-                );
-            movieService.addMovieByTMDBId(payload.movieId).then(gatherRatings);
-            break;
-
-        case movieJobsTypeValues["add-movie-with-ratings:name"]:
-            if (!payload.name)
-                throw new Error(
-                    `Missing name from add-movie-with-ratings:name`
-                );
-            movieService.addMovieByName(payload.name).then(gatherRatings);
-            break;
-    }
-};
-
-async function gatherRatings(movie: any) {
-    await ratingQueue.addBulk([
-        {
-            name: `set-rating:rotten:${movie.id}`,
-            data: {
-                type: "set-rating:rotten",
-                payload: {
-                    movieId: movie.id,
-                    name: movie.title,
+    async gatherRatings(movie: MovieType) {
+        await this.ratingQueue.addBulk([
+            {
+                name: `set-rating:rotten:${movie.id}`,
+                data: {
+                    type: "set-rating:rotten",
+                    payload: {
+                        movieId: movie.id,
+                        name: movie.title,
+                    },
                 },
             },
-        },
-        {
-            name: `set-rating:imdb:${movie.id}`,
-            data: {
-                type: "set-rating:imdb",
-                payload: { movieId: movie.id },
+            {
+                name: `set-rating:imdb:${movie.id}`,
+                data: {
+                    type: "set-rating:imdb",
+                    payload: { movieId: movie.id },
+                },
             },
-        },
-        {
-            name: `set-rating:letterboxd:${movie.id}`,
-            data: {
-                type: "set-rating:letterboxd",
-                payload: { movieId: movie.id },
+            {
+                name: `set-rating:letterboxd:${movie.id}`,
+                data: {
+                    type: "set-rating:letterboxd",
+                    payload: { movieId: movie.id },
+                },
             },
-        },
-    ]);
+        ]);
+    }
 }
+
+export default MovieHandler;

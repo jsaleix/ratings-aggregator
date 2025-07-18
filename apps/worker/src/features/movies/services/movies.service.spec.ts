@@ -36,6 +36,18 @@ describe("MovieService", () => {
             expect(movieResponse).toEqual(existingMovie);
         });
 
+        it("should throw an error if TMDB ID is not provided (because the movie doesn't exist then)", async () => {
+            await expect(
+                movieService.addMovieByTMDBId(undefined as any)
+            ).rejects.toThrow();
+        });
+
+        it("should return null if the movie does not exist", async () => {
+            prismaMock.movie.findFirst.mockResolvedValue(null);
+            const movieResponse = await movieService.getMovieByTMDBId(99999);
+            expect(movieResponse).toBeNull();
+        });
+
         it("should add a new movie by ID", async () => {
             const tmdbId = 67890;
             const mockMovieResponse = {
@@ -145,7 +157,9 @@ describe("MovieService", () => {
         it("should throw an error if no movies found", async () => {
             const movieName = "Nonexistent Movie";
             tmdbService.findMovie = jest.fn().mockResolvedValue([]);
-            await expect(movieService.addMovieByName(movieName)).rejects.toThrow();
+            await expect(
+                movieService.addMovieByName(movieName)
+            ).rejects.toThrow();
         });
     });
 });

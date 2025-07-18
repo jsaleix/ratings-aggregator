@@ -1,4 +1,5 @@
 import { PrismaClient } from "../../../../generated/prisma";
+import { MovieType } from "../types/db";
 import TMDBService from "./tmdb.service";
 
 class MovieService {
@@ -10,7 +11,7 @@ class MovieService {
         this.db = db;
     }
 
-    async addMovieByTMDBId(tmdbId: number) {
+    async addMovieByTMDBId(tmdbId: number): Promise<MovieType> {
         const movieExists = await this.getMovieByTMDBId(tmdbId);
         if (movieExists) return movieExists;
         const movieResponse = await this.tmdbService.getMovieById(tmdbId);
@@ -23,7 +24,7 @@ class MovieService {
     }
 
     // Useless actually
-    async addMovieByName(movieName: string) {
+    async addMovieByName(movieName: string): Promise<MovieType> {
         console.log(`🟦 Adding movie ${movieName}`);
         const movieResponse = await this.tmdbService.findMovie(movieName);
         if (!movieResponse || movieResponse.length === 0) {
@@ -39,24 +40,20 @@ class MovieService {
         return createdMovie;
     }
 
-    async getMovieById(movieId: string) {
+    async getMovieById(movieId: string): Promise<MovieType | null> {
         const movie = await this.db.movie.findUnique({
             where: {
                 id: movieId,
             },
         });
 
-        if (!movie) {
-            throw new Error(`Movie with ID ${movieId} not found`);
-        }
-
-        return movie;
+        return movie ? movie : null;
     }
 
-    async getMovieByTMDBId(tmdbId: number) {
+    async getMovieByTMDBId(tmdbId: number): Promise<MovieType | null> {
         const movie = await this.db.movie.findFirst({
             where: {
-                tmdbId,
+                tmdbId: +tmdbId,
             },
         });
 

@@ -1,5 +1,6 @@
 import { Job } from "bullmq";
-import { movieService, ratingService } from "..";
+import MovieService from "../../features/movies/services/movies.service";
+import RatingService from "../../features/ratings/services/rating.service";
 
 const ratingJobsTypeValues = {
     "set-rating:rotten": "set-rating:rotten",
@@ -20,29 +21,44 @@ type RatingJob = {
     };
 };
 
-export const ratingHandler = async (job: Job<RatingJob>) => {
-    const { type, payload: _ } = job.data;
+class RatingHandler {
+    constructor(
+        private movieService: MovieService,
+        private ratingService: RatingService
+    ) {}
 
-    if (!ratingJobsTypeArr.includes(type)) {
-        throw new Error(`❌ Unknown job type: ${type}`);
+    async handle(job: Job<RatingJob>) {
+        const { type, payload: _ } = job.data;
+
+        if (!ratingJobsTypeArr.includes(type)) {
+            throw new Error(`❌ Unknown job type: ${type}`);
+        }
+
+        const { movieId } = job.data.payload;
+
+        const movie = await this.movieService.getMovieById(movieId);
+        if (!movie) {
+            throw new Error(`Movie with ID ${movieId} not found`);
+        }
+        let res: any = undefined;
+
+        switch (type) {
+            case ratingJobsTypeValues["set-rating:allocine"]:
+                break;
+            case ratingJobsTypeValues["set-rating:imdb"]:
+                break;
+            case ratingJobsTypeValues["set-rating:letterboxd"]:
+                break;
+            case ratingJobsTypeValues["set-rating:rotten"]:
+                res = await this.ratingService.setRottenRatings(
+                    movieId,
+                    movie.title
+                );
+                break;
+        }
+
+        console.log(`Processing job [${job.id}] of type "${type}"`);
     }
+}
 
-    const { movieId } = job.data.payload;
-
-    const movie = await movieService.getMovieById(movieId);
-    let res: any = undefined;
-
-    switch (type) {
-        case ratingJobsTypeValues["set-rating:allocine"]:
-            break;
-        case ratingJobsTypeValues["set-rating:imdb"]:
-            break;
-        case ratingJobsTypeValues["set-rating:letterboxd"]:
-            break;
-        case ratingJobsTypeValues["set-rating:rotten"]:
-            res = await ratingService.setRottenRatings(movieId, movie.title);
-            break;
-    }
-
-    console.log(`Processing job [${job.id}] of type "${type}"`);
-};
+export default RatingHandler;

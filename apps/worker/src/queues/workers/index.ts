@@ -1,21 +1,45 @@
-import { Worker } from "bullmq";
+import { Queue, Worker } from "bullmq";
 
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
+import { db } from "../../core/db";
 
-import { movieHandler } from "../handlers/movie";
-import { ratingHandler } from "../handlers/rating";
+import MovieService from "../../features/movies/services/movies.service";
+import TMDBService from "../../features/movies/services/tmdb.service";
+import RatingService from "../../features/ratings/services/rating.service";
 
-export const addMovieWorker = new Worker(QUEUES.movie, movieHandler, {
+import MovieHandler from "../handlers/movie";
+import RatingHandler from "../handlers/rating";
+
+const ratingQueue = new Queue(QUEUES.rating, {
     connection: RedisMqConnection,
-    concurrency: 1,
-    autorun: false,
 });
 
-export const ratingWorker = new Worker(QUEUES.rating, ratingHandler, {
-    connection: RedisMqConnection,
-    concurrency: 1,
-    autorun: false,
-});
+const tmdbService = new TMDBService();
+const movieService = new MovieService(db, tmdbService);
+const ratingService = new RatingService(db);
+
+const movieHandler = new MovieHandler(ratingQueue, movieService);
+const ratingHandler = new RatingHandler(movieService, ratingService);
+
+export const movieWorker = new Worker(
+    QUEUES.movie,
+    movieHandler.handle.bind(movieHandler),
+    {
+        connection: RedisMqConnection,
+        concurrency: 1,
+        autorun: false,
+    }
+);
+
+export const ratingWorker = new Worker(
+    QUEUES.rating,
+    ratingHandler.handle.bind(ratingHandler),
+    {
+        connection: RedisMqConnection,
+        concurrency: 1,
+        autorun: false,
+    }
+);
 
 export const summaryWorker = new Worker(
     QUEUES.summary,
