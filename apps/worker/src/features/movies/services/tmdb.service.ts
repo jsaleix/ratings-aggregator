@@ -1,5 +1,6 @@
 import { Prisma } from "../../../../generated/prisma";
 import { TMDB_TOKEN } from "../../../config/tmdb";
+import { MovieCreateInput } from "../types/db";
 import { TMDBGetMovieType } from "../types/tmdb";
 
 const authHeaders = { Authorization: `Bearer ${TMDB_TOKEN}` };
@@ -44,9 +45,7 @@ class TMDBService {
         return res.results as TMDBGetMovieType[];
     }
 
-    mapApiResponseToModel(
-        tmdbMovie: TMDBGetMovieType
-    ): Prisma.MovieCreateInput {
+    mapApiResponseToModel(tmdbMovie: TMDBGetMovieType): MovieCreateInput {
         let {
             id: tmdbId,
             title,
@@ -78,7 +77,7 @@ class TMDBService {
             poster_path,
             release_date: new Date(release_date),
             runtime: runtime ? +runtime : -1,
-        } satisfies Prisma.MovieCreateInput;
+        } satisfies MovieCreateInput;
     }
 }
 

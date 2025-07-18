@@ -15,34 +15,41 @@ datasource db {
 }
 
 model Movie {
-  id           String         @id @default(uuid())
-  title        String
-  createdAt    DateTime       @default(now()) @db.Timestamp(6)
-  tmdbId       Int            @unique
-  tagLine      String
-  summary      String
-  runtime      Int
-  release_date DateTime
-  year         Int
-  budget       Float
-  poster_path  String
-  Movie_Rating Movie_Rating[]
+  id             String         @id @default(uuid())
+  title          String
+  created_at     DateTime       @default(now()) @db.Timestamp(6)
+  tmdbId         Int            @unique
+  tagLine        String
+  summary        String
+  runtime        Int
+  release_date   DateTime
+  year           Int
+  budget         Float
+  poster_path    String
+  ratings_status RatingsStatus  @default(pending)
+  Movie_Rating   Movie_Rating[]
 }
 
 model Movie_Rating {
-  id           String     @id @default(uuid())
-  movieId      String
-  Movie        Movie      @relation(fields: [movieId], references: [id])
-  ratingSource String
-  value        String
-  ratingUnit   RatingUnit
-  extra        String     @default("")
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id            String     @id @default(uuid())
+  movieId       String
+  Movie         Movie      @relation(fields: [movieId], references: [id])
+  rating_source String
+  value         String
+  rating_unit   RatingUnit
+  extra         String     @default("")
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
 }
 
 enum RatingUnit {
   points
   stars
   percentage
+}
+
+enum RatingsStatus {
+  pending
+  completed
+  failed
 }

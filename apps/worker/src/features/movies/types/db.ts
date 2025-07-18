@@ -10,7 +10,7 @@ const movieModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
     select: {
         id: true,
         title: true,
-        createdAt: true,
+        created_at: true,
         tmdbId: true,
         tagLine: true,
         summary: true,
@@ -26,3 +26,4 @@ export type MovieType = Prisma.MovieGetPayload<typeof movieModel>;
 export type MovieWithRatingsType = Prisma.MovieGetPayload<
     typeof movieWithPostsModel
 >;
+export type MovieCreateInput = Prisma.MovieCreateInput;

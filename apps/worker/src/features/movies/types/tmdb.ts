@@ -13,5 +13,5 @@ export type TMDBGetMovieType = {
     genre: Array<TMDBGenreType>;
     poster_path: string;
     release_date: string;
-    runtime?: string;
+    runtime?: number;
 };

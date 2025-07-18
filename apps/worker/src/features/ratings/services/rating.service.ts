@@ -23,7 +23,7 @@ class RatingService {
         const rottenRatingExists = await this.db.movie_Rating.findFirst({
             where: {
                 movieId,
-                ratingSource: RATING_SOURCERS.ROTTEN_TOMATOES,
+                rating_source: RATING_SOURCERS.ROTTEN_TOMATOES,
             },
         });
 
@@ -38,9 +38,9 @@ class RatingService {
             criticsRating = await this.db.movie_Rating.create({
                 data: {
                     movieId,
-                    ratingSource: RATING_SOURCERS.ROTTEN_TOMATOES,
+                    rating_source: RATING_SOURCERS.ROTTEN_TOMATOES,
                     value: criticsRatings,
-                    ratingUnit: RATING_UNITS.PERCENTAGE,
+                    rating_unit: RATING_UNITS.PERCENTAGE,
                 },
             });
         }
@@ -50,7 +50,7 @@ class RatingService {
             {
                 where: {
                     movieId,
-                    ratingSource: RATING_SOURCERS.ROTTEN_TOMATOES_AUDIENCE,
+                    rating_source: RATING_SOURCERS.ROTTEN_TOMATOES_AUDIENCE,
                 },
             }
         );
@@ -64,9 +64,9 @@ class RatingService {
             audienceRating = await this.db.movie_Rating.create({
                 data: {
                     movieId,
-                    ratingSource: RATING_SOURCERS.ROTTEN_TOMATOES_AUDIENCE,
+                    rating_source: RATING_SOURCERS.ROTTEN_TOMATOES_AUDIENCE,
                     value: audienceRatings,
-                    ratingUnit: RATING_UNITS.PERCENTAGE,
+                    rating_unit: RATING_UNITS.PERCENTAGE,
                 },
             });
         }

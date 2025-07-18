@@ -1,11 +1,14 @@
 -- CreateEnum
 CREATE TYPE "RatingUnit" AS ENUM ('points', 'stars', 'percentage');
 
+-- CreateEnum
+CREATE TYPE "RatingsStatus" AS ENUM ('pending', 'completed', 'failed');
+
 -- CreateTable
 CREATE TABLE "Movie" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "tmdbId" INTEGER NOT NULL,
     "tagLine" TEXT NOT NULL,
     "summary" TEXT NOT NULL,
@@ -14,6 +17,7 @@ CREATE TABLE "Movie" (
     "year" INTEGER NOT NULL,
     "budget" DOUBLE PRECISION NOT NULL,
     "poster_path" TEXT NOT NULL,
+    "ratings_status" "RatingsStatus" NOT NULL DEFAULT 'pending',
 
     CONSTRAINT "Movie_pkey" PRIMARY KEY ("id")
 );
@@ -22,12 +26,12 @@ CREATE TABLE "Movie" (
 CREATE TABLE "Movie_Rating" (
     "id" TEXT NOT NULL,
     "movieId" TEXT NOT NULL,
-    "ratingSource" TEXT NOT NULL,
+    "rating_source" TEXT NOT NULL,
     "value" TEXT NOT NULL,
-    "ratingUnit" "RatingUnit" NOT NULL,
+    "rating_unit" "RatingUnit" NOT NULL,
     "extra" TEXT NOT NULL DEFAULT '',
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Movie_Rating_pkey" PRIMARY KEY ("id")
 );

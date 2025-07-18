@@ -1,7 +1,9 @@
-import { Prisma } from "../../../../generated/prisma";
+import { MovieRatingsStatus } from "../../../config/movies";
 import { prismaMock } from "../../../tests/singleton";
 import MovieService from "./movies.service";
 import TMDBService from "./tmdb.service";
+import { MovieCreateInput, type MovieType } from "../types/db";
+import { TMDBGetMovieType } from "../types/tmdb";
 
 const existingMovie = {
     id: "1",
@@ -14,8 +16,9 @@ const existingMovie = {
     year: 2020,
     budget: 1000000,
     tagLine: "A test movie tagline",
-    createdAt: new Date(),
-} satisfies Prisma.MovieCreateInput;
+    created_at: new Date(),
+    ratings_status: MovieRatingsStatus.pending,
+} satisfies MovieCreateInput;
 
 describe("MovieService", () => {
     let tmdbService: TMDBService;
@@ -53,10 +56,13 @@ describe("MovieService", () => {
             const mockMovieResponse = {
                 id: tmdbId,
                 title: "New Movie",
+                original_title: "New Movie",
                 overview: "This is a new movie.",
+                genre: [],
                 release_date: "2021-01-01",
                 runtime: 150,
-            };
+                poster_path: "/path/to/poster.jpg",
+            } satisfies TMDBGetMovieType;
 
             tmdbService.getMovieById = jest
                 .fn()
@@ -71,14 +77,15 @@ describe("MovieService", () => {
                 year: 2021,
                 budget: 0,
                 tagLine: "",
-            });
+            } satisfies MovieCreateInput);
 
             prismaMock.movie.create.mockResolvedValue({
                 ...existingMovie,
                 title: mockMovieResponse.title,
                 id: "2",
-                createdAt: new Date(),
-            });
+                created_at: new Date(),
+                ratings_status: MovieRatingsStatus.pending,
+            } satisfies MovieCreateInput);
 
             const result = await movieService.addMovieByTMDBId(tmdbId);
             expect(prismaMock.movie.create).toHaveBeenCalledWith({
@@ -132,7 +139,7 @@ describe("MovieService", () => {
                 ...existingMovie,
                 title: movieName,
                 id: "3",
-                createdAt: new Date(),
+                created_at: new Date(),
             });
 
             const result = await movieService.addMovieByName(movieName);
