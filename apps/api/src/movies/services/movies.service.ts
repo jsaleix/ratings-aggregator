@@ -3,7 +3,7 @@ import { CreateMovieDto } from '../dto/create-movie.dto';
 import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { SearchMovieQueryDto } from '../dto/search-movie-query.dto';
 import { ConfigService } from '@nestjs/config';
-import { EnvType } from 'src/config/configuration';
+import { EnvType } from 'src/core/configuration';
 
 @Injectable()
 export class MoviesService {

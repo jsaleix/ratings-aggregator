@@ -5,7 +5,7 @@ import { MoviesModule } from './movies/movies.module';
 import { RatingsModule } from './ratings/ratings.module';
 import { RequestsModule } from './requests/requests.module';
 import { ConfigModule } from '@nestjs/config';
-import configuration from './config/configuration';
+import configuration from './core/configuration';
 
 @Module({
   imports: [
