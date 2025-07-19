@@ -11,7 +11,7 @@ import configuration from './core/configuration';
   imports: [
     ConfigModule.forRoot({
       load: [configuration],
-      isGlobal: true
+      isGlobal: true,
     }),
     MoviesModule,
     RatingsModule,
