@@ -36,8 +36,21 @@ CREATE TABLE "Movie_Rating" (
     CONSTRAINT "Movie_Rating_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Movie_Request" (
+    "id" TEXT NOT NULL,
+    "tmdbId" INTEGER NOT NULL,
+    "title" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Movie_Request_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Movie_tmdbId_key" ON "Movie"("tmdbId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Movie_Request_tmdbId_key" ON "Movie_Request"("tmdbId");
 
 -- AddForeignKey
 ALTER TABLE "Movie_Rating" ADD CONSTRAINT "Movie_Rating_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "Movie"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

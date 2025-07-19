@@ -4,10 +4,14 @@ import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { SearchMovieQueryDto } from '../dto/search-movie-query.dto';
 import { ConfigService } from '@nestjs/config';
 import { EnvType } from 'src/core/configuration';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class MoviesService {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private prisma: PrismaService,
+  ) {}
 
   create(createMovieDto: CreateMovieDto) {
     return 'This action adds a new movie';
