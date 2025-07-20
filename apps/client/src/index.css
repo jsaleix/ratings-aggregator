@@ -14,3 +14,20 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+@theme {
+    --color-bg-dark: #121217;
+    --color-bg-light: #d7d5e3;
+    --color-bg-medium: #29303f;
+    --color-text-secondary: #a7a7a7;
+    --color-text-regular: #ffffff;
+    --color-text-dark: #000000;
+}
+
+@utility drag-none {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-select: none;
+}
