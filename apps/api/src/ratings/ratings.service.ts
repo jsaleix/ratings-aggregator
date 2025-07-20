@@ -1,30 +1,58 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRatingDto } from './dto/create-rating.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class RatingsService {
-  create(createRatingDto: CreateRatingDto) {
-    return 'This action adds a new rating';
+  constructor(private prisma: PrismaService) {}
+
+  async findAll() {
+    const res = await this.prisma.movie_Rating.findMany();
+    if (!res) {
+      throw new Error('Failed to fetch ratings');
+    }
+    return res;
   }
 
-  findAll() {
-    return `This action returns all ratings`;
+  async findOne(id: string) {
+    const res = await this.prisma.movie_Rating.findUnique({
+      where: { id },
+    });
+    if (!res) {
+      throw new Error('Failed to fetch rating');
+    }
+    return res;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} rating`;
+  async update(id: string, updateRatingDto: UpdateRatingDto) {
+    const res = await this.prisma.movie_Rating.update({
+      where: { id },
+      data: updateRatingDto,
+    });
+    if (!res) {
+      throw new Error('Failed to update rating');
+    }
+    return res;
   }
 
-  update(id: number, updateRatingDto: UpdateRatingDto) {
-    return `This action updates a #${id} rating`;
+  async remove(id: string) {
+    const res = await this.prisma.movie_Rating.delete({
+      where: { id },
+    });
+    if (!res) {
+      throw new Error('Failed to remove rating');
+    }
+    return res;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} rating`;
-  }
-
-  findForMovie(movieId: string) {
-    return `This action returns ratings for movie with ID: ${movieId}`;
+  async findForMovie(movieId: string) {
+    const res = await this.prisma.movie_Rating.findMany({
+      where: { movieId },
+    });
+    if (!res) {
+      throw new Error('Failed to fetch ratings for movie');
+    }
+    return res;
   }
 }

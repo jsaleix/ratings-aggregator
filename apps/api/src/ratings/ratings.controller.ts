@@ -21,11 +21,6 @@ export class RatingsController {
     return this.ratingsService.findForMovie(movieId);
   }
 
-  @Post()
-  create(@Body() createRatingDto: CreateRatingDto) {
-    return this.ratingsService.create(createRatingDto);
-  }
-
   @Get()
   findAll() {
     return this.ratingsService.findAll();
@@ -33,19 +28,11 @@ export class RatingsController {
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.ratingsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateRatingDto: UpdateRatingDto,
-  ) {
-    return this.ratingsService.update(+id, updateRatingDto);
+    return this.ratingsService.findOne(id);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.ratingsService.remove(+id);
+    return this.ratingsService.remove(id);
   }
 }
