@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router";
 
-import HomePage from "./features/movies/pages/home";
+import HomePage from "./features/general/home";
 import NotFoundPage from "./features/general/not-found";
 import BaseLayout from "./layouts/base/layout";
 

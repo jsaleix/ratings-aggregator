@@ -37,7 +37,7 @@ export default function MoviePage() {
 
     return (
         <div className="w-full max-w-screen">
-            <div className="flex flex-col items-center container mx-auto gap-5 py-5">
+            <div className="flex flex-col items-center container mx-auto gap-5 pb-5 md:py-5">
                 <header className="flex flex-col w-full md:flex-row gap-5 justify-center">
                     <div className="hidden md:flex h-auto md:w-55 overflow-hidden object-contain">
                         <img
@@ -51,7 +51,7 @@ export default function MoviePage() {
                         style={{ backgroundImage: `url(${posterUrl})` }}
                     ></div>
                     <div className="flex flex-col gap-3 px-5">
-                        <h1 className="text-3xl font-bold text-white">
+                        <h1 className="text-3xl font-bold text-white md:max-w-90">
                             {movie.title}
                         </h1>
                         <h2 className="text-xl text-text-secondary">
@@ -62,7 +62,7 @@ export default function MoviePage() {
                                 {movie.tagLine}
                             </p>
                         )}
-                        <p className="md:max-w-80 font-light text-white md:text-md text-lg">
+                        <p className="md:max-w-90 font-light text-white md:text-md text-lg">
                             {movie.summary}
                         </p>
                     </div>

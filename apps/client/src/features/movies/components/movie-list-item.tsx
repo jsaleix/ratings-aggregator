@@ -13,8 +13,18 @@ export default function MovieListItem({ movie }: Props) {
         [movie]
     );
 
+    const summary = useMemo(() => {
+        // If the movie title is one line long, summary is unaltered
+        if (movie.title.length <= 15) return movie.summary; 
+         // However if it's too long, summary won't fit so hide it
+        if (movie.title.length >= 30) return "";
+        if (movie.summary.length > 15)
+            return `${movie.summary.slice(0, 110)}...`;
+        return movie.summary;
+    }, [movie]);
+
     return (
-        <article className="flex w-96 border-1 border-bg-light rounded-xl p-5 gap-5 bg-bg-dark shadow-md shadow-bg-medium">
+        <article className="flex w-96 max-h-55 overflow-hidden border-1 border-bg-light rounded-xl p-5 gap-5 bg-bg-dark shadow-md shadow-bg-medium">
             <div className="w-55 overflow-hidden object-contain">
                 <img
                     src={posterUrl}
@@ -25,7 +35,7 @@ export default function MovieListItem({ movie }: Props) {
             <div className="flex flex-col gap-3 w-full">
                 <Link
                     to={`/movies/${movie.id}`}
-                    className="flex items-end gap-3 hover:opacity-90"
+                    className="flex items-end gap-3 hover:opacity-90  flex-wrap"
                 >
                     <h1 className="text-2xl font-bold text-white">
                         {movie.title}
@@ -33,7 +43,7 @@ export default function MovieListItem({ movie }: Props) {
                     <p className="text-lg text-text-secondary"> {movie.year}</p>
                 </Link>
                 <p className="font-light text-sm text-text-secondary">
-                    {movie.summary}
+                    {summary}
                 </p>
             </div>
         </article>

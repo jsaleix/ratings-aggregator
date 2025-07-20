@@ -22,6 +22,12 @@
     --color-text-secondary: #a7a7a7;
     --color-text-regular: #ffffff;
     --color-text-dark: #000000;
+
+    --color-utils-orange: #ff3b00;
+    --color-utils-yellow: #ffbb00;
+    --color-utils-green: #07BC44;
+    --color-utils-gray: #D9D9D9;
+
 }
 
 @utility drag-none {
