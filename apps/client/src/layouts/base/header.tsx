@@ -6,7 +6,7 @@ export default function Header() {
         <header className="h-16 p-5 border-b-1 border-b-bg-light">
             <div className="container mx-auto flex items-center justify-between">
                 <Link to="/">AGREGATOR</Link>
-                <div className="w-fit gap-5 flex items-center">
+                <div className="w-fit gap-5 items-center hidden md:flex">
                     <nav className="flex gap-3 font-bold">
                         <NavLink
                             to="/movies"
