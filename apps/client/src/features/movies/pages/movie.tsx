@@ -65,17 +65,49 @@ export default function MoviePage() {
                         <p className="md:max-w-90 font-light text-white md:text-md text-lg">
                             {movie.summary}
                         </p>
+                        <div className="flex flex-col gap-2">
+                            <p className="text-text-secondary">
+                                Budget:{" "}
+                                <span className="text-white">
+                                    ${movie.budget.toLocaleString()}
+                                </span>
+                            </p>
+                            <p className="text-text-secondary">
+                                Runtime:{" "}
+                                <span className="text-white">
+                                    {movie.runtime.toLocaleString()} minutes
+                                </span>
+                            </p>
+                            {movie.release_date !== "" && (
+                                <p className="text-text-secondary">
+                                    Release date:{" "}
+                                    <span className="text-white">
+                                        {new Date(
+                                            movie.release_date
+                                        ).toLocaleDateString()}
+                                    </span>
+                                </p>
+                            )}
+                        </div>
                     </div>
                 </header>
                 <hr className="w-full border-bg-light" />
                 <div className="flex flex-col gap-3 w-full px-5">
-                    <h1 className="text-xl font-bold uppercase text-white">
-                        <span className="text-orange-700">R</span>atings
-                    </h1>
+                    <div className="w-full flex justify-between">
+                        <h1 className="text-xl font-bold uppercase text-white">
+                            <span className="text-orange-700">R</span>atings
+                        </h1>
+                        <p className="text-text-secondary">
+                            Status:{" "}
+                            <span className="uppercase font-bold text-white">
+                                {movie.ratings_status}
+                            </span>
+                        </p>
+                    </div>
                     <div className="flex flex-col">
                         {ratings.length === 0 && <p>No rating</p>}
                         {ratings.length > 0 && (
-                            <ul className="flex flex-col md:w-[60%]">
+                            <ul className="flex flex-col md:w-[100%]">
                                 {ratings?.map((rating) => (
                                     <MovieRatingItem
                                         rating={rating}
