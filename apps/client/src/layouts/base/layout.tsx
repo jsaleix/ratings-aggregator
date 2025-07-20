@@ -6,7 +6,7 @@ export default function BaseLayout() {
     return (
         <div className="w-full h-full flex flex-col">
             <Header />
-            <div className="w-full h-full grow bg-slate-700">
+            <div className="w-full h-full grow bg-bg-dark">
                 <Outlet />
             </div>
             <Footer />

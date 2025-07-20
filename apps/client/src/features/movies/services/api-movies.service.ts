@@ -1,6 +1,5 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import type { MovieModel } from "../types/movie";
-import type { GetAllMoviesResponse } from "../types/movie-api";
 
 class ApiMoviesService {
     async getAll(): Promise<MovieModel[]> {
@@ -24,7 +23,7 @@ class ApiMoviesService {
                 `Error fetching movie with id ${id}: ${res.statusText}`
             );
         }
-        return await res.json();
+        return (await res.json())["movie"] as MovieModel;
     }
 
     async search(query: string) {

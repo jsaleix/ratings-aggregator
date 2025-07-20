@@ -14,7 +14,7 @@ export default function MovieListItem({ movie }: Props) {
     );
 
     return (
-        <article className="flex w-96 border-0 border-bg-light rounded-xl p-5 gap-5 bg-bg-dark shadow-md shadow-bg-medium">
+        <article className="flex w-96 border-1 border-bg-light rounded-xl p-5 gap-5 bg-bg-dark shadow-md shadow-bg-medium">
             <div className="w-55 overflow-hidden object-contain">
                 <img
                     src={posterUrl}
