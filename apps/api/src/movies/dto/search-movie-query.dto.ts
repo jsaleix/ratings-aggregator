@@ -1,4 +1,11 @@
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+
 export class SearchMovieQueryDto {
-  name: string;
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @IsNumber()
+  @IsOptional()
   year?: number;
 }
