@@ -1,30 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class RequestsService {
-  create(createRequestDto: CreateRequestDto) {
-    return 'This action adds a new request';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createRequestDto: CreateRequestDto) {
+    const request = await this.prisma.movie_Request.create({
+      data: {
+        ...createRequestDto,
+      },
+    });
+
+    if (!request) {
+      throw new Error('Failed to create request');
+    }
+
+    this.addToQueue(request.id);
+    return request;
   }
 
-  findAll() {
-    return `This action returns all requests`;
+  async findAll() {
+    return this.prisma.movie_Request.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} request`;
+  async findOne(id: string) {
+    return this.prisma.movie_Request.findUnique({
+      where: { id },
+    });
   }
 
-  update(id: number, updateRequestDto: UpdateRequestDto) {
-    return `This action updates a #${id} request`;
+  async remove(id: string) {
+    return this.prisma.movie_Request.delete({
+      where: { id },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} request`;
-  }
-
-  addToQueue(id: number) {
-    return `This action adds request #${id} to the processing queue`;
+  async addToQueue(id: string) {
+    console.log(`Adding request with ID ${id} to the queue`);
   }
 }
