@@ -11,12 +11,19 @@ const MoviePage = lazy(() => import("./features/movies/pages/movie"));
 const MoviesPage = lazy(() => import("./features/movies/pages/movies"));
 
 const RequestsPage = lazy(() => import("./features/requests/pages/requests"));
+const CreateRequestsPage = lazy(
+    () => import("./features/requests/pages/new-request")
+);
 
 function App() {
     return (
         <Suspense>
             <Routes>
                 <Route element={<BaseLayout />}>
+                    <Route
+                        path="/requests/create"
+                        element={<CreateRequestsPage />}
+                    />
                     <Route path="/requests" element={<RequestsPage />} />
                     <Route path="/movies" element={<MoviesPage />} />
                     <Route path="/movies/:id" element={<MoviePage />} />

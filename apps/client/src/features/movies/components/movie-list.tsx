@@ -10,7 +10,7 @@ export default function MovieList({ movies }: Props) {
         <div className="flex flex-col">
             {movies.length === 0 && <p>There is no movie</p>}
             {movies.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3">
                     {movies.map((movie) => (
                         <MovieListItem movie={movie} key={movie.id} />
                     ))}

@@ -2,12 +2,12 @@ import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
 
 const buttonVariants = cva(
-    "border-1 border-transparent px-3 py-1 rounded-md cursor-pointer hover:opacity-85 duration-150",
+    "border-1 border-transparent px-3 py-1 rounded-md cursor-pointer hover:opacity-85 duration-150 disabled:cursor-not-allowed",
     {
         variants: {
             variant: {
                 default: "bg-bg-light text-black",
-                primary: "bg-utils-orange font-bold",
+                primary: "bg-utils-orange font-bold disabled:bg-utils-orange-light",
             },
             size: {
                 medium: "text-md",
@@ -21,13 +21,16 @@ const buttonVariants = cva(
     }
 );
 
+type Props = React.ComponentProps<"button"> &
+    VariantProps<typeof buttonVariants>;
+
 export default function Button({
     children,
     variant,
     size,
     className,
     ...rest
-}: React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>) {
+}: Props) {
     const style = clsx(buttonVariants({ variant, size }), className);
 
     return (

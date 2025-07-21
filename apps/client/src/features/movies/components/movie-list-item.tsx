@@ -14,13 +14,12 @@ export default function MovieListItem({ movie }: Props) {
     );
 
     const summary = useMemo(() => {
-        // If the movie title is one line long, summary is unaltered
-        if (movie.title.length <= 15) return movie.summary; 
-         // However if it's too long, summary won't fit so hide it
-        if (movie.title.length >= 30) return "";
-        if (movie.summary.length > 15)
-            return `${movie.summary.slice(0, 110)}...`;
-        return movie.summary;
+        if (movie.title.length <= 15) {
+            if (movie.summary.length > 210)
+                return `${movie.summary.slice(0, 150)}...`;
+            return movie.summary;
+        }
+        return "";
     }, [movie]);
 
     return (
