@@ -1,6 +1,8 @@
 import { Link, NavLink } from "react-router";
 import HeaderSearchMovieInput from "../../shared/ui/header-search-input";
 
+const linkCss = "font-bold hover:text-utils-orange-light duration-150";
+
 export default function Header() {
     return (
         <header className="h-16 p-5 border-b-1 border-b-bg-light">
@@ -8,19 +10,16 @@ export default function Header() {
                 <Link to="/">AGREGATOR</Link>
                 <div className="w-fit gap-5 items-center hidden md:flex">
                     <nav className="flex gap-3 font-bold">
-                        <NavLink
-                            to="/movies"
-                            className={({ isActive }) => (isActive ? "" : "")}
-                        >
+                        <NavLink to="/sigin" className={linkCss}>
+                            Signin
+                        </NavLink>
+                        <NavLink to="/movies" className={linkCss}>
                             Movies
                         </NavLink>
-                        <NavLink className="" to="/requests">
+                        <NavLink className={linkCss} to="/requests">
                             Requests
                         </NavLink>
-                        <NavLink
-                            to="/about"
-                            className={({ isActive }) => (isActive ? "" : "")}
-                        >
+                        <NavLink to="/about" className={linkCss}>
                             About
                         </NavLink>
                     </nav>

@@ -35,9 +35,9 @@ export default function MovieListItem({ movie }: Props) {
             <div className="flex flex-col gap-3 w-full">
                 <Link
                     to={`/movies/${movie.id}`}
-                    className="flex items-end gap-3 hover:opacity-90  flex-wrap"
+                    className="flex items-end gap-3  flex-wrap"
                 >
-                    <h1 className="text-2xl font-bold text-white">
+                    <h1 className="text-2xl font-bold text-white hover:text-utils-orange-light">
                         {movie.title}
                     </h1>
                     <p className="text-lg text-text-secondary"> {movie.year}</p>

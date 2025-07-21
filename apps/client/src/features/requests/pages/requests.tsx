@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import apiRequestService from "../services/api-request.service";
 import RequestListItem from "../components/requests-list-item";
 import Button from "../../../shared/ui/button";
+import UnderlinedItem from "../../../shared/ui/underlined-item";
 
 export default function RequestsPage() {
     const { data } = useQuery({
@@ -27,7 +28,7 @@ export default function RequestsPage() {
                         <br />
                         Limits: max. 10 requests per day
                     </p>
-                    <Button>Make a request</Button>
+                    <Button variant={"primary"}>Make a request</Button>
                 </header>
                 <div className="flex w-full flex-col justify-center px-5 md:px-0">
                     {data.length === 0 && <p>There is no request pending</p>}

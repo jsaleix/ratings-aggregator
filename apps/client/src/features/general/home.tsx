@@ -3,12 +3,20 @@ export default function HomePage() {
         <div className="w-full">
             <div className="flex flex-col gap-5 py-5">
                 <section className="flex flex-col md:flex-row container mx-auto gap-5 items-center justify-center py-10">
-                    <div className="w-full md:w-1/3 flex justify-center">IMAGE HERE</div>
+                    <div className="w-full md:w-1/3 flex justify-center">
+                        <div className="w-90 md:w-full h-auto object-contain">
+                            <img
+                                className="w-full h-full"
+                                src="assets/images/home/nexsus/sup.png"
+                                alt=""
+                            />
+                        </div>
+                    </div>
                     <div className="flex flex-col w-full md:w-1/3 px-5 md:px-0 text-center md:text-start">
                         <h1 className="text-3xl font-bold md:max-w-80">
                             GATHERING RATINGS ACROSS DIFFERENT WEBSITES
                         </h1>
-                        <h1 className="text-3xl font-bold text-utils-green">
+                        <h1 className="text-3xl font-bold text-utils-orange">
                             SO YOU DON'T HAVE TO
                         </h1>
                     </div>
