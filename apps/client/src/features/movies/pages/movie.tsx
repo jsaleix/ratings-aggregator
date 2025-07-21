@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import apiMoviesService from "../services/api-movies.service";
 import { BASE_POSTER_URL } from "../../../core/config/misc";
 import apiRatingsService from "../services/api-ratings.service";
-import MovieRatingItem from "../components/move-rating-item";
+import MovieRatingItem from "../components/movie-rating-item";
 
 export default function MoviePage() {
     let { id } = useParams();

@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import Component from ".";
 
 const meta: Meta<typeof Component> = {
@@ -25,4 +25,9 @@ const meta: Meta<typeof Component> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const UnderlinedItem: Story = {};
+export const UnderlinedItem: Story = {
+    args: {
+        className:"!text-white w-fit px-3",
+        colorClass: "bg-utils-orange"
+    }
+};

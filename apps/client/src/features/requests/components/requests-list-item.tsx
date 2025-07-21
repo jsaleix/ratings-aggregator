@@ -5,7 +5,7 @@ interface Props {
 }
 
 export default function RequestListItem({ request }: Props) {
-    const url = new URL(request.tmdbId, "https://www.themoviedb.org/movie/");
+    const url = new URL(request.tmdbId.toString(), "https://www.themoviedb.org/movie/");
 
     return (
         <article className="w-full flex md:flex-row flex-col gap-1 justify-between border-b-1 border-b-bg-light px-5 py-3">
