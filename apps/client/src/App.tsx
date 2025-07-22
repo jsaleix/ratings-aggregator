@@ -9,6 +9,7 @@ const AboutPage = lazy(() => import("./features/general/about"));
 
 const MoviePage = lazy(() => import("./features/movies/pages/movie"));
 const MoviesPage = lazy(() => import("./features/movies/pages/movies"));
+const SearchMoviesPage = lazy(() => import("./features/movies/pages/search"));
 
 const RequestsPage = lazy(() => import("./features/requests/pages/requests"));
 const CreateRequestsPage = lazy(
@@ -26,6 +27,10 @@ function App() {
                     />
                     <Route path="/requests" element={<RequestsPage />} />
                     <Route path="/movies" element={<MoviesPage />} />
+                    <Route
+                        path="/movies/search"
+                        element={<SearchMoviesPage />}
+                    />
                     <Route path="/movies/:id" element={<MoviePage />} />
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/" element={<HomePage />} />

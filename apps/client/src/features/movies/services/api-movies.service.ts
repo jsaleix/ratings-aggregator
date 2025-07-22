@@ -28,7 +28,7 @@ class ApiMoviesService {
 
     async search(query: string) {
         const url = new URL("/movies/search", API_ENDPOINT);
-        url.searchParams.append("query", query);
+        url.searchParams.append("title", query);
         const res = await fetch(url, {
             method: "GET",
         });

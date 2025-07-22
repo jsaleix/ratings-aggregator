@@ -1,21 +1,36 @@
+import { useEffect } from "react";
+
+import { useScrollEnd } from "../hooks/use-scrollend";
 import type { MovieModel } from "../types/movie";
 import MovieListItem from "./movie-list-item";
 
 interface Props {
     movies: MovieModel[];
+    onScrollEnd?: () => void;
 }
 
-export default function MovieList({ movies }: Props) {
+export default function MovieList({ movies, onScrollEnd }: Props) {
+    const { ref, inView } = useScrollEnd();
+
+    useEffect(() => {
+        if (inView && onScrollEnd) onScrollEnd();
+    }, [inView]);
+
     return (
         <div className="flex flex-col">
             {movies.length === 0 && <p>There is no movie</p>}
             {movies.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 gap-3">
                     {movies.map((movie) => (
                         <MovieListItem movie={movie} key={movie.id} />
                     ))}
                 </div>
             )}
+            <div
+                ref={ref}
+                className="w-full bottom-0 bg-transparent h-4"
+                style={{ height: "10px" }}
+            ></div>
         </div>
     );
 }

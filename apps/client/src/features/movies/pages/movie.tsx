@@ -3,8 +3,8 @@ import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 
 import apiMoviesService from "../services/api-movies.service";
-import { BASE_POSTER_URL } from "../../../core/config/misc";
 import apiRatingsService from "../services/api-ratings.service";
+import { BASE_POSTER_URL } from "../../../core/config/misc";
 import MovieRatingItem from "../components/movie-rating-item";
 
 export default function MoviePage() {
@@ -39,11 +39,11 @@ export default function MoviePage() {
         <div className="w-full max-w-screen">
             <div className="flex flex-col items-center container mx-auto gap-5 pb-5 md:py-5">
                 <header className="flex flex-col w-full md:flex-row gap-5 justify-center">
-                    <div className="hidden md:flex h-auto md:w-55 overflow-hidden object-contain">
+                    <div className="hidden md:flex h-auto md:w-65 overflow-hidden aspect-[9/16]">
                         <img
                             src={posterUrl}
                             alt={movie.title}
-                            className="w-full h-auto select-none drag-none"
+                            className="w-full h-full object-contain select-none pointer-events-none"
                         />
                     </div>
                     <div
