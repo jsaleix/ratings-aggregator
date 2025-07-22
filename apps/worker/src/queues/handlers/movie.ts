@@ -21,13 +21,19 @@ export type MovieJob = {
 };
 
 class MovieHandler {
+    delay = 30000;
+
     constructor(
         private ratingQueue: Queue,
         private movieService: MovieService
     ) {}
 
+    setDelay(value: number) {
+        this.delay = value;
+    }
+
     async handle(job: Job<MovieJob>) {
-        await sleep(30000); // Delay of 30 sec between jobs
+        await sleep(this.delay);
         const { type, payload } = job.data;
 
         if (!movieJobsTypeArr.includes(type)) {

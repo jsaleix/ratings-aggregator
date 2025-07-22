@@ -22,6 +22,7 @@ describe("MovieHandler Integration", () => {
             ratingQueue,
             mockMovieService as unknown as MovieService
         );
+        handler.setDelay(0);
 
         worker = new Worker(
             QUEUES.movie,
@@ -57,7 +58,7 @@ describe("MovieHandler Integration", () => {
 
         await new Promise((resolve) => worker.on("completed", resolve));
         expect(mockMovieService.addMovieByTMDBId).toHaveBeenCalledWith(42);
-    });
+    }, 5000);
 
     // test("should handle addMovieWithRatingsByTMDBId and enqueue rating jobs", async () => {
     //     mockMovieService.addMovieByTMDBId.mockResolvedValue({
