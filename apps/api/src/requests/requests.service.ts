@@ -42,6 +42,16 @@ export class RequestsService {
     });
   }
 
+  async getCountForToday() {
+    return await this.prisma.movie_Request.count({
+      where: {
+        created_at: {
+          gte: new Date(new Date().setHours(0, 0, 0, 0)),
+        },
+      },
+    });
+  }
+
   private async addToQueue(tmdb: number) {
     this.bullmqService.addMovieToQueue(tmdb);
   }

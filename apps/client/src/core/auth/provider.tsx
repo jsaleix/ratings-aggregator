@@ -1,8 +1,12 @@
-import { createContext, useCallback, useContext, useState } from "react";
-
-type UserType = {
-    id: string;
-};
+import {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
+import type { UserType } from "../../features/auth/types/user";
+import userService from "../../features/auth/services/user.service";
 
 type AuthContextType = {
     user: undefined | null | UserType;
@@ -29,7 +33,7 @@ interface Props {
 }
 
 export const AuthContextProvider = ({ children }: Props) => {
-    const [user] = useState<null | undefined | UserType>(undefined);
+    const [user, setUser] = useState<null | undefined | UserType>(undefined);
     const isConnected = !!user?.id;
 
     const login = useCallback(
@@ -41,6 +45,19 @@ export const AuthContextProvider = ({ children }: Props) => {
         async (email: string, password: string) => {},
         [isConnected]
     );
+
+    const retrieveProfile = async () => {
+        try {
+            const profile = await userService.getSelf();
+            setUser(profile);
+        } catch (e) {
+            setUser(null);
+        }
+    };
+
+    useEffect(() => {
+        retrieveProfile();
+    }, []);
 
     return (
         <authContext.Provider value={{ user, isConnected, login, signup }}>

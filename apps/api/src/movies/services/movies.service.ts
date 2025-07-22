@@ -18,8 +18,14 @@ export class MoviesService {
 
   async findAll() {
     const skip = 0;
-    const take = 10;
-    const movies = await this.prisma.movie.findMany({ skip, take });
+    const take = 20;
+    const movies = await this.prisma.movie.findMany({
+      skip,
+      take,
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
     return movies;
   }
 

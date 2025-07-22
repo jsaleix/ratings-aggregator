@@ -92,7 +92,7 @@ export default function MoviePage() {
                     </div>
                 </header>
                 <hr className="w-full border-bg-light" />
-                <div className="flex flex-col gap-3 w-full px-5">
+                <div className="flex flex-col gap-3 w-full md:px-0 px-5">
                     <div className="w-full flex justify-between">
                         <h1 className="text-xl font-bold uppercase text-white">
                             <span className="text-orange-700">R</span>atings
