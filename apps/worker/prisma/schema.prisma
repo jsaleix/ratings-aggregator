@@ -47,6 +47,7 @@ model Movie_Request {
   tmdbId     Int      @unique
   title      String
   created_at DateTime @default(now())
+  processed  Boolean  @default(false)
 }
 
 enum RatingUnit {

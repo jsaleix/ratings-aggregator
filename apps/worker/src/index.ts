@@ -1,5 +1,5 @@
 import { db } from "./core/db";
-import { movieWorker, ratingWorker, summaryWorker } from "./queues/workers";
+import { movieWorker, ratingWorker, summaryWorker } from "./queues";
 
 try {
     movieWorker.run();

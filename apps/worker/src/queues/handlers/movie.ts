@@ -12,7 +12,7 @@ const movieJobsTypeArr = Object.values(movieJobsTypeValues);
 type MovieJobType =
     (typeof movieJobsTypeValues)[keyof typeof movieJobsTypeValues];
 
-type MovieJob = {
+export type MovieJob = {
     type: MovieJobType;
     payload: {
         tmdbId: number;
@@ -34,24 +34,17 @@ class MovieHandler {
 
         console.log(`Processing job [${job.id}] of type "${type}"`);
 
-        let res: any = null;
-
         switch (type) {
             case movieJobsTypeValues.addMovieByTMDBId:
-                res = await this.movieService.addMovieByTMDBId(payload.tmdbId);
-                job.updateProgress(100);
+                return await this.movieService.addMovieByTMDBId(payload.tmdbId);
                 break;
 
             case movieJobsTypeValues.addMovieWithRatingsByTMDBId:
-                const movie = await this.movieService.addMovieByTMDBId(
-                    payload.tmdbId
-                );
-                job.updateProgress(50);
-
-                await this.gatherRatings(movie);
-                job.updateProgress(100);
+                return await this.movieService.addMovieByTMDBId(payload.tmdbId);
                 break;
         }
+
+        return undefined;
     }
 
     async gatherRatings(movie: MovieType) {

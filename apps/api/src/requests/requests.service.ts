@@ -26,8 +26,8 @@ export class RequestsService {
     return request;
   }
 
-  async findAll() {
-    return this.prisma.movie_Request.findMany();
+  async findAll(processed: boolean) {
+    return this.prisma.movie_Request.findMany({ where: { processed } });
   }
 
   async findOne(id: string) {

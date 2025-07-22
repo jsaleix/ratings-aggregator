@@ -42,6 +42,7 @@ CREATE TABLE "Movie_Request" (
     "tmdbId" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "processed" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Movie_Request_pkey" PRIMARY KEY ("id")
 );

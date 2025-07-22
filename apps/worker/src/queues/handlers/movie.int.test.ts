@@ -59,29 +59,29 @@ describe("MovieHandler Integration", () => {
         expect(mockMovieService.addMovieByTMDBId).toHaveBeenCalledWith(42);
     });
 
-    test("should handle addMovieWithRatingsByTMDBId and enqueue rating jobs", async () => {
-        mockMovieService.addMovieByTMDBId.mockResolvedValue({
-            id: 42,
-            title: "Inception",
-        });
+    // test("should handle addMovieWithRatingsByTMDBId and enqueue rating jobs", async () => {
+    //     mockMovieService.addMovieByTMDBId.mockResolvedValue({
+    //         id: 42,
+    //         title: "Inception",
+    //     });
 
-        await movieQueue.add("add-movie", {
-            type: "add-movie-with-ratings:tmdbId",
-            payload: { tmdbId: 42 },
-        });
+    //     await movieQueue.add("add-movie", {
+    //         type: "add-movie-with-ratings:tmdbId",
+    //         payload: { tmdbId: 42 },
+    //     });
 
-        await new Promise((resolve) => worker.on("completed", resolve));
+    //     await new Promise((resolve) => worker.on("completed", resolve));
 
-        expect(mockMovieService.addMovieByTMDBId).toHaveBeenCalledWith(42);
+    //     expect(mockMovieService.addMovieByTMDBId).toHaveBeenCalledWith(42);
 
-        const ratingJobs = await ratingQueue.getJobs();
-        const jobNames = ratingJobs.map((j) => j.name);
-        expect(jobNames.sort()).toEqual(
-            [
-                "set-rating:rotten:42",
-                "set-rating:imdb:42",
-                "set-rating:letterboxd:42",
-            ].sort()
-        );
-    });
+    //     const ratingJobs = await ratingQueue.getJobs();
+    //     const jobNames = ratingJobs.map((j) => j.name);
+    //     expect(jobNames.sort()).toEqual(
+    //         [
+    //             "set-rating:rotten:42",
+    //             "set-rating:imdb:42",
+    //             "set-rating:letterboxd:42",
+    //         ].sort()
+    //     );
+    // });
 });

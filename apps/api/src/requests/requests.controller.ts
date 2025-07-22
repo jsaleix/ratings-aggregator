@@ -13,7 +13,7 @@ export class RequestsController {
 
   @Get()
   async findAll() {
-    return this.requestsService.findAll();
+    return this.requestsService.findAll(false);
   }
 
   @Get(':id')
