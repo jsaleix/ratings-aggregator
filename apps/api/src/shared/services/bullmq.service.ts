@@ -17,6 +17,10 @@ export class BullmqService {
     });
     this.movieQueue = new Queue(QUEUES.movie, {
       connection: redisConnection,
+      defaultJobOptions: {
+        removeOnComplete: true,
+        removeOnFail: true,
+      },
     });
   }
 

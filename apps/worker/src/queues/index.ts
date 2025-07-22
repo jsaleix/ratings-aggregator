@@ -14,6 +14,10 @@ import { MovieType } from "../features/movies/types/db";
 
 const ratingQueue = new Queue(QUEUES.rating, {
     connection: RedisMqConnection,
+    defaultJobOptions: {
+        removeOnComplete: true,
+        removeOnFail: true,
+    },
 });
 
 const tmdbService = new TMDBService();

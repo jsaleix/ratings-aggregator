@@ -1,6 +1,7 @@
 import { Job, Queue } from "bullmq";
 import MovieService from "../../features/movies/services/movies.service";
 import { MovieType } from "../../features/movies/types/db";
+import { sleep } from "../../shared/utils";
 
 const movieJobsTypeValues = {
     addMovieByTMDBId: "add-movie:tmdbId",
@@ -26,6 +27,7 @@ class MovieHandler {
     ) {}
 
     async handle(job: Job<MovieJob>) {
+        await sleep(30000); // Delay of 30 sec between jobs
         const { type, payload } = job.data;
 
         if (!movieJobsTypeArr.includes(type)) {
@@ -33,7 +35,6 @@ class MovieHandler {
         }
 
         console.log(`Processing job [${job.id}] of type "${type}"`);
-
         switch (type) {
             case movieJobsTypeValues.addMovieByTMDBId:
                 return await this.movieService.addMovieByTMDBId(payload.tmdbId);
