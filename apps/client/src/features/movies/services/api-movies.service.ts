@@ -1,16 +1,26 @@
 import { API_ENDPOINT } from "../../../core/config/api";
+import type { PaginatedResult } from "../../../shared/types/pagination";
 import type { MovieModel } from "../types/movie";
 
 class ApiMoviesService {
-    async getAll(): Promise<MovieModel[]> {
+    async getAll(
+        orderBy?: string,
+        order?: "asc" | "desc",
+        page?: number
+    ): Promise<PaginatedResult<MovieModel>> {
         const url = new URL("/movies", API_ENDPOINT);
+        if (page) url.searchParams.append("page", page.toString());
+        if (orderBy) url.searchParams.append("orderBy", orderBy);
+        if (order) url.searchParams.append("order", order);
+
+        console.log(url.toString());
         const res = await fetch(url, {
             method: "GET",
         });
         if (!res.ok) {
             throw new Error(`Error fetching movies: ${res.statusText}`);
         }
-        return (await res.json()) as MovieModel[];
+        return (await res.json()) as PaginatedResult<MovieModel>;
     }
 
     async getById(id: string) {

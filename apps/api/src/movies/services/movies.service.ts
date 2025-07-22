@@ -4,6 +4,10 @@ import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { SearchMovieQueryDto } from '../dto/search-movie-query.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { Prisma } from 'generated/prisma';
+import { PaginatedResult } from 'src/shared/types/pagination';
+import { MovieType } from '../entities/movie.entity';
+import { FindMoviesDTO } from '../dto/find-movies.dto';
+import { PaginateFunction, paginator } from 'src/shared/utils/pagination';
 
 @Injectable()
 export class MoviesService {
@@ -16,17 +20,27 @@ export class MoviesService {
     return movie;
   }
 
-  async findAll() {
-    const skip = 0;
-    const take = 20;
-    const movies = await this.prisma.movie.findMany({
-      skip,
-      take,
-      orderBy: {
-        created_at: 'desc',
+  async findAll(
+    findMoviesDTO: FindMoviesDTO,
+  ): Promise<PaginatedResult<MovieType>> {
+    let { order, orderBy, page } = findMoviesDTO;
+    if (!orderBy) orderBy = 'id';
+    if (!order) order = 'desc';
+    if (!page) page = 1;
+
+    const paginate: PaginateFunction = paginator({ perPage: 10 });
+
+    return await paginate(
+      this.prisma.movie,
+      {
+        orderBy: {
+          [orderBy]: order,
+        },
       },
-    });
-    return movies;
+      {
+        page,
+      },
+    );
   }
 
   async findOne(id: string) {

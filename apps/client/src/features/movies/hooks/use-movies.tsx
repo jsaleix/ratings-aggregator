@@ -8,11 +8,15 @@ export default function UseMovies() {
         queryKey: ["getMovies"],
         queryFn: async ({ pageParam = 1 }) => {
             console.log(pageParam);
-            const response = await apiMoviesService.getAll();
+            const response = await apiMoviesService.getAll(
+                undefined,
+                undefined,
+                pageParam
+            );
 
             return {
-                items: response,
-                next: undefined,
+                items: response.data,
+                next: response.pagination.next,
             };
         },
         refetchOnWindowFocus: false,

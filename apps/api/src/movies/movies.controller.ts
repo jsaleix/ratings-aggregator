@@ -14,6 +14,7 @@ import { TMDBService } from './services/tmdb.service';
 
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { SearchMovieQueryDto } from './dto/search-movie-query.dto';
+import { FindMoviesDTO } from './dto/find-movies.dto';
 
 @Controller('movies')
 export class MoviesController {
@@ -38,8 +39,8 @@ export class MoviesController {
   }
 
   @Get()
-  async findAll() {
-    return await this.moviesService.findAll();
+  async findAll(@Query() query: FindMoviesDTO) {
+    return await this.moviesService.findAll(query);
   }
 
   @Get(':id')
