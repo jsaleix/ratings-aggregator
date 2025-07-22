@@ -16,6 +16,8 @@ const CreateRequestsPage = lazy(
     () => import("./features/requests/pages/new-request")
 );
 
+const AuthPage = lazy(() => import("./features/auth/pages/auth"));
+
 function App() {
     return (
         <Suspense>
@@ -25,6 +27,7 @@ function App() {
                         path="/requests/create"
                         element={<CreateRequestsPage />}
                     />
+                    <Route path="/auth" element={<AuthPage />} />
                     <Route path="/requests" element={<RequestsPage />} />
                     <Route path="/movies" element={<MoviesPage />} />
                     <Route
