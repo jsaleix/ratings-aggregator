@@ -19,7 +19,7 @@ export default function RequestsPage() {
 
     return (
         <div className="w-full">
-            <div className="flex flex-col container mx-auto gap-5 py-5 items-center">
+            <div className="flex flex-col container mx-auto gap-5 py-5 items-center px-5 md:px-0">
                 <PageHeader title="Movie requests">
                     <p className="text-text-secondary">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit.

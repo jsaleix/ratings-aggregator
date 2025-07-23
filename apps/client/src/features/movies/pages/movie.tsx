@@ -50,7 +50,7 @@ export default function MoviePage() {
                         className="md:hidden bg-top-left bg-size-[100vw] h-80 bg-fixed bg-no-repeat"
                         style={{ backgroundImage: `url(${posterUrl})` }}
                     ></div>
-                    <div className="flex flex-col gap-3 px-5">
+                    <div className="flex flex-col gap-3 px-5 md:px-0">
                         <h1 className="text-3xl font-bold text-white md:max-w-90">
                             {movie.title}
                         </h1>

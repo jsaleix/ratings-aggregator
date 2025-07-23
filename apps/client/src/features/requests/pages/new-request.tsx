@@ -21,7 +21,7 @@ export default function NewRequestPage() {
 
     return (
         <div className="w-full">
-            <div className="flex flex-col container mx-auto gap-5 py-5 px-5 xl:px-0">
+            <div className="flex flex-col container mx-auto gap-5 py-5 px-5 md:px-0">
                 <header className="relative flex flex-col items">
                     <h2 className="text-2xl">Movie Request</h2>
                 </header>

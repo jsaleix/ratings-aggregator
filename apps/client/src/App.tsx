@@ -29,7 +29,6 @@ function App() {
         <Suspense>
             <Routes>
                 <Route element={<BaseLayout />}>
-                
                     <Route element={<AuthLayout />}>
                         <Route path="/profile" element={<ProfilePage />} />
                         <Route
