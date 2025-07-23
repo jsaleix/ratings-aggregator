@@ -1,6 +1,6 @@
 import { toast, type ToastOptions } from "react-toastify";
 
-export function displayMsg(msg: string, type = "success") {
+export function displayMsg(msg: string, type: "success" | "error" = "success") {
     const settings = {
         position: "bottom-right",
         autoClose: 5000,
