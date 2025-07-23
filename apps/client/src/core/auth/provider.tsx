@@ -12,14 +12,12 @@ type AuthContextType = {
     user: undefined | null | UserType;
     isConnected: boolean;
     login: (email: string, password: string) => Promise<any>;
-    signup: (email: string, password: string) => Promise<any>;
 };
 
 const defaultValue = {
     user: undefined,
     isConnected: false,
-    login: async (email: string, password: string) => {},
-    signup: async (email: string, password: string) => {},
+    login: async () => {},
 } satisfies AuthContextType;
 
 const authContext = createContext<AuthContextType>(defaultValue);
@@ -37,30 +35,27 @@ export const AuthContextProvider = ({ children }: Props) => {
     const isConnected = !!user?.id;
 
     const login = useCallback(
-        async (email: string, password: string) => {},
+        async (email: string, password: string) => {
+            await userService.login(email, password);
+        },
         [isConnected]
     );
 
-    const signup = useCallback(
-        async (email: string, password: string) => {},
-        [isConnected]
-    );
-
-    const retrieveProfile = async () => {
+    const retrieveProfile = useCallback(async () => {
         try {
             const profile = await userService.getSelf();
             setUser(profile);
         } catch (e) {
             setUser(null);
         }
-    };
+    }, []);
 
     useEffect(() => {
         retrieveProfile();
     }, []);
 
     return (
-        <authContext.Provider value={{ user, isConnected, login, signup }}>
+        <authContext.Provider value={{ user, isConnected, login }}>
             {children}
         </authContext.Provider>
     );

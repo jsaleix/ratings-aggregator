@@ -18,6 +18,14 @@ class UserService {
         return (await res.json()) as UserType;
         // return mockUserProfile;
     }
+
+    async signup(email: string, password: string) {
+        return false;
+    }
+
+    async login(email: string, password: string) {
+        return false;
+    }
 }
 
 export default new UserService();
