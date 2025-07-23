@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router";
-import HeaderSearchMovieInput from "../../shared/ui/header-search-input";
-import { useAuthContext } from "../../core/auth/provider";
+import { useAuthContext } from "../core/auth/provider";
+import HeaderSearchMovieInput from "../shared/ui/header-search-input";
 
 const linkCss = "font-bold hover:text-utils-orange-light duration-150";
 

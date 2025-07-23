@@ -3,7 +3,10 @@ import { Routes, Route } from "react-router";
 
 import HomePage from "./features/general/home";
 import NotFoundPage from "./features/general/not-found";
-import BaseLayout from "./layouts/base/layout";
+
+import BaseLayout from "./layouts/layout";
+import AuthLayout from "./layouts/auth/layout";
+import { useAuthContext } from "./core/auth/provider";
 
 const AboutPage = lazy(() => import("./features/general/about"));
 
@@ -17,17 +20,28 @@ const CreateRequestsPage = lazy(
 );
 
 const AuthPage = lazy(() => import("./features/auth/pages/auth"));
+const ProfilePage = lazy(() => import("./features/auth/pages/profile"));
 
 function App() {
+    const { isConnected } = useAuthContext();
+
     return (
         <Suspense>
             <Routes>
                 <Route element={<BaseLayout />}>
-                    <Route
-                        path="/requests/create"
-                        element={<CreateRequestsPage />}
-                    />
-                    <Route path="/auth" element={<AuthPage />} />
+                
+                    <Route element={<AuthLayout />}>
+                        <Route path="/profile" element={<ProfilePage />} />
+                        <Route
+                            path="/requests/create"
+                            element={<CreateRequestsPage />}
+                        />
+                    </Route>
+
+                    {!isConnected && (
+                        <Route path="/auth" element={<AuthPage />} />
+                    )}
+
                     <Route path="/requests" element={<RequestsPage />} />
                     <Route path="/movies" element={<MoviesPage />} />
                     <Route
