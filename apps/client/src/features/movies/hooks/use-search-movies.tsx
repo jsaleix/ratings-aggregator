@@ -3,11 +3,14 @@ import { useMemo } from "react";
 
 import apiMoviesService from "../services/api-movies.service";
 
-export default function UseMovies() {
+export default function UseSearchMovies(query: string) {
     const { data, isFetching, hasNextPage, fetchNextPage } = useInfiniteQuery({
-        queryKey: ["getMovies"],
+        queryKey: ["searchMovies", query],
         queryFn: async ({ pageParam = 1 }) => {
-            const response = await apiMoviesService.getAll({ page: pageParam });
+            const response = await apiMoviesService.search({
+                title: query,
+                page: pageParam,
+            });
 
             return {
                 items: response.data,

@@ -2,18 +2,30 @@ import { API_ENDPOINT } from "../../../core/config/api";
 import type { PaginatedResult } from "../../../shared/types/pagination";
 import type { MovieModel } from "../types/movie";
 
+type SearchMovieParams = {
+    title: string;
+    order?: "asc" | "desc";
+    orderBy?: string;
+    page?: number;
+};
+
+type GetAllMoviesParams = {
+    order?: "asc" | "desc";
+    orderBy?: string;
+    page?: number;
+};
+
 class ApiMoviesService {
-    async getAll(
-        orderBy?: string,
-        order?: "asc" | "desc",
-        page?: number
-    ): Promise<PaginatedResult<MovieModel>> {
+    async getAll({
+        page,
+        order,
+        orderBy,
+    }: GetAllMoviesParams): Promise<PaginatedResult<MovieModel>> {
         const url = new URL("/movies", API_ENDPOINT);
         if (page) url.searchParams.append("page", page.toString());
         if (orderBy) url.searchParams.append("orderBy", orderBy);
         if (order) url.searchParams.append("order", order);
 
-        console.log(url.toString());
         const res = await fetch(url, {
             method: "GET",
         });
@@ -36,16 +48,24 @@ class ApiMoviesService {
         return (await res.json())["movie"] as MovieModel;
     }
 
-    async search(query: string) {
+    async search(
+        params: SearchMovieParams
+    ): Promise<PaginatedResult<MovieModel>> {
+        const { title, page, order, orderBy } = params;
         const url = new URL("/movies/search", API_ENDPOINT);
-        url.searchParams.append("title", query);
+
+        url.searchParams.append("title", title);
+        url.searchParams.append("page", page ? page.toString() : "1");
+        if (order) url.searchParams.append("order", order);
+        if (orderBy) url.searchParams.append("orderBy", orderBy);
+
         const res = await fetch(url, {
             method: "GET",
         });
         if (!res.ok) {
             throw new Error(`Error searching movies: ${res.statusText}`);
         }
-        return await res.json();
+        return (await res.json()) as PaginatedResult<MovieModel>;
     }
 
     async searchTMDB(query: string) {

@@ -20,29 +20,6 @@ export class MoviesService {
     return movie;
   }
 
-  async findAll(
-    findMoviesDTO: FindMoviesDTO,
-  ): Promise<PaginatedResult<MovieType>> {
-    let { order, orderBy, page } = findMoviesDTO;
-    if (!orderBy) orderBy = 'id';
-    if (!order) order = 'desc';
-    if (!page) page = 1;
-
-    const paginate: PaginateFunction = paginator({ perPage: 10 });
-
-    return await paginate(
-      this.prisma.movie,
-      {
-        orderBy: {
-          [orderBy]: order,
-        },
-      },
-      {
-        page,
-      },
-    );
-  }
-
   async findOne(id: string) {
     const movie = await this.prisma.movie.findUnique({ where: { id } });
     return { movie };
@@ -60,8 +37,31 @@ export class MoviesService {
     return { message: `Movie with id ${id} deleted successfully` };
   }
 
+  async findAll(
+    findMoviesDTO: FindMoviesDTO,
+  ): Promise<PaginatedResult<MovieType>> {
+    let { order, orderBy, page } = findMoviesDTO;
+    if (!orderBy) orderBy = 'id';
+    if (!order) order = 'desc';
+    if (!page) page = 1;
+
+    const paginate: PaginateFunction = paginator({ perPage: 15 });
+
+    return await paginate(
+      this.prisma.movie,
+      {
+        orderBy: {
+          [orderBy]: order,
+        },
+      },
+      {
+        page,
+      },
+    );
+  }
+
   async search(query: SearchMovieQueryDto) {
-    const { title, year } = query;
+    let { title, year, order, orderBy, page } = query;
     const where: Prisma.MovieWhereInput = {};
 
     if (title) {
@@ -75,6 +75,24 @@ export class MoviesService {
       where.year = year;
     }
 
-    return await this.prisma.movie.findMany({ where });
+    if (!orderBy) orderBy = 'id';
+    if (!order) order = 'desc';
+    if (!page) page = 1;
+
+    const paginate: PaginateFunction = paginator({ perPage: 15 });
+
+    return await paginate(
+      this.prisma.movie,
+      {
+        orderBy: {
+          [orderBy]: order,
+        },
+        where
+      },
+      {
+        page,
+      },
+    );
+    // return await this.prisma.movie.findMany({ where });
   }
 }
