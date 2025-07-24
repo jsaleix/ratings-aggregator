@@ -34,3 +34,25 @@ export const signupSchema = z
 
 export type LoginType = z.infer<typeof loginSchema>;
 export type SignupType = z.infer<typeof signupSchema>;
+
+export const updateProfileSchema = z.object({
+    email: z.email().nonempty(),
+    username: z.string().nonempty(),
+});
+
+export type UpdateProfileType = z.infer<typeof updatePasswordSchema>;
+
+export const updatePasswordSchema = z.object({
+    current_password: z.string().nonempty(),
+    password: z
+        .string()
+        .refine((password) => /[a-z]/.test(password), {
+            message: "Your password must include a least 1 lowercase character",
+        })
+        .refine((password) => /[0-9]/.test(password), {
+            message: "Your password must include a least 1 digit",
+        }),
+    password_confirmation: z.string().nonempty(),
+});
+
+export type UpdatePasswordType = z.infer<typeof updatePasswordSchema>;

@@ -13,12 +13,14 @@ type AuthContextType = {
     user: undefined | null | UserType;
     isConnected: boolean;
     login: (email: string, password: string) => Promise<any>;
+    logout: () => void;
 };
 
 const defaultValue = {
     user: undefined,
     isConnected: false,
     login: async () => {},
+    logout: () => undefined,
 } satisfies AuthContextType;
 
 const authContext = createContext<AuthContextType>(defaultValue);
@@ -45,6 +47,11 @@ export const AuthContextProvider = ({ children }: Props) => {
         [isConnected]
     );
 
+    const logout = useCallback(() => {
+        localStorage.removeItem(STORAGE_TOKEN_KEY);
+        setUser(null);
+    }, []);
+
     const retrieveProfile = useCallback(async () => {
         try {
             const profile = await userService.getSelf();
@@ -59,7 +66,7 @@ export const AuthContextProvider = ({ children }: Props) => {
     }, []);
 
     return (
-        <authContext.Provider value={{ user, isConnected, login }}>
+        <authContext.Provider value={{ user, isConnected, login, logout }}>
             {children}
         </authContext.Provider>
     );

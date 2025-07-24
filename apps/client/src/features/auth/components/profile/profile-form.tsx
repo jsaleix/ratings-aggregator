@@ -1,32 +1,35 @@
 import { useForm, useStore } from "@tanstack/react-form";
-import clsx from "clsx";
+import { useAuthContext } from "../../../../core/auth/provider";
+import Button from "../../../../shared/ui/button";
+import Input from "../../../../shared/ui/input";
+import ProfilePart from "./field";
+import { updateProfileSchema } from "../../types/auth";
+import profileService from "../../services/profile.service";
+import { displayMsg } from "../../../../shared/utils/toast";
 
-import Button from "../../../shared/ui/button";
-import Input from "../../../shared/ui/input";
-import { loginSchema } from "../types/auth";
-import { useAuthContext } from "../../../core/auth/provider";
-
-interface Props {
-    containerCss?: string;
-}
+interface Props {}
 
 const errorClass = "font-bold text-red-400 text-sm";
 
-export default function LoginForm({ containerCss }: Props) {
-    const { login } = useAuthContext();
-    const containerStyle = clsx("flex flex-col gap-5 rounded-md", containerCss);
-
+export default function ProfileForm({}: Props) {
+    const { user } = useAuthContext();
     const form = useForm({
         defaultValues: {
-            email: "",
-            password: "",
+            email: user?.email ?? "",
+            username: user?.username ?? "",
         },
         onSubmit: async ({ value }) => {
-            console.log("called")
-            return await login(value.email, value.password);
+            try {
+                const { email, username } = value;
+                await profileService.updateProfile(email, username);
+                displayMsg("Account updated!", "success");
+            } catch (e: any) {
+                if (e instanceof Error) displayMsg(e.message, "error");
+                else displayMsg("Could not update your account", "error");
+            }
         },
         validators: {
-            onChange: loginSchema,
+            onChange: updateProfileSchema,
         },
     });
 
@@ -36,10 +39,12 @@ export default function LoginForm({ containerCss }: Props) {
     }));
 
     return (
-        <div className={containerStyle}>
-            <h2 className="text-2xl">Already a member</h2>
+        <ProfilePart
+            name="Account"
+            subTitle="Your email address is your identity on Agregator and is used to log in."
+        >
             <form
-                className="flex flex-col w-full gap-5"
+                className="flex flex-col gap-5"
                 onSubmit={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -54,10 +59,8 @@ export default function LoginForm({ containerCss }: Props) {
                                 onChange={(e) =>
                                     field.handleChange(e.target.value)
                                 }
-                                variant={"default"}
-                                name="email"
                                 placeholder="Email"
-                                type="email"
+                                variant={"default"}
                             />
                             {field.state.meta.errors.length > 0 && (
                                 <p className={errorClass}>
@@ -67,7 +70,7 @@ export default function LoginForm({ containerCss }: Props) {
                         </>
                     )}
                 </form.Field>
-                <form.Field name="password">
+                <form.Field name="username">
                     {(field) => (
                         <>
                             <Input
@@ -75,10 +78,8 @@ export default function LoginForm({ containerCss }: Props) {
                                 onChange={(e) =>
                                     field.handleChange(e.target.value)
                                 }
+                                placeholder="Username"
                                 variant={"default"}
-                                name="password"
-                                placeholder="Password"
-                                type="password"
                             />
                             {field.state.meta.errors.length > 0 && (
                                 <p className={errorClass}>
@@ -93,9 +94,9 @@ export default function LoginForm({ containerCss }: Props) {
                     variant={"primary"}
                     type="submit"
                 >
-                    Login
+                    Update
                 </Button>
             </form>
-        </div>
+        </ProfilePart>
     );
 }

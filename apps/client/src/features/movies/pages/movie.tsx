@@ -6,8 +6,10 @@ import apiMoviesService from "../services/api-movies.service";
 import apiRatingsService from "../services/api-ratings.service";
 import { BASE_POSTER_URL } from "../../../core/config/misc";
 import MovieRatingItem from "../components/movie-rating-item";
+import { useAuthContext } from "../../../core/auth/provider";
 
 export default function MoviePage() {
+    const { isConnected } = useAuthContext();
     let { id } = useParams();
     const { data: movie, isFetching: isMovieFetching } = useQuery({
         queryKey: ["getMovie", id],
@@ -21,6 +23,7 @@ export default function MoviePage() {
     const { data: ratings } = useQuery({
         queryKey: ["getMovieRatings", id],
         queryFn: async () => {
+            if (!isConnected) throw new Error("Not authenticated");
             if (!id) throw new Error("missing id");
             return apiRatingsService.getMovieRatings(id);
         },
@@ -105,16 +108,22 @@ export default function MoviePage() {
                         </p>
                     </div>
                     <div className="flex flex-col">
-                        {ratings.length === 0 && <p>No rating</p>}
-                        {ratings.length > 0 && (
-                            <ul className="flex flex-col md:w-[100%]">
-                                {ratings?.map((rating) => (
-                                    <MovieRatingItem
-                                        rating={rating}
-                                        key={rating.id}
-                                    />
-                                ))}
-                            </ul>
+                        {isConnected ? (
+                            <>
+                                {ratings.length === 0 && <p>No rating</p>}
+                                {ratings.length > 0 && (
+                                    <ul className="flex flex-col md:w-[100%]">
+                                        {ratings?.map((rating) => (
+                                            <MovieRatingItem
+                                                rating={rating}
+                                                key={rating.id}
+                                            />
+                                        ))}
+                                    </ul>
+                                )}
+                            </>
+                        ) : (
+                            <p>You must be authenticated to see the ratings</p>
                         )}
                     </div>
                 </div>

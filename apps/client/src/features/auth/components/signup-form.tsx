@@ -3,7 +3,7 @@ import { useForm, useStore, type AnyFieldApi } from "@tanstack/react-form";
 
 import Button from "../../../shared/ui/button";
 import Input from "../../../shared/ui/input";
-import { signupSchema } from "../type/auth";
+import { signupSchema } from "../types/auth";
 import { displayMsg } from "../../../shared/utils/toast";
 import userService from "../services/user.service";
 

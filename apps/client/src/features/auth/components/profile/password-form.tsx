@@ -1,32 +1,37 @@
 import { useForm, useStore } from "@tanstack/react-form";
-import clsx from "clsx";
+import Button from "../../../../shared/ui/button";
+import Input from "../../../../shared/ui/input";
+import { updatePasswordSchema } from "../../types/auth";
+import ProfilePart from "./field";
+import profileService from "../../services/profile.service";
+import { displayMsg } from "../../../../shared/utils/toast";
 
-import Button from "../../../shared/ui/button";
-import Input from "../../../shared/ui/input";
-import { loginSchema } from "../types/auth";
-import { useAuthContext } from "../../../core/auth/provider";
-
-interface Props {
-    containerCss?: string;
-}
+interface Props {}
 
 const errorClass = "font-bold text-red-400 text-sm";
 
-export default function LoginForm({ containerCss }: Props) {
-    const { login } = useAuthContext();
-    const containerStyle = clsx("flex flex-col gap-5 rounded-md", containerCss);
-
+export default function PasswordForm({}: Props) {
     const form = useForm({
         defaultValues: {
-            email: "",
+            current_password: "",
             password: "",
+            password_confirmation: "",
         },
         onSubmit: async ({ value }) => {
-            console.log("called")
-            return await login(value.email, value.password);
+            try {
+                await profileService.updatePassword(
+                    value.current_password,
+                    value.password
+                );
+                form.reset()
+                displayMsg("Password updated!", "success");
+            } catch (e: any) {
+                if (e instanceof Error) displayMsg(e.message, "error");
+                else displayMsg("Could not update your password", "error");
+            }
         },
         validators: {
-            onChange: loginSchema,
+            onChange: updatePasswordSchema,
         },
     });
 
@@ -36,17 +41,16 @@ export default function LoginForm({ containerCss }: Props) {
     }));
 
     return (
-        <div className={containerStyle}>
-            <h2 className="text-2xl">Already a member</h2>
+        <ProfilePart name="Password">
             <form
-                className="flex flex-col w-full gap-5"
+                className="flex flex-col gap-5"
                 onSubmit={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     form.handleSubmit();
                 }}
             >
-                <form.Field name="email">
+                <form.Field name="current_password">
                     {(field) => (
                         <>
                             <Input
@@ -54,10 +58,9 @@ export default function LoginForm({ containerCss }: Props) {
                                 onChange={(e) =>
                                     field.handleChange(e.target.value)
                                 }
+                                placeholder="Current password"
                                 variant={"default"}
-                                name="email"
-                                placeholder="Email"
-                                type="email"
+                                type="password"
                             />
                             {field.state.meta.errors.length > 0 && (
                                 <p className={errorClass}>
@@ -67,6 +70,7 @@ export default function LoginForm({ containerCss }: Props) {
                         </>
                     )}
                 </form.Field>
+
                 <form.Field name="password">
                     {(field) => (
                         <>
@@ -75,9 +79,29 @@ export default function LoginForm({ containerCss }: Props) {
                                 onChange={(e) =>
                                     field.handleChange(e.target.value)
                                 }
+                                placeholder="New Password"
                                 variant={"default"}
-                                name="password"
-                                placeholder="Password"
+                                type="password"
+                            />
+                            {field.state.meta.errors.length > 0 && (
+                                <p className={errorClass}>
+                                    {field.state.meta.errors[0]?.message}
+                                </p>
+                            )}
+                        </>
+                    )}
+                </form.Field>
+
+                <form.Field name="password_confirmation">
+                    {(field) => (
+                        <>
+                            <Input
+                                value={field.state.value}
+                                onChange={(e) =>
+                                    field.handleChange(e.target.value)
+                                }
+                                placeholder="New Password Confirmation"
+                                variant={"default"}
                                 type="password"
                             />
                             {field.state.meta.errors.length > 0 && (
@@ -93,9 +117,9 @@ export default function LoginForm({ containerCss }: Props) {
                     variant={"primary"}
                     type="submit"
                 >
-                    Login
+                    Update password
                 </Button>
             </form>
-        </div>
+        </ProfilePart>
     );
 }
