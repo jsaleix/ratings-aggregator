@@ -5,6 +5,8 @@ import { MoviesModule } from './movies/movies.module';
 import { RatingsModule } from './ratings/ratings.module';
 import { RequestsModule } from './requests/requests.module';
 import { ConfigModule } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 import configuration from './core/configuration';
 
 @Module({
@@ -16,6 +18,8 @@ import configuration from './core/configuration';
     MoviesModule,
     RatingsModule,
     RequestsModule,
+    UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

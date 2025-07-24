@@ -3,6 +3,7 @@ import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { BullmqService } from 'src/shared/services/bullmq.service';
+import { User } from 'generated/prisma';
 
 @Injectable()
 export class RequestsService {
@@ -11,10 +12,11 @@ export class RequestsService {
     private bullmqService: BullmqService,
   ) {}
 
-  async create(createRequestDto: CreateRequestDto) {
+  async create(createRequestDto: CreateRequestDto, user: User) {
     const request = await this.prisma.movie_Request.create({
       data: {
         ...createRequestDto,
+        userId: user.id,
       },
     });
 
