@@ -18,6 +18,7 @@ const existingMovie = {
     tagLine: "A test movie tagline",
     created_at: new Date(),
     ratings_status: MovieRatingsStatus.pending,
+    updated_at: new Date(),
 } satisfies MovieCreateInput;
 
 describe("MovieService", () => {

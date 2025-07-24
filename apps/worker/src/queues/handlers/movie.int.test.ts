@@ -53,7 +53,7 @@ describe("MovieHandler Integration", () => {
 
         await movieQueue.add("add-movie", {
             type: "add-movie:tmdbId",
-            payload: { tmdbId: 42 },
+            payload: { tmdbId: 42},
         });
 
         await new Promise((resolve) => worker.on("completed", resolve));
