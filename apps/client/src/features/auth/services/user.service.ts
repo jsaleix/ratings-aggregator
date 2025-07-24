@@ -8,15 +8,15 @@ class UserService {
     async getSelf(): Promise<UserType | null> {
         const url = new URL("/users/me", API_ENDPOINT).toString();
         await sleep(5);
-        const res = await fetch(url, {
-            method: "GET",
-            headers: { "Content-Type": "application/json", ...authHeaders() },
-        });
-        if (!res.ok) {
-            throw new Error(`Error fetching requests: ${res.statusText}`);
-        }
-        return (await res.json()) as UserType;
-        // return mockUserProfile;
+        // const res = await fetch(url, {
+        //     method: "GET",
+        //     headers: { "Content-Type": "application/json", ...authHeaders() },
+        // });
+        // if (!res.ok) {
+        //     throw new Error(`Error fetching requests: ${res.statusText}`);
+        // }
+        // return (await res.json()) as UserType;
+        return mockUserProfile;
     }
 
     async signup(email: string, password: string) {

@@ -8,7 +8,6 @@ export default function AuthLayout() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(user);
         if (user === null) {
             const currentUrl = window.location.pathname;
             const saveUrlInQueryParam = new URLSearchParams(
