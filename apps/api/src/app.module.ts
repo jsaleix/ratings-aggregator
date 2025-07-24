@@ -7,6 +7,7 @@ import { RequestsModule } from './requests/requests.module';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { DynamicConfigModule } from './dynamic-config/dynamic-config.module';
 import configuration from './core/configuration';
 
 @Module({
@@ -20,6 +21,7 @@ import configuration from './core/configuration';
     RequestsModule,
     UsersModule,
     AuthModule,
+    DynamicConfigModule,
   ],
   controllers: [AppController],
   providers: [AppService],
