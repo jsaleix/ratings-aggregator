@@ -1,18 +1,16 @@
-import {
-  Body,
-  Controller,
-  HttpException,
-  HttpStatus,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 
 import { UsersService } from 'src/users/users.service';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UsersService,
+  ) {}
 
   @Post('signup')
   async signup(@Body() data: SignupDto) {
@@ -21,9 +19,6 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() data: LoginDto) {
-    throw new HttpException(
-      'Not implemented yet',
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
+    return await this.authService.login(data);
   }
 }
