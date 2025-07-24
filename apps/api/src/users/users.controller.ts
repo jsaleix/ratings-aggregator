@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDTO } from './dto/update-user.dto';
@@ -17,7 +18,9 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('me')
-  findSelf() {}
+  findSelf(@Req() req) {
+    return this.usersService.findOneFull(req.user.id);
+  }
 
   @Patch('me')
   updateSelfProfile() {}
@@ -30,7 +33,7 @@ export class UsersController {
 
   @Get()
   findAll() {
-    return this.usersService.findAll();
+    return this.usersService.findAllPublic();
   }
 
   @Get(':id/full')

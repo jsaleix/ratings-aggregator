@@ -31,15 +31,28 @@ export class UsersService {
     return { id, role, username, email, created_at };
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAllPublic() {
+    return await this.prismaService.user.findMany({
+      select: {
+        id: true,
+        username: true,
+      },
+    });
+  }
+
+  async findAllFull() {
+    return await this.prismaService.user.findMany({
+      omit: {
+        password: true,
+      },
+    });
   }
 
   async findOneFull(id: string) {
     return await this.prismaService.user.findUnique({
       where: { id },
-      select: {
-        password: false,
+      omit: {
+        password: true,
       },
     });
   }

@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { RequestsService } from './requests.service';
 import { CreateRequestDto } from './dto/create-request.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('requests')
 export class RequestsController {
@@ -19,6 +20,7 @@ export class RequestsController {
     return this.requestsService.create(createRequestDto, req.user);
   }
 
+  @Public()
   @Get()
   async findAll() {
     return this.requestsService.findAll(false);

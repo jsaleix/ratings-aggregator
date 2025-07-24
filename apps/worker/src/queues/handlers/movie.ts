@@ -16,12 +16,13 @@ type MovieJobType =
 export type MovieJob = {
     type: MovieJobType;
     payload: {
+        requestId: string;
         tmdbId: number;
     };
 };
 
 class MovieHandler {
-    delay = 30000;
+    delay = 15000;
 
     constructor(
         private ratingQueue: Queue,

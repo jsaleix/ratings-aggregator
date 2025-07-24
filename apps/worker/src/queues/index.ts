@@ -41,9 +41,9 @@ export const movieWorker = new Worker(
 movieWorker.on(
     "completed",
     async (job: Job<MovieJob>, movie: MovieType | undefined) => {
-        const { tmdbId } = job.data.payload;
+        const { requestId } = job.data.payload;
         if (movie == undefined) return;
-        await movieRatingService.updateRequestState(tmdbId, true);
+        await movieRatingService.updateRequestState(requestId, true);
         await movieHandler.gatherRatings(movie);
     }
 );

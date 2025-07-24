@@ -24,10 +24,10 @@ export class BullmqService {
     });
   }
 
-  async addMovieToQueue(tmdbId: number) {
+  async addRequestToQueue(requestId: string, tmdbId: number) {
     await this.movieQueue.add('add-movie', {
       type: 'add-movie-with-ratings:tmdbId',
-      payload: { tmdbId },
+      payload: { tmdbId, requestId },
     });
   }
 }

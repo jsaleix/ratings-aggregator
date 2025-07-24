@@ -66,14 +66,14 @@ const run = async () => {
     });
   });
 
-  app.listen(3000, () => {
-    console.log('Running on 3000...');
-    console.log('For the UI, open http://localhost:3000/ui');
+  app.listen(3001, () => {
+    console.log('Running on 3001...');
+    console.log('For the UI, open http://localhost:3001/ui');
     console.log('Make sure Redis is running on port 6379 by default');
     console.log('To populate the queue, run:');
-    console.log('  curl http://localhost:3000/add?title=Example');
+    console.log('  curl http://localhost:3001/add?title=Example');
     console.log('To populate the queue with custom options (opts), run:');
-    console.log('  curl http://localhost:3000/add?title=Test&opts[delay]=9');
+    console.log('  curl http://localhost:3001/add?title=Test&opts[delay]=9');
   });
 };
 

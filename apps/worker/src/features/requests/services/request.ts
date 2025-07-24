@@ -7,9 +7,9 @@ class MovieRequestService {
         this.db = db;
     }
 
-    async updateRequestState(tmdbId: number, value: boolean) {
+    async updateRequestState(requestId: string, value: boolean) {
         return await this.db.movie_Request.update({
-            where: { tmdbId },
+            where: { id: requestId },
             data: {
                 processed: value,
             },

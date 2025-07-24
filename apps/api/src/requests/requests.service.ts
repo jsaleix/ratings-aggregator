@@ -3,7 +3,7 @@ import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { BullmqService } from 'src/shared/services/bullmq.service';
-import { User } from 'generated/prisma';
+import { PrismaClient, User } from 'generated/prisma';
 
 @Injectable()
 export class RequestsService {
@@ -24,7 +24,7 @@ export class RequestsService {
       throw new Error('Failed to create request');
     }
 
-    this.addToQueue(request.tmdbId);
+    this.addToQueue(request.id, request.tmdbId);
     return request;
   }
 
@@ -54,7 +54,7 @@ export class RequestsService {
     });
   }
 
-  private async addToQueue(tmdb: number) {
-    this.bullmqService.addMovieToQueue(tmdb);
+  private async addToQueue(requestId: string, tmdbId: number) {
+    this.bullmqService.addRequestToQueue(requestId, tmdbId);
   }
 }

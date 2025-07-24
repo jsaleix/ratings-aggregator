@@ -15,6 +15,7 @@ import { TMDBService } from './services/tmdb.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { SearchMovieQueryDto } from './dto/search-movie-query.dto';
 import { FindMoviesDTO } from './dto/find-movies.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('movies')
 export class MoviesController {
@@ -23,6 +24,7 @@ export class MoviesController {
     private readonly tmdbService: TMDBService,
   ) {}
 
+  @Public()
   @Get('search')
   async search(@Query() query: SearchMovieQueryDto) {
     return await this.moviesService.search(query);
@@ -38,11 +40,13 @@ export class MoviesController {
     return await this.moviesService.create(createMovieDto);
   }
 
+  @Public()
   @Get()
   async findAll(@Query() query: FindMoviesDTO) {
     return await this.moviesService.findAll(query);
   }
 
+  @Public()
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return await this.moviesService.findOne(id);
