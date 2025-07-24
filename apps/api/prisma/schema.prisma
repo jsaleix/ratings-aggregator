@@ -44,7 +44,7 @@ model Movie_Rating {
 
 model Movie_Request {
   id         String   @id @default(uuid())
-  tmdbId     Int      @unique
+  tmdbId     Int
   title      String
   created_at DateTime @default(now())
   processed  Boolean  @default(false)

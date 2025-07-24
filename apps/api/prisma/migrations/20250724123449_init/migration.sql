@@ -50,8 +50,5 @@ CREATE TABLE "Movie_Request" (
 -- CreateIndex
 CREATE UNIQUE INDEX "Movie_tmdbId_key" ON "Movie"("tmdbId");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Movie_Request_tmdbId_key" ON "Movie_Request"("tmdbId");
-
 -- AddForeignKey
 ALTER TABLE "Movie_Rating" ADD CONSTRAINT "Movie_Rating_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "Movie"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
