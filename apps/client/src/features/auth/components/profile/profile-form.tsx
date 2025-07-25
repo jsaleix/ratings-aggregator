@@ -1,17 +1,17 @@
 import { useForm, useStore } from "@tanstack/react-form";
+
 import { useAuthContext } from "../../../../core/auth/provider";
 import Button from "../../../../shared/ui/button";
 import Input from "../../../../shared/ui/input";
 import ProfilePart from "./field";
-import { updateProfileSchema } from "../../types/auth";
-import profileService from "../../services/profile.service";
-import { displayMsg } from "../../../../shared/utils/toast";
-
-interface Props {}
+import { updateProfileSchema, type UpdateProfileType } from "../../types/auth";
+interface Props {
+    updateAction: (value: UpdateProfileType) => Promise<boolean>;
+}
 
 const errorClass = "font-bold text-red-400 text-sm";
 
-export default function ProfileForm({}: Props) {
+export default function ProfileForm({ updateAction }: Props) {
     const { user } = useAuthContext();
     const form = useForm({
         defaultValues: {
@@ -19,14 +19,7 @@ export default function ProfileForm({}: Props) {
             username: user?.username ?? "",
         },
         onSubmit: async ({ value }) => {
-            try {
-                const { email, username } = value;
-                await profileService.updateProfile(email, username);
-                displayMsg("Account updated!", "success");
-            } catch (e: any) {
-                if (e instanceof Error) displayMsg(e.message, "error");
-                else displayMsg("Could not update your account", "error");
-            }
+            await updateAction(value);
         },
         validators: {
             onChange: updateProfileSchema,

@@ -15,12 +15,9 @@ export default function MovieListItem({ movie }: Props) {
     );
 
     const summary = useMemo(() => {
-        if (movie.title.length <= 15) {
-            if (movie.summary.length > 210)
-                return `${movie.summary.slice(0, 150)}...`;
-            return movie.summary;
-        }
-        return "";
+        if (movie.summary.length > 210)
+            return `${movie.summary.slice(0, 150)}...`;
+        return movie.summary;
     }, [movie]);
 
     return (
@@ -35,9 +32,9 @@ export default function MovieListItem({ movie }: Props) {
             <div className="flex flex-col gap-3 w-full">
                 <Link
                     to={`/movies/${movie.id}`}
-                    className="flex items-end gap-3  flex-wrap"
+                    className="flex items-end gap-3 flex-wrap w-full overflow-hidden"
                 >
-                    <h1 className="text-2xl font-bold text-white hover:text-utils-orange-light">
+                    <h1 className="text-2xl font-bold text-white hover:text-utils-orange-light max-w-41 truncate">
                         {movie.title}
                     </h1>
                     <p className="text-lg text-text-secondary"> {movie.year}</p>

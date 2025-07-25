@@ -40,7 +40,7 @@ export const updateProfileSchema = z.object({
     username: z.string().nonempty(),
 });
 
-export type UpdateProfileType = z.infer<typeof updatePasswordSchema>;
+export type UpdateProfileType = z.infer<typeof updateProfileSchema>;
 
 export const updatePasswordSchema = z.object({
     current_password: z.string().nonempty(),

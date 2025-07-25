@@ -1,12 +1,11 @@
-import { useAuthContext } from "../../../../core/auth/provider";
 import Button from "../../../../shared/ui/button";
 import ProfilePart from "./field";
 
-interface Props {}
+interface Props {
+    logout: () => any;
+}
 
-export default function LogoutPart({}: Props) {
-    const { logout } = useAuthContext();
-
+export default function LogoutPart({ logout }: Props) {
     return (
         <ProfilePart name="Session">
             <Button onClick={logout}>Logout</Button>

@@ -1,4 +1,4 @@
-import PageHeader from "../../shared/ui/page-header";
+import PageHeader from "../../../shared/ui/page-header";
 
 export default function AboutPage() {
     return (

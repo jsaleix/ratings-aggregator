@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Component from "./index";
+import Component from "./password-form";
 
 const meta: Meta<typeof Component> = {
-    title: "Requests/NewRequestForm",
+    title: "Auth/Profile/PasswordForm",
     component: Component,
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const NewRequestForm: Story = {
+export const PasswordForm: Story = {
     args: {
-        label: "Create new request"
+        updatePassword: async () => true,
     },
 };

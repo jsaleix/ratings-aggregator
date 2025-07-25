@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Component from "./index";
+import Component from "./profile-form";
 
 const meta: Meta<typeof Component> = {
-    title: "Requests/NewRequestForm",
+    title: "Auth/Profile/ProfileForm",
     component: Component,
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const NewRequestForm: Story = {
+export const ProfileForm: Story = {
     args: {
-        label: "Create new request"
+        updateAction: async () => true,
     },
 };

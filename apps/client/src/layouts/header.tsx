@@ -9,10 +9,18 @@ export default function Header() {
 
     return (
         <header className="h-16 p-5 border-b-1 border-b-bg-light">
-            <div className="container mx-auto flex items-center justify-between">
-                <Link to="/">AGREGATOR</Link>
+            <div className="container mx-auto flex items-center justify-between h-full w-full">
+                <Link to="/" className="h-full">
+                    <div className="h-full hover:opacity-85 active:opacity-85 duration-150">
+                        <img
+                            src="logo.svg"
+                            alt="Aggregator"
+                            className="object-contain w-full h-full"
+                        />
+                    </div>
+                </Link>
                 <div className="w-fit gap-5 items-center hidden md:flex">
-                    <nav className="flex gap-3 font-bold">
+                    <nav className="flex gap-3 font-bold uppercase">
                         {isConnected ? (
                             <NavLink to="/profile" className={linkCss}>
                                 Profile

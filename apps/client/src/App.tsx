@@ -1,14 +1,14 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router";
 
-import HomePage from "./features/general/home";
-import NotFoundPage from "./features/general/not-found";
+import HomePage from "./features/general/pages/home";
+import NotFoundPage from "./features/general/pages/not-found";
 
 import BaseLayout from "./layouts/layout";
 import AuthLayout from "./layouts/auth/layout";
 import { useAuthContext } from "./core/auth/provider";
 
-const AboutPage = lazy(() => import("./features/general/about"));
+const AboutPage = lazy(() => import("./features/general/pages/about"));
 
 const MoviePage = lazy(() => import("./features/movies/pages/movie"));
 const MoviesPage = lazy(() => import("./features/movies/pages/movies"));

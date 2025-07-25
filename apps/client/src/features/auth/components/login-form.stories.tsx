@@ -1,16 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Component from "./index";
+import Component from "./login-form";
 
 const meta: Meta<typeof Component> = {
-    title: "Requests/NewRequestForm",
+    title: "Auth/Loginform",
     component: Component,
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const NewRequestForm: Story = {
-    args: {
-        label: "Create new request"
-    },
-};
+export const Loginform: Story = {};

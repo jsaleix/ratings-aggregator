@@ -1,16 +1,20 @@
 import { useForm, useStore } from "@tanstack/react-form";
+
 import Button from "../../../../shared/ui/button";
 import Input from "../../../../shared/ui/input";
-import { updatePasswordSchema } from "../../types/auth";
+import {
+    updatePasswordSchema,
+    type UpdatePasswordType,
+} from "../../types/auth";
 import ProfilePart from "./field";
-import profileService from "../../services/profile.service";
-import { displayMsg } from "../../../../shared/utils/toast";
 
-interface Props {}
+interface Props {
+    updatePassword: (value: UpdatePasswordType) => Promise<boolean>;
+}
 
 const errorClass = "font-bold text-red-400 text-sm";
 
-export default function PasswordForm({}: Props) {
+export default function PasswordForm({ updatePassword }: Props) {
     const form = useForm({
         defaultValues: {
             current_password: "",
@@ -18,17 +22,7 @@ export default function PasswordForm({}: Props) {
             password_confirmation: "",
         },
         onSubmit: async ({ value }) => {
-            try {
-                await profileService.updatePassword(
-                    value.current_password,
-                    value.password
-                );
-                form.reset()
-                displayMsg("Password updated!", "success");
-            } catch (e: any) {
-                if (e instanceof Error) displayMsg(e.message, "error");
-                else displayMsg("Could not update your password", "error");
-            }
+            if (await updatePassword(value)) form.reset();
         },
         validators: {
             onChange: updatePasswordSchema,

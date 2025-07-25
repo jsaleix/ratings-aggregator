@@ -22,7 +22,6 @@ export default function LoginForm({ containerCss }: Props) {
             password: "",
         },
         onSubmit: async ({ value }) => {
-            console.log("called")
             return await login(value.email, value.password);
         },
         validators: {

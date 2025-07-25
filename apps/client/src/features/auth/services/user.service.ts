@@ -1,6 +1,5 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import { authHeaders } from "../../../shared/api/headers";
-import type { SignupType } from "../types/auth";
 import type { SignupReturnType, UserType } from "../types/user";
 
 class UserService {
@@ -16,12 +15,12 @@ class UserService {
         return (await res.json()) as UserType;
     }
 
-    async signup(data: SignupType) {
+    async signup(email: string, password: string) {
         const url = new URL("/auth/login", API_ENDPOINT).toString();
         const res = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...data }),
+            body: JSON.stringify({ email, password }),
         });
         if (!res.ok) {
             throw new Error(`Error fetching requests: ${res.statusText}`);
