@@ -34,7 +34,7 @@ export default function ProfileForm({ updateAction }: Props) {
     return (
         <ProfilePart
             name="Account"
-            subTitle="Your email address is your identity on Agregator and is used to log in."
+            subTitle="Your email address is your identity on Aggregator and is used to log in."
         >
             <form
                 className="flex flex-col gap-5"
