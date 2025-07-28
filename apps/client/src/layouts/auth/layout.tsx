@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from "react-router";
-import { useAuthContext } from "../../core/auth/provider";
 import { useEffect } from "react";
+
+import { useAuthContext } from "../../core/auth/provider";
 import { notify } from "../../shared/utils/toast";
 
 export default function AuthLayout() {
@@ -10,14 +11,12 @@ export default function AuthLayout() {
     useEffect(() => {
         if (user === null) {
             const currentUrl = window.location.pathname;
+            console.log(currentUrl)
             const saveUrlInQueryParam = new URLSearchParams(
                 window.location.search
             );
             saveUrlInQueryParam.set("redirect", currentUrl);
             navigate(`/auth?${saveUrlInQueryParam.toString()}`, {});
-            // navigate("/auth", {
-            //     state: { from: currentUrl },
-            // });
             notify("You must be logged in to access this page");
         }
     }, [user]);

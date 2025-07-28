@@ -42,7 +42,7 @@ export default function MoviePage() {
         <div className="w-full max-w-screen">
             <div className="flex flex-col items-center container mx-auto gap-5 pb-5 md:py-5">
                 <header className="flex flex-col w-full md:flex-row gap-5 justify-center">
-                    <div className="hidden md:flex h-auto md:w-65 overflow-hidden aspect-[9/16]">
+                    <div className="hidden md:flex h-auto md:w-75 overflow-hidden aspect-[9/16]">
                         <img
                             src={posterUrl}
                             alt={movie.title}
@@ -91,6 +91,12 @@ export default function MoviePage() {
                                     </span>
                                 </p>
                             )}
+                            <p className="text-text-secondary">
+                                TMDB ID:{" "}
+                                <span className="text-white">
+                                    {movie.tmdbId}
+                                </span>
+                            </p>
                         </div>
                     </div>
                 </header>
@@ -100,12 +106,12 @@ export default function MoviePage() {
                         <h1 className="text-xl font-bold uppercase text-white">
                             <span className="text-orange-700">R</span>atings
                         </h1>
-                        <p className="text-text-secondary">
+                        {/* <p className="text-text-secondary">
                             Status:{" "}
                             <span className="uppercase font-bold text-white">
                                 {movie.ratings_status}
                             </span>
-                        </p>
+                        </p> */}
                     </div>
                     <div className="flex flex-col">
                         {isConnected ? (
