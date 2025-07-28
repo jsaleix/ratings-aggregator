@@ -1,4 +1,4 @@
-import type { MovieRatingsStatusType } from "../../constants";
+import type { MovieRatingsStatusType } from "../constants";
 
 export interface MovieModel {
     id: string;

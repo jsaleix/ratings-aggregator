@@ -33,6 +33,11 @@ export class UsersController {
     return this.usersService.updatePassword(req.user.id, updatePasswordDto);
   }
 
+  @Delete('me')
+  deleteSelfProfile(@Req() req) {
+    return this.usersService.remove(req.user.id);
+  }
+
   @Patch('me/mail')
   updateSelfMail(@Body() updateEmailDto: UpdateEmailDTO, @Req() req) {
     return this.usersService.updateMail(req.user.id, updateEmailDto);

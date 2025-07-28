@@ -124,7 +124,7 @@ export class UsersService {
   }
 
   remove(id: string) {
-    return `This action removes a #${id} user`;
+    return this.prismaService.user.delete({ where: { id } });
   }
 
   async getUserWithMail(email: string) {
