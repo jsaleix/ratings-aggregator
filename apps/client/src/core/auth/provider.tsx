@@ -57,12 +57,12 @@ export const AuthContextProvider = ({ children }: Props) => {
             const profile = await userService.getSelf();
             setUser(profile);
         } catch (e) {
-            setUser(null);
+            logout();
         }
     }, []);
 
     useEffect(() => {
-        retrieveProfile();
+        if (localStorage.getItem(STORAGE_TOKEN_KEY)) retrieveProfile();
     }, []);
 
     return (

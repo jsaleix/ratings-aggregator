@@ -29,12 +29,12 @@ class ProfileService {
         return await res.json();
     }
 
-    async updatePassword(oldPassword: string, newPassword: string) {
+    async updatePassword(currentPassword: string, newPassword: string) {
         const url = new URL("/users/me/password", API_ENDPOINT).toString();
         const res = await fetch(url, {
             method: "PATCH",
             headers: { "Content-Type": "application/json", ...authHeaders() },
-            body: JSON.stringify({ oldPassword, newPassword }),
+            body: JSON.stringify({ currentPassword, newPassword }),
         });
         if (!res.ok) {
             throw new Error(`Error fetching requests: ${res.statusText}`);

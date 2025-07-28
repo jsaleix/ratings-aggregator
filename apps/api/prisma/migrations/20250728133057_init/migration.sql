@@ -72,6 +72,9 @@ CREATE UNIQUE INDEX "Movie_tmdbId_key" ON "Movie"("tmdbId");
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
 -- AddForeignKey
 ALTER TABLE "Movie_Rating" ADD CONSTRAINT "Movie_Rating_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "Movie"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 

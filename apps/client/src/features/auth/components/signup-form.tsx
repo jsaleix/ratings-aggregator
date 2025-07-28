@@ -30,9 +30,10 @@ export default function SignupForm({ containerCss }: Props) {
             password: "",
             password_confirmation: "",
             gcu: false,
+            username: "",
         },
         onSubmit: async ({ value }) => {
-            const res = await userService.signup(value.email, value.password);
+            const res = await userService.signup(value);
             if (res) {
                 form.reset();
                 displayMsg("Account created! You can login now", "success");
@@ -73,6 +74,23 @@ export default function SignupForm({ containerCss }: Props) {
                                 name="email"
                                 placeholder="Email"
                                 type="email"
+                            />
+                            <FieldInfo field={field} />
+                        </>
+                    )}
+                </form.Field>
+                <form.Field name="username">
+                    {(field) => (
+                        <>
+                            <Input
+                                value={field.state.value}
+                                onChange={(e) =>
+                                    field.handleChange(e.target.value)
+                                }
+                                variant={"default"}
+                                name="username"
+                                placeholder="Username"
+                                type="text"
                             />
                             <FieldInfo field={field} />
                         </>
