@@ -57,7 +57,7 @@ export class UsersController {
   @Role('admin')
   @Get()
   findAll() {
-    return this.usersService.findAllPublic();
+    return this.usersService.findAllFull();
   }
 
   @Role('admin')

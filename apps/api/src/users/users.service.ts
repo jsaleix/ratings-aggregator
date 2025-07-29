@@ -12,6 +12,7 @@ import * as bcrypt from 'bcrypt';
 import { roles } from 'src/core/constants/auth';
 import { AdminUpdateUserFullDTO } from './dto/admin/update-user-full.dto';
 import { AdminUpdatePasswordDTO } from './dto/admin/update-password.dto';
+import { PaginateFunction, paginator } from 'src/shared/utils/pagination';
 
 @Injectable()
 export class UsersService {
@@ -49,6 +50,13 @@ export class UsersService {
   }
 
   async findAllFull() {
+    const paginate: PaginateFunction = paginator({ perPage: 15 });
+
+    return await paginate(this.prismaService.user, {
+      omit: {
+        password: true,
+      },
+    });
     return await this.prismaService.user.findMany({
       omit: {
         password: true,

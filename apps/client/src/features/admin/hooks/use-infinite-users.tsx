@@ -1,18 +1,17 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+import useBaseFilters from "./use-filters";
+import ApiUsersService from "../services/users.service";
 import { useEffect, useMemo } from "react";
 
-import apiMoviesService from "../services/api-movies.service";
-import useMovieFilters from "./use-filters";
-
-export default function UseMovies() {
-    const { filters, changeOrder, changeOrderBy } = useMovieFilters();
+export default function useInfiniteUsers() {
+    const { filters, changeOrder, changeOrderBy } = useBaseFilters();
 
     const { refetch, data, isFetching, hasNextPage, fetchNextPage } =
         useInfiniteQuery({
-            queryKey: ["getMovies"],
+            queryKey: ["getUsers"],
             queryFn: async ({ pageParam = 1 }) => {
                 const { order, orderBy } = filters;
-                const response = await apiMoviesService.getAll({
+                const response = await ApiUsersService.getAll({
                     page: pageParam,
                     order,
                     orderBy,
@@ -28,7 +27,7 @@ export default function UseMovies() {
             getNextPageParam: (lastPage) => lastPage.next,
         });
     const currentPage = data?.pageParams?.length ?? 0;
-    const movies = useMemo(() => {
+    const users = useMemo(() => {
         return data?.pages.flatMap((page) => page.items) ?? [];
     }, [data]);
 
@@ -37,7 +36,7 @@ export default function UseMovies() {
     }, [filters]);
 
     return {
-        movies,
+        users,
         isFetching,
         fetchNextPage,
         currentPage,

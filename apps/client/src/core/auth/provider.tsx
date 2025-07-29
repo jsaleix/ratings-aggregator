@@ -12,6 +12,7 @@ import { STORAGE_TOKEN_KEY } from "../config/storage";
 type AuthContextType = {
     user: undefined | null | UserType;
     isConnected: boolean;
+    role: string | undefined;
     login: (email: string, password: string) => Promise<any>;
     logout: () => void;
 };
@@ -19,6 +20,7 @@ type AuthContextType = {
 const defaultValue = {
     user: undefined,
     isConnected: false,
+    role: undefined,
     login: async () => {},
     logout: () => undefined,
 } satisfies AuthContextType;
@@ -36,6 +38,7 @@ interface Props {
 export const AuthContextProvider = ({ children }: Props) => {
     const [user, setUser] = useState<null | undefined | UserType>(undefined);
     const isConnected = !!user?.id;
+    const role = user?.role;
 
     const login = useCallback(
         async (email: string, password: string) => {
@@ -66,7 +69,9 @@ export const AuthContextProvider = ({ children }: Props) => {
     }, []);
 
     return (
-        <authContext.Provider value={{ user, isConnected, login, logout }}>
+        <authContext.Provider
+            value={{ user, isConnected, login, logout, role }}
+        >
             {children}
         </authContext.Provider>
     );

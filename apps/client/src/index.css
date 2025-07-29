@@ -49,6 +49,14 @@
     animation: modalEnter 0.3s ease-out forwards;
 }
 
+@utility title-primary {
+    @apply text-2xl font-bold;
+}
+
+@utility title-secondary {
+    @apply text-xl font-semibold;
+}
+
 @keyframes modalEnter {
     0% {
         opacity: 0;

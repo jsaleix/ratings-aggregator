@@ -1,11 +1,12 @@
 import { Link, NavLink } from "react-router";
 import { useAuthContext } from "../core/auth/provider";
 import HeaderSearchMovieInput from "../shared/ui/header-search-input";
+import clsx from "clsx";
 
 const linkCss = "font-bold hover:text-utils-orange-light duration-150";
 
 export default function Header() {
-    const { isConnected } = useAuthContext();
+    const { isConnected, role } = useAuthContext();
 
     return (
         <header className="h-16 p-5 border-b-1 border-b-bg-light">
@@ -39,6 +40,11 @@ export default function Header() {
                         <NavLink to="/about" className={linkCss}>
                             About
                         </NavLink>
+                        {role === "admin" && (
+                            <NavLink to="/admin" className={clsx(linkCss, "text-green-400")}>
+                                ADMIN
+                            </NavLink>
+                        )}
                     </nav>
                     <HeaderSearchMovieInput css="!w-40" />
                 </div>
