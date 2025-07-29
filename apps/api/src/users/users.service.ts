@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { UpdatePasswordDTO } from './dto/update-password.dto';
@@ -6,16 +10,20 @@ import { UpdateEmailDTO } from './dto/update-email';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { roles } from 'src/core/constants/auth';
+import { AdminUpdateUserFullDTO } from './dto/admin/update-user-full.dto';
+import { AdminUpdatePasswordDTO } from './dto/admin/update-password.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
   async create(data: CreateUserDTO) {
-    const mailAlreadyTaken = await this.getUserWithMail(data.email);
+    const mailAlreadyTaken = await this.adminGetUserWithMail(data.email);
     if (mailAlreadyTaken) throw new Error('Mail already taken');
 
-    const usernameAlreadyTaken = await this.getUserWithUsername(data.username);
+    const usernameAlreadyTaken = await this.adminGetUserWithUsername(
+      data.username,
+    );
     if (usernameAlreadyTaken) throw new Error('Username already taken');
 
     const password = (await bcrypt.hash(data.password, 10)) as string;
@@ -67,11 +75,56 @@ export class UsersService {
     });
   }
 
-  updateAccount(id: string, updateUserDTO: UpdateUserDTO) {
+  async adminUpdateAccountFull(id: string, data: AdminUpdateUserFullDTO) {
     try {
+      const isMailTaken = await this.adminGetUserWithMail(data.email);
+      if (isMailTaken && isMailTaken.id !== id) {
+        throw new BadRequestException('Email already taken');
+      }
       return this.prismaService.user.update({
         where: { id },
-        data: updateUserDTO,
+        data,
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          created_at: true,
+        },
+      });
+    } catch (error) {
+      throw new Error('Error updating user account');
+    }
+  }
+
+  async adminUpdatePassword(
+    id: string,
+    updatePassword: AdminUpdatePasswordDTO,
+  ) {
+    try {
+      const { newPassword } = updatePassword;
+      const user = await this.prismaService.user.findUnique({ where: { id } });
+      if (!user) {
+        throw new Error('User not found');
+      }
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      return this.prismaService.user.update({
+        where: { id },
+        data: { password: hashedPassword },
+      });
+    } catch (error) {
+      throw new BadRequestException('Error updating user password');
+    }
+  }
+
+  async updateAccount(id: string, data: UpdateUserDTO) {
+    try {
+      const isMailTaken = await this.adminGetUserWithMail(data.email);
+      if (isMailTaken && isMailTaken.id !== id) {
+        throw new BadRequestException('Email already taken');
+      }
+      return this.prismaService.user.update({
+        where: { id },
+        data,
         select: {
           id: true,
           username: true,
@@ -108,30 +161,25 @@ export class UsersService {
     }
   }
 
-  async updateMail(id: string, updateEmailDto: UpdateEmailDTO) {
-    try {
-      const mailAlreadyTaken = await this.getUserWithMail(updateEmailDto.email);
-      if (mailAlreadyTaken && mailAlreadyTaken.id !== id) {
-        throw new Error('Email already taken');
-      }
-      return this.prismaService.user.update({
-        where: { id },
-        data: { email: updateEmailDto.email },
-      });
-    } catch (error) {
-      throw new Error('Error updating user email');
-    }
+  async remove(id: string) {
+    const user = await this.findOneFull(id);
+    if (!user) throw new NotFoundException();
+    const timestamp = new Date().toISOString();
+    user.deleted_at = new Date(timestamp);
+    user.email = `${timestamp}-deleted@example.com`;
+    user.username = `${timestamp}-deleted`;
+    user.role = 'user';
+    return this.prismaService.user.update({
+      where: { id },
+      data: user,
+    });
   }
 
-  remove(id: string) {
-    return this.prismaService.user.delete({ where: { id } });
-  }
-
-  async getUserWithMail(email: string) {
+  async adminGetUserWithMail(email: string) {
     return await this.prismaService.user.findFirst({ where: { email } });
   }
 
-  async getUserWithUsername(username: string) {
+  async adminGetUserWithUsername(username: string) {
     return await this.prismaService.user.findFirst({ where: { username } });
   }
 }

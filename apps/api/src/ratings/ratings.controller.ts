@@ -11,6 +11,7 @@ import {
 import { RatingsService } from './ratings.service';
 import { CreateRatingDto } from './dto/create-rating.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
+import { Role } from 'src/auth/decorators/role.decorator';
 
 @Controller('ratings')
 export class RatingsController {
@@ -21,16 +22,19 @@ export class RatingsController {
     return this.ratingsService.findForMovie(movieId);
   }
 
+  @Role('admin')
   @Get()
   findAll() {
     return this.ratingsService.findAll();
   }
 
+  @Role('admin')
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.ratingsService.findOne(id);
   }
 
+  @Role('admin')
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.ratingsService.remove(id);

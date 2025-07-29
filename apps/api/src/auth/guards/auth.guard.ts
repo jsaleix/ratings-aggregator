@@ -44,6 +44,7 @@ export class AuthGuard implements CanActivate {
 
       const user = await this.userService.findOneFull(payload.sub);
       if (!user) throw new Error('No user found');
+      if (user.deleted_at) throw new Error('User is deleted');
       request['user'] = user;
     } catch {
       throw new UnauthorizedException();
