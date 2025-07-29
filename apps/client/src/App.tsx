@@ -1,5 +1,5 @@
-import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router";
+import { lazy, Suspense, useEffect } from "react";
+import { Routes, Route, useParams, useLocation } from "react-router";
 
 import HomePage from "./features/general/pages/home";
 import NotFoundPage from "./features/general/pages/not-found";
@@ -23,7 +23,12 @@ const AuthPage = lazy(() => import("./features/auth/pages/auth"));
 const ProfilePage = lazy(() => import("./features/auth/pages/profile"));
 
 function App() {
+    const { pathname } = useLocation();
     const { isConnected } = useAuthContext();
+
+    useEffect(() => {
+        document.title = "Aggregator";
+    }, [pathname]);
 
     return (
         <Suspense>

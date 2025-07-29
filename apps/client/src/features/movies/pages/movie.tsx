@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 
@@ -7,6 +7,7 @@ import apiRatingsService from "../services/api-ratings.service";
 import { BASE_POSTER_URL } from "../../../core/config/misc";
 import MovieRatingItem from "../components/movie-rating-item";
 import { useAuthContext } from "../../../core/auth/provider";
+import { setPageTitle } from "../../../shared/utils/page";
 
 export default function MoviePage() {
     const { isConnected } = useAuthContext();
@@ -35,6 +36,10 @@ export default function MoviePage() {
         () => (movie ? BASE_POSTER_URL + movie.poster_path : ""),
         [movie]
     );
+
+    useEffect(()=>{
+        if(movie) setPageTitle(movie.title)
+    }, [movie]);
 
     if (isMovieFetching || !movie?.id) return <p>Loading...</p>;
 

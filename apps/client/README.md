@@ -1,3 +1,3 @@
-## Ratings Agregator Client
+## Ratings Aggregator Client
 
 React + TypeScript + Vite

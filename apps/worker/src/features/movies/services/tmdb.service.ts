@@ -14,7 +14,7 @@ class TMDBService {
             method: "GET",
             headers: { ...authHeaders },
         });
-        if (!res.ok) throw new Error();
+        if (!res.ok) throw new Error("Movie not found");
         return res.json();
     }
 

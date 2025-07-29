@@ -6,11 +6,11 @@ import { db } from "../core/db";
 import MovieService from "../features/movies/services/movies.service";
 import TMDBService from "../features/movies/services/tmdb.service";
 import RatingService from "../features/ratings/services/rating.service";
+import MovieRequestService from "../features/requests/services/request";
+import { MovieType } from "../features/movies/types/db";
 
 import MovieHandler, { MovieJob } from "./handlers/movie";
 import RatingHandler from "./handlers/rating";
-import MovieRequestService from "../features/requests/services/request";
-import { MovieType } from "../features/movies/types/db";
 
 const ratingQueue = new Queue(QUEUES.rating, {
     connection: RedisMqConnection,
@@ -38,15 +38,31 @@ export const movieWorker = new Worker(
     }
 );
 
+movieWorker.on("active", async (job: Job<MovieJob>) => {
+    console.log("---------------");
+    const { requestId } = job.data.payload;
+    console.log("Active: ", requestId);
+    await movieRatingService.updateRequestState(requestId, true);
+    console.log("---------------");
+});
+
 movieWorker.on(
     "completed",
-    async (job: Job<MovieJob>, movie: MovieType | undefined) => {
-        const { requestId } = job.data.payload;
+    async (_: Job<MovieJob>, movie: MovieType | undefined) => {
         if (movie == undefined) return;
-        await movieRatingService.updateRequestState(requestId, true);
         await movieHandler.gatherRatings(movie);
     }
 );
+
+movieWorker.on("failed", (job, error) => {
+    console.log("---------------");
+    console.log("MovieWorker failed:");
+    console.log(
+        `Type: ${job?.data.type} | Request ${job?.data.payload.requestId} | TMDBID ${job?.data.payload.tmdbId}`
+    );
+    console.log(error.message);
+    console.log("---------------");
+});
 
 export const ratingWorker = new Worker(
     QUEUES.rating,

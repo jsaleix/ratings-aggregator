@@ -3,7 +3,7 @@ export default function Footer() {
         <footer className="h-32 p-5 border-t-1 border-b-bg-light">
             <div className="container mx-auto flex flex-col center">
                 <p className="font-light text-sm text-text-secondary">
-                    © Agregator
+                    © Aggregator
                 </p>
                 <p className="font-light text-sm text-text-secondary">
                     Data from{" "}
