@@ -38,20 +38,23 @@ services:
             - postgres
             - redis
         volumes:
-            - /app
+            - ./apps/api:/app
+            - /app/node_modules
+            - /app/generated
 
     worker:
         build:
             context: ./apps/worker
             dockerfile: ../../docker/worker/Dockerfile
+            target: dev
         depends_on:
             - postgres
             - redis
         volumes:
             - ./apps/worker:/app
+            - /app/node_modules
+            - /app/generated
 
 volumes:
     postgres_data:
     redis_data:
-    api_data:
-    worker_data:
