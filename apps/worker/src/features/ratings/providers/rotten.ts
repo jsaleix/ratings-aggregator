@@ -1,7 +1,10 @@
 import puppeteer from "puppeteer";
 
 export const getRottenTomatoesScores = async (name: string) => {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({
+        headless: "shell",
+        args: ["--no-sandbox"],
+    });
     const page = await browser.newPage();
 
     try {
@@ -14,6 +17,7 @@ export const getRottenTomatoesScores = async (name: string) => {
             "#search-results search-page-result:nth-child(2) search-page-media-row";
         await page.waitForSelector(mediaRowSelector, { timeout: 10000 });
 
+        console.log("here");
         const movieUrl = await page.$eval(`${mediaRowSelector} a`, (el) =>
             el.getAttribute("href")
         );
@@ -43,6 +47,8 @@ export const getRottenTomatoesScores = async (name: string) => {
             (el) => el.textContent?.trim() || "N/A"
         );
 
+        console.log(`Critics Ratings: ${criticsRatings}`);
+        console.log(`Audience Ratings: ${audienceRatings}`);
         return {
             name,
             url: fullMovieUrl,

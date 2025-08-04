@@ -74,6 +74,16 @@ export const ratingWorker = new Worker(
     }
 );
 
+ratingWorker.on("failed", (job, error) => {
+    console.log("---------------");
+    console.log("RatingWorker failed:");
+    console.log(
+        `Type: ${job?.data.type} | MovieID ${job?.data.payload.movieId}`
+    );
+    console.log(error.message);
+    console.log("---------------");
+});
+
 export const summaryWorker = new Worker(
     QUEUES.summary,
     async (_) => {

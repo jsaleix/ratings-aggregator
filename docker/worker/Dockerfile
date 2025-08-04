@@ -1,12 +1,16 @@
-FROM node:24-alpine as dev
+FROM node:23 as dev
 
-WORKDIR /home/node
+WORKDIR /app
 
-COPY --chown=node:node package*.json ./
-RUN npm i
-RUN npm i -g tsc
-RUN npm i -g ts-node
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=node:node . .
+
+RUN npm i -g ts-node
+RUN npm install --force
+
+RUN npx prisma generate
 
 CMD [ "npm", "run", "dev" ]
