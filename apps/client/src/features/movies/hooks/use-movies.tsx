@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "react";
 import apiMoviesService from "../services/api-movies.service";
 import useMovieFilters from "./use-filters";
 
-export default function UseMovies() {
+export default function useMovies() {
     const { filters, changeOrder, changeOrderBy } = useMovieFilters();
 
     const { refetch, data, isFetching, hasNextPage, fetchNextPage } =

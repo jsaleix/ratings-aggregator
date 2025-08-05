@@ -1,11 +1,11 @@
 import PageHeader from "../../../shared/ui/page-header";
 import MovieList from "../components/movie-list";
 import FiltersPart from "../components/movies-filters";
-import UseMovies from "../hooks/use-movies";
+import useMovies from "../hooks/use-movies";
 
 export default function MoviesPage() {
     const { movies, fetchNextPage, filters, changeOrder, changeOrderBy } =
-        UseMovies();
+        useMovies();
 
     return (
         <div className="w-full">

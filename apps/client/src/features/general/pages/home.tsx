@@ -1,51 +1,38 @@
+import { Link } from "react-router";
+import Button from "../../../shared/ui/button";
+import LastMoviesAdded from "../../movies/components/last-movies-added";
+
 const imgIdx = Math.floor(Math.random() * 3) + 1;
 
 export default function HomePage() {
+    const image = `assets/images/home/${imgIdx}.webp`;
+
     return (
         <div className="w-full">
-            <div className="flex flex-col gap-5 py-5 px-5 md:px-0">
-                <section className="w-full h-[40vh] md:h-[60vh] flex flex-col justify-center items-center gap-5">
-                    <div className="md:h-60 object-contain">
+            <div className="flex flex-col gap-0">
+                <section className="w-full flex flex-col md:flex-row items-center gap-5 justify-center bg-black h-[80vh] md:h-auto z-1">
+                    <div className="flex flex-col w-full md:w-2/4 md:ml-40 gap-3 p-5 md:p-0 z-1 items-center md:items-start">
+                        <h2 className="uppercase text-white  text-4xl md:text-3xl font-bold text-center md:text-start">
+                            Gathering ratings across different websites
+                        </h2>
+                        <p className="text-white text-2xl md:text-xl">
+                            So you don't have to.
+                        </p>
+                        <Link to={"/auth"} className="w-2/3">
+                            <Button variant={"primary"}>
+                                Join now (for free)
+                            </Button>
+                        </Link>
+                    </div>
+                    <div className="h-[80vh] md:max-h-[50vh] overflow-hidden md:relative absolute opacity-30 md:opacity-100">
                         <img
-                            className="w-full h-full"
-                            src={`assets/images/home/${imgIdx}.png`}
-                            alt=""
+                            className="mask-radial-[100%_100%] mask-radial-from-75% md:mask-radial-at-right w-full h-full object-cover"
+                            src={image}
                         />
-                    </div>
-                    <div className="flex flex-col justify-start w-96 text-start">
-                        <h1 className="text-3xl font-bold">
-                            GATHERING RATINGS ACROSS DIFFERENT WEBSITES
-                        </h1>
-                        <h1 className="text-3xl font-bold text-utils-orange">
-                            SO YOU DON'T HAVE TO
-                        </h1>
-                    </div>
-                </section>
-                <section className="flex flex-col md:flex-row container mx-auto gap-5 items-center justify-center py-10">
-                    <div className="w-full md:w-2/3 flex justify-center">
-                        <div className="w-90 md:w-full h-auto object-contain">
-                            <img
-                                className="w-full h-full"
-                                src="assets/images/home/1.png"
-                                alt=""
-                            />
-                        </div>
-                    </div>
-                    <div className="flex flex-col w-full md:w-1/3 px-5 md:px-0 text-center md:text-start">
-                        <h1 className="text-3xl font-bold md:max-w-80">
-                            GATHERING RATINGS ACROSS DIFFERENT WEBSITES
-                        </h1>
-                        <h1 className="text-3xl font-bold text-utils-orange">
-                            SO YOU DON'T HAVE TO
-                        </h1>
                     </div>
                 </section>
 
-                <section className="bg-bg-light flex justify-center py-5">
-                    <h2 className="text-black text-xl">
-                        Gathering ratings from
-                    </h2>
-                </section>
+                <LastMoviesAdded maxResults={5}/>
             </div>
         </div>
     );

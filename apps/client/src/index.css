@@ -15,6 +15,16 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.hideScrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hideScrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
 @theme {
     --color-bg-dark: #121217;
     --color-bg-light: #d7d5e3;
