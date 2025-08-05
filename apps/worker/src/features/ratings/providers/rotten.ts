@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer";
 
-export const getRottenTomatoesScores = async (name: string) => {
+export const getRottenTomatoesScores = async (name: string, year: number) => {
     const browser = await puppeteer.launch({
         headless: "shell",
         args: ["--no-sandbox"],
@@ -17,7 +17,6 @@ export const getRottenTomatoesScores = async (name: string) => {
             "#search-results search-page-result:nth-child(2) search-page-media-row";
         await page.waitForSelector(mediaRowSelector, { timeout: 10000 });
 
-        console.log("here");
         const movieUrl = await page.$eval(`${mediaRowSelector} a`, (el) =>
             el.getAttribute("href")
         );
@@ -38,14 +37,17 @@ export const getRottenTomatoesScores = async (name: string) => {
             "#modules-wrap > div.media-scorecard.no-border > media-scorecard > rt-text:nth-child(7)";
         await page.waitForSelector(criticsSelector, { timeout: 10000 });
 
-        const criticsRatings = await page.$eval(
+        let criticsRatings = await page.$eval(
             criticsSelector,
             (el) => el.textContent?.trim() || "N/A"
         );
-        const audienceRatings = await page.$eval(
+        let audienceRatings = await page.$eval(
             audienceSelector,
             (el) => el.textContent?.trim() || "N/A"
         );
+
+        if (criticsRatings.indexOf("%") == -1) criticsRatings = "N/A";
+        if (audienceRatings.indexOf("%") == -1) audienceRatings = "N/A";
 
         console.log(`Critics Ratings: ${criticsRatings}`);
         console.log(`Audience Ratings: ${audienceRatings}`);

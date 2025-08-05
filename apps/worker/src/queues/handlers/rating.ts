@@ -55,8 +55,7 @@ class RatingHandler {
                 break;
             case ratingJobsTypeValues["set-rating:rotten"]:
                 res = await this.ratingService.setRottenRatings(
-                    movieId,
-                    movie.title
+                    movie
                 );
                 break;
         }
