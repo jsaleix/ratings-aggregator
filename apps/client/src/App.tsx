@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
-import { Routes, Route, useParams, useLocation } from "react-router";
+import { Routes, Route, useLocation } from "react-router";
 
 import HomePage from "./features/general/pages/home";
 import NotFoundPage from "./features/general/pages/not-found";
