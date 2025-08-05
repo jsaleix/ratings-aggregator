@@ -17,9 +17,26 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
             "#search-results search-page-result:nth-child(2) search-page-media-row";
         await page.waitForSelector(mediaRowSelector, { timeout: 10000 });
 
-        const movieUrl = await page.$eval(`${mediaRowSelector} a`, (el) =>
-            el.getAttribute("href")
-        );
+        const movieUrl = await page.evaluate((targetYear) => {
+            const movieResultSection = document.querySelector(
+                "search-page-result[type='movie']"
+            );
+            if (!movieResultSection) return null;
+
+            const rows = Array.from(
+                movieResultSection.querySelectorAll("search-page-media-row")
+            );
+
+            for (const row of rows) {
+                const releaseYear = row.getAttribute("releaseyear");
+                if (releaseYear === String(targetYear)) {
+                    const anchor = row.querySelector("a");
+                    return anchor?.getAttribute("href") || null;
+                }
+            }
+
+            return null;
+        }, year);
 
         if (!movieUrl)
             throw new Error(
