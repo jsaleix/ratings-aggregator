@@ -2,13 +2,13 @@ import { useCallback, useState } from "react";
 
 export type FiltersType = {
     order: "asc" | "desc" | undefined;
-    orderBy: "title" | "id" | "created_at" | undefined;
+    orderBy: "title" | "id" | "created_at" | "year" | undefined;
 };
 
 export default function useMovieFilters() {
     const [filters, setFilters] = useState<FiltersType>({
-        order: "asc",
-        orderBy: "created_at",
+        order: "desc",
+        orderBy: "year",
     });
 
     const changeOrder = useCallback((order: FiltersType["order"]) => {

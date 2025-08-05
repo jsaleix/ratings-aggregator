@@ -3,8 +3,8 @@ import { Transform } from 'class-transformer';
 
 export class FindMoviesDTO {
   @IsString()
-  @IsIn(['id', 'title', 'created_at'])
-  orderBy?: 'id' | 'title' | 'created_at' = 'id';
+  @IsIn(['id', 'title', 'created_at', 'year'])
+  orderBy?: 'id' | 'title' | 'created_at' | 'year' = 'year';
 
   @IsString()
   @IsIn(['asc', 'desc'])
