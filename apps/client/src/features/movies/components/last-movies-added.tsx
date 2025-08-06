@@ -2,12 +2,55 @@ import { useEffect } from "react";
 import { Link } from "react-router";
 import useMovies from "../hooks/use-movies";
 import MoviePosterItem from "./movie-poster-item";
+import Slider from "react-slick";
+
+const settings = {
+    dots: false,
+    class: "h-55 w-full",
+    infinite: false,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 4,
+    initialSlide: 2,
+
+    responsive: [
+        {
+            breakpoint: 2048,
+            settings: {
+                slidesToShow: 4,
+                slidesToScroll: 3,
+            },
+        },
+        {
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+            },
+        },
+        {
+            breakpoint: 700,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+            },
+        },
+        {
+            breakpoint: 480,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                centerMode: true,
+            },
+        },
+    ],
+};
 
 interface Props {
     maxResults?: number;
 }
 
-export default function LastMoviesAdded({ maxResults = 4 }: Props) {
+export default function LastMoviesAdded({}: Props) {
     const { movies, changeOrderBy } = useMovies();
 
     useEffect(() => {
@@ -16,11 +59,11 @@ export default function LastMoviesAdded({ maxResults = 4 }: Props) {
 
     return (
         <section className="bg-bg-light w-full">
-            <div className="bg-bg-light container mx-auto px-5 md:px-0">
+            <div className="bg-bg-light container mx-auto px-5 md:px-0 pb-5">
                 <div className="flex flex-col py-5 gap-3 items-center">
                     <div className="w-full flex justify-between">
                         <h2 className="text-black text-xl">
-                            Last {maxResults} movies added
+                            Last movies added
                         </h2>
                         <Link
                             to="/movies"
@@ -34,10 +77,15 @@ export default function LastMoviesAdded({ maxResults = 4 }: Props) {
                         <p className="text-slate-800">No movie found</p>
                     )}
                     {movies.length > 0 && (
-                        <div className="flex gap-3 w-full flex-wrap justify-center">
-                            {movies.slice(0, maxResults).map((movie) => (
-                                <MoviePosterItem movie={movie} key={movie.id} />
-                            ))}
+                        <div className="w-full">
+                            <Slider {...settings}>
+                                {movies.map((movie) => (
+                                    <MoviePosterItem
+                                        movie={movie}
+                                        key={movie.id}
+                                    />
+                                ))}
+                            </Slider>
                         </div>
                     )}
                 </div>
