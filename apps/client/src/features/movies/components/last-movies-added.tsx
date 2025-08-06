@@ -64,16 +64,16 @@ export default function LastMoviesAdded() {
     });
 
     return (
-        <section className="bg-bg-light w-full">
-            <div className="bg-bg-light container mx-auto px-5 md:px-0 pb-5">
+        <section className="bg-bg-medium w-full">
+            <div className="container mx-auto px-8 md:px-0 pb-5">
                 <div className="flex flex-col py-5 gap-3 items-center">
                     <div className="w-full flex justify-between">
-                        <h2 className="text-black text-xl">
+                        <h2 className="text-white text-xl">
                             Last movies added
                         </h2>
                         <Link
                             to="/movies"
-                            className="text-black hover:underline"
+                            className="text-white font-bold hover:underline"
                         >
                             See all
                         </Link>
