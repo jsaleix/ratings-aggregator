@@ -14,7 +14,7 @@ export default function HeaderSearchMovieInput({ css }: Props) {
     const navigate = useNavigate();
 
     const containerCss = clsx(
-        "w-full flex items-center bg-bg-medium flex gap-1 rounded-2xl px-3 py-1 border-1 border-transparent hover:border-utils-orange-light data-active:border-utils-orange-light group duration-150",
+        "w-full flex items-center bg-bg-medium flex gap-1 rounded-2xl px-3 py-1 border-1 border-transparent hover:border-primary data-active:border-utils-orange-light group duration-150",
         css
     );
 

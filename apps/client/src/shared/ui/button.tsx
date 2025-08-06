@@ -7,7 +7,8 @@ const buttonVariants = cva(
         variants: {
             variant: {
                 default: "bg-bg-light text-black",
-                primary: "bg-utils-orange font-bold disabled:bg-utils-orange-light",
+                primary: "bg-primary font-bold disabled:opacity-60",
+                secondary: "bg-utils-yellow font-bold disabled:opacity-60"
             },
             size: {
                 medium: "text-md",

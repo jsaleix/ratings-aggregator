@@ -3,13 +3,13 @@ import { useAuthContext } from "../core/auth/provider";
 import HeaderSearchMovieInput from "../shared/ui/header-search-input";
 import clsx from "clsx";
 
-const linkCss = "font-bold hover:text-utils-orange-light duration-150";
+const linkCss = "font-bold hover:text-secondary duration-150";
 
 export default function Header() {
     const { isConnected, role } = useAuthContext();
 
     return (
-        <header className="h-16 p-5 border-b-1 border-b-bg-light">
+        <header className="h-16 p-5 border-b-1 border-b-bg-light bg-bg-dark">
             <div className="container mx-auto flex items-center justify-between h-full w-full">
                 <Link to="/" className="h-full">
                     <div className="h-full hover:opacity-85 active:opacity-85 duration-150">

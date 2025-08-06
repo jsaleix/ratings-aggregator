@@ -1,12 +1,14 @@
 import { Link } from "react-router";
 import Button from "../../../shared/ui/button";
 import LastMoviesAdded from "../../movies/components/last-movies-added";
+import { useAuthContext } from "../../../core/auth/provider";
 
-const MAX = 3
+const MAX = 3;
 const img1 = Math.floor(Math.random() * 3) + 1;
 const img2 = img1 === MAX ? 1 : img1 + 1;
 
 export default function HomePage() {
+    const { isConnected } = useAuthContext();
     const imageA = `assets/images/home/${img1}.webp`;
     const imageB = `assets/images/home/${img2}.webp`;
 
@@ -22,11 +24,13 @@ export default function HomePage() {
                             <p className="text-white text-2xl md:text-xl text-shadow-lg">
                                 So you don't have to.
                             </p>
-                            <Link to={"/auth"} className="">
-                                <Button variant={"primary"}>
-                                    Join now (for free)
-                                </Button>
-                            </Link>
+                            {!isConnected && (
+                                <Link to={"/auth"} className="">
+                                    <Button variant={"primary"}>
+                                        Join now (for free)
+                                    </Button>
+                                </Link>
+                            )}
                         </div>
 
                         <div className="md:w-3/4 h-[80vh] md:max-h-[50vh] overflow-hidden md:relative absolute opacity-70 md:opacity-100">

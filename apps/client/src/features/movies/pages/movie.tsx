@@ -110,7 +110,7 @@ export default function MoviePage() {
                 <div className="flex flex-col gap-3 w-full md:px-0 px-5">
                     <div className="w-full flex justify-between">
                         <h1 className="text-xl font-bold uppercase text-white">
-                            <span className="text-orange-700">R</span>atings
+                            <span className="text-secondary">R</span>atings
                         </h1>
                         {/* <p className="text-text-secondary">
                             Status:{" "}
