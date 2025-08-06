@@ -16,7 +16,7 @@ export default function Header() {
                         <img
                             src="logo.svg"
                             alt="Aggregator"
-                            className="object-contain w-full h-full"
+                            className="object-contain w-full h-full select-none drag-none"
                         />
                     </div>
                 </Link>

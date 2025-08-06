@@ -1,8 +1,9 @@
-import { useEffect } from "react";
 import { Link } from "react-router";
-import useMovies from "../hooks/use-movies";
-import MoviePosterItem from "./movie-poster-item";
 import Slider from "react-slick";
+import { useQuery } from "@tanstack/react-query";
+
+import MoviePosterItem from "./movie-poster-item";
+import apiMoviesService from "../services/api-movies.service";
 
 const settings = {
     dots: false,
@@ -11,7 +12,7 @@ const settings = {
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 4,
-    initialSlide: 2,
+    initialSlide: 0,
 
     responsive: [
         {
@@ -41,21 +42,26 @@ const settings = {
                 slidesToShow: 1,
                 slidesToScroll: 1,
                 centerMode: true,
+                initialSlide: 2,
             },
         },
     ],
 };
 
-interface Props {
-    maxResults?: number;
-}
 
-export default function LastMoviesAdded({}: Props) {
-    const { movies, changeOrderBy } = useMovies();
-
-    useEffect(() => {
-        changeOrderBy("created_at");
-    }, []);
+export default function LastMoviesAdded() {
+    const { data: movies } = useQuery({
+        queryKey: ["lastMovies"],
+        queryFn: async () => {
+            const res = await apiMoviesService.getAll({
+                order: "desc",
+                orderBy: "created_at",
+            });
+            return res.data;
+        },
+        initialData: [],
+        refetchOnWindowFocus: false,
+    });
 
     return (
         <section className="bg-bg-light w-full">

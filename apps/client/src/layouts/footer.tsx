@@ -6,7 +6,7 @@ export default function Footer() {
                     © Aggregator
                 </p>
                 <p className="font-light text-sm text-text-secondary">
-                    Data from{" "}
+                    Movies data from{" "}
                     <a
                         className="underline"
                         href="https://www.themoviedb.org/"

@@ -38,8 +38,8 @@ export default function MoviePage() {
         [movie]
     );
 
-    useEffect(()=>{
-        if(movie) setPageTitle(movie.title)
+    useEffect(() => {
+        if (movie) setPageTitle(movie.title);
     }, [movie]);
 
     if (isMovieFetching || !movie?.id) return <p>Loading...</p>;
@@ -140,7 +140,7 @@ export default function MoviePage() {
                     </div>
                 </div>
             </div>
-            <LastMoviesAdded maxResults={12}/>
+            <LastMoviesAdded />
         </div>
     );
 }
