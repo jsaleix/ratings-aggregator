@@ -5,16 +5,30 @@ import apiRequestService from "../services/api-request.service";
 import RequestListItem from "../components/requests-list-item";
 import Button from "../../../shared/ui/button";
 import PageHeader from "../../../shared/ui/page-header";
+import { mapApiRequestToMovieRequestModel } from "../types/api-request";
 
 export default function RequestsPage() {
+    const { data: count } = useQuery({
+        queryKey: ["getMovieRequestsCount"],
+        queryFn: async () => {
+            return apiRequestService.getCount();
+        },
+        initialData: {
+            current: -1,
+            max: -1,
+            left: -1,
+        },
+    });
+
     const { data } = useQuery({
         queryKey: ["getRequests"],
         queryFn: async () => {
-            // return [];
-            return apiRequestService.getAll();
+            const res = await apiRequestService.getAll();
+            return res.map((item) => mapApiRequestToMovieRequestModel(item));
         },
         initialData: [],
         refetchOnWindowFocus: false,
+        refetchInterval: 15000,
     });
 
     return (
@@ -28,10 +42,16 @@ export default function RequestsPage() {
                         rem, saepe odio? Nulla doloribus accusamus culpa ut
                         dolorem?
                         <br />
-                        Limits: max. 10 requests per day
+                        <span className="text-white">
+                            Limits: max. {count.max} request(s) per day - Left:{" "}
+                            {count.left}
+                        </span>
+                        - (shared across users)
                     </p>
                     <Link to="/requests/create" className="mr-auto">
-                        <Button variant={"primary"}>Make a request</Button>
+                        <Button variant={"primary"} disabled={count.left < 1}>
+                            Make a request
+                        </Button>
                     </Link>
                 </PageHeader>
                 <div className="flex w-full flex-col justify-center px-5 md:px-0 ">

@@ -1,9 +1,10 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import { authHeaders } from "../../../shared/api/headers";
 import type {
-    CreateRequestType,
-    MovieRequestModel,
-} from "../types/movie-request";
+    ApiGetCountResponse,
+    ApiMovieRequestType,
+} from "../types/api-request";
+import type { CreateRequestType } from "../types/schemas";
 
 class ApiRequestService {
     async getAll() {
@@ -15,7 +16,7 @@ class ApiRequestService {
         if (!res.ok) {
             throw new Error(`Error fetching requests: ${res.statusText}`);
         }
-        return (await res.json()) as MovieRequestModel[];
+        return (await res.json()) as ApiMovieRequestType[];
     }
 
     async create(data: CreateRequestType) {
@@ -29,7 +30,19 @@ class ApiRequestService {
         if (!res.ok) {
             throw new Error(`Error creating request: ${res.statusText}`);
         }
-        return (await res.json()) as MovieRequestModel;
+        return (await res.json()) as ApiMovieRequestType;
+    }
+
+    async getCount() {
+        const url = new URL(`/requests/count`, API_ENDPOINT);
+        const res = await fetch(url, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+        if (!res.ok) {
+            throw new Error(`Error fetching request count: ${res.statusText}`);
+        }
+        return (await res.json()) as ApiGetCountResponse;
     }
 }
 

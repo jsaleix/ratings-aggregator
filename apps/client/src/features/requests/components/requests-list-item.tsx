@@ -1,11 +1,14 @@
-import type { MovieRequestModel } from "../types/movie-request";
+import type { MovieRequestModel } from "../models/movie-request";
 
 interface Props {
     request: MovieRequestModel;
 }
 
 export default function RequestListItem({ request }: Props) {
-    const url = new URL(request.tmdbId.toString(), "https://www.themoviedb.org/movie/");
+    const url = new URL(
+        request.tmdbId.toString(),
+        "https://www.themoviedb.org/movie/"
+    );
 
     return (
         <article className="w-full flex md:flex-row flex-col gap-1 justify-between border-b-1 border-b-bg-light px-5 py-3">
@@ -21,7 +24,7 @@ export default function RequestListItem({ request }: Props) {
                     See the TMDB page
                 </a>
             </div>
-            
+
             <div className="flex flex-col md:items-end">
                 <p className="font-light">
                     Created at:{" "}

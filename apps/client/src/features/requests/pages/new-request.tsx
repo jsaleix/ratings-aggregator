@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 
 import RequestForm from "../components/new-request-form";
-import type { CreateRequestType } from "../types/movie-request";
+import type { CreateRequestType } from "../types/schemas";
 import apiRequestService from "../services/api-request.service";
 import { displayMsg } from "../../../shared/utils/toast";
 

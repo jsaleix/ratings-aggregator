@@ -6,7 +6,7 @@ import { useForm, useStore } from "@tanstack/react-form";
 import {
     createRequestSchema,
     type CreateRequestType,
-} from "../../types/movie-request";
+} from "../../types/schemas";
 
 interface Props {
     label: string;
