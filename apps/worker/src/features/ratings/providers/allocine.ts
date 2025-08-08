@@ -22,12 +22,12 @@ export const getAllocineScore = async (name: string, year: number) => {
             timeout: 10000,
         });
 
-        const screenshotPath = `./debug-imdb-${Date.now()}.png`;
-        await page.screenshot({
-            path: screenshotPath as `${string}.png`,
-            fullPage: true,
-        });
-        console.log(`📸 Screenshot sauvegardé dans : ${screenshotPath}`);
+        // const screenshotPath = `./debug-imdb-${Date.now()}.png`;
+        // await page.screenshot({
+        //     path: screenshotPath as `${string}.png`,
+        //     fullPage: true,
+        // });
+        // console.log(`📸 Screenshot sauvegardé dans : ${screenshotPath}`);
 
         let scores = await page.evaluate((targetYear: number) => {
             const rows = document.querySelectorAll(
@@ -42,8 +42,8 @@ export const getAllocineScore = async (name: string, year: number) => {
             const [press, audience] = vals;
 
             return {
-                press: press.textContent,
-                audience: audience.textContent,
+                press: press.textContent??"N/A",
+                audience: audience.textContent??"N/A",
             };
         }, year);
 
@@ -52,6 +52,7 @@ export const getAllocineScore = async (name: string, year: number) => {
     } catch (error) {
         if (error instanceof Error) console.error("❌ Erreur :", error.message);
         else console.error(error);
+        return null
     } finally {
         await browser.close();
     }

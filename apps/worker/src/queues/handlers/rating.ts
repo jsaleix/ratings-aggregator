@@ -48,15 +48,15 @@ class RatingHandler {
 
         switch (type) {
             case ratingJobsTypeValues["set-rating:allocine"]:
+                res = await this.ratingService.setAllocineRatings(movie);
                 break;
             case ratingJobsTypeValues["set-rating:imdb"]:
-                break;
-            case ratingJobsTypeValues["set-rating:letterboxd"]:
+                res = await this.ratingService.setIMDBRating(movie);
                 break;
             case ratingJobsTypeValues["set-rating:rotten"]:
-                res = await this.ratingService.setRottenRatings(
-                    movie
-                );
+                res = await this.ratingService.setRottenRatings(movie);
+                break;
+            case ratingJobsTypeValues["set-rating:letterboxd"]:
                 break;
         }
 

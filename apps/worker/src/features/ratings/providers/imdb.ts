@@ -70,6 +70,8 @@ export const getIMDBScore = async (name: string, year: number) => {
             return score?.textContent;
         });
 
+        if (!score) throw new Error("No score found");
+
         return {
             url: fullUrl,
             score,
@@ -77,6 +79,7 @@ export const getIMDBScore = async (name: string, year: number) => {
     } catch (error) {
         if (error instanceof Error) console.error("❌ Erreur :", error.message);
         else console.error(error);
+        return null;
     } finally {
         await browser.close();
     }

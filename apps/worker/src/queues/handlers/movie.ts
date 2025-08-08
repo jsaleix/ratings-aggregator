@@ -81,6 +81,13 @@ class MovieHandler {
                     payload: { movieId: movie.id },
                 },
             },
+            {
+                name: `set-rating:allocine:${movie.id}`,
+                data: {
+                    type: "set-rating:allocine",
+                    payload: { movieId: movie.id },
+                },
+            },
         ]);
     }
 }

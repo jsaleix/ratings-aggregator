@@ -2,8 +2,9 @@ export const RATING_SOURCERS = {
     ROTTEN_TOMATOES: "rotten_tomatoes",
     ROTTEN_TOMATOES_AUDIENCE: "rotten_tomatoes_audience",
     LETTERBOXD: "letterboxd",
-    ALLOCINE: "allocine",
+    ALLOCINE_PRESS: "allocine_press",
     ALLOCINE_AUDIENCE: "allocine_audience",
+    IMDB: "imdb",
 } as const;
 
 export const RATING_UNITS = {
