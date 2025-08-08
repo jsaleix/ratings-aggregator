@@ -10,6 +10,7 @@ type RatingAttributesType = {
     value: string;
     rating_source: string;
     rating_unit: RatingUnit;
+    sourceUrl?: string;
 };
 
 class RatingService {
@@ -20,7 +21,7 @@ class RatingService {
     }
 
     private async addOrCreateRating(data: RatingAttributesType) {
-        const { movieId, value, rating_source, rating_unit } = data;
+        const { movieId, value, rating_source, rating_unit, sourceUrl } = data;
         const exists = await this.db.movie_Rating.findFirst({
             where: {
                 movieId,
@@ -30,7 +31,7 @@ class RatingService {
         if (exists) {
             return await this.db.movie_Rating.update({
                 where: { id: exists.id },
-                data: { value },
+                data: { value, sourceUrl: sourceUrl ?? null },
             });
         } else {
             return await this.db.movie_Rating.create({
@@ -39,6 +40,7 @@ class RatingService {
                     value,
                     rating_source,
                     rating_unit,
+                    sourceUrl: sourceUrl ?? null,
                 },
             });
         }
@@ -50,13 +52,14 @@ class RatingService {
         if (!values) {
             throw new Error(`Rotten Tomatoes rating for ${title} not found`);
         }
-        const { criticsRatings, audienceRatings } = values;
+        const { criticsRatings, audienceRatings, url } = values;
 
         const criticsRating = await this.addOrCreateRating({
             movieId,
             value: criticsRatings,
             rating_source: RATING_SOURCERS.ROTTEN_TOMATOES,
             rating_unit: RATING_UNITS.PERCENTAGE,
+            sourceUrl: url,
         });
 
         const audienceRating = await this.addOrCreateRating({
@@ -64,6 +67,7 @@ class RatingService {
             value: audienceRatings,
             rating_source: RATING_SOURCERS.ROTTEN_TOMATOES_AUDIENCE,
             rating_unit: RATING_UNITS.PERCENTAGE,
+            sourceUrl: url,
         });
 
         return {
@@ -106,13 +110,14 @@ class RatingService {
         if (!value) {
             throw new Error(`IMDB rating for ${title} not found`);
         }
-        const { score } = value;
+        const { score, url } = value;
 
         const rating = await this.addOrCreateRating({
             movieId,
             value: score,
             rating_source: RATING_SOURCERS.IMDB,
             rating_unit: RATING_UNITS.POINTS,
+            sourceUrl: url,
         });
 
         return {
