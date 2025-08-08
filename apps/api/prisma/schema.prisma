@@ -66,6 +66,11 @@ model User {
   Movie_Request Movie_Request[]
 }
 
+model App_Config {
+  key   String @unique
+  value String
+}
+
 enum RatingUnit {
   points
   stars
