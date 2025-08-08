@@ -14,7 +14,7 @@ export default function Header() {
                 <Link to="/" className="h-full">
                     <div className="h-full hover:opacity-85 active:opacity-85 duration-150">
                         <img
-                            src="logo.svg"
+                            src="/logo.svg"
                             alt="Aggregator"
                             className="object-contain w-full h-full select-none drag-none"
                         />

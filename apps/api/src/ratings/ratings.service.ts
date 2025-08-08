@@ -49,6 +49,7 @@ export class RatingsService {
   async findForMovie(movieId: string) {
     const res = await this.prisma.movie_Rating.findMany({
       where: { movieId },
+      orderBy: { rating_source: 'asc' },
     });
     if (!res) {
       throw new Error('Failed to fetch ratings for movie');

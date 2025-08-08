@@ -84,8 +84,8 @@ export default function LastMoviesAdded() {
                                     xmlns="http://www.w3.org/2000/svg"
                                 >
                                     <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
                                         d="M-8.74228e-08 14L6 8L-6.11959e-07 2L2 -8.74228e-08L10 8L2 16L-8.74228e-08 14Z"
                                         fill="white"
                                     />
