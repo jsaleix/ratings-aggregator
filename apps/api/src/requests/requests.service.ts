@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRequestDto } from './dto/create-request.dto';
-import { UpdateRequestDto } from './dto/update-request.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { BullmqService } from 'src/shared/services/bullmq.service';
-import { PrismaClient, User } from 'generated/prisma';
+import { User } from 'generated/prisma';
 
 @Injectable()
 export class RequestsService {
@@ -56,5 +55,15 @@ export class RequestsService {
 
   private async addToQueue(requestId: string, tmdbId: number) {
     this.bullmqService.addRequestToQueue(requestId, tmdbId);
+  }
+
+  async getRequestsCountOfTheToday() {
+    return await this.prisma.movie_Request.count({
+      where: {
+        created_at: {
+          gte: new Date(new Date().setHours(0, 0, 0, 0)),
+        },
+      },
+    });
   }
 }
