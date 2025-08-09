@@ -4,6 +4,7 @@ import { MovieType } from "../../movies/types/db";
 import { getAllocineScore } from "../providers/allocine";
 import { getIMDBScore } from "../providers/imdb";
 import { getRottenTomatoesScores } from "../providers/rotten";
+import { RatingType } from "../types/db";
 
 type RatingAttributesType = {
     movieId: string;
@@ -46,7 +47,7 @@ class RatingService {
         }
     }
 
-    async setRottenRatings(movie: MovieType) {
+    async setRottenRatings(movie: MovieType): Promise<Array<RatingType>> {
         const { title, id: movieId, year } = movie;
         const values = await getRottenTomatoesScores(title, year);
         if (!values) {
@@ -70,13 +71,10 @@ class RatingService {
             sourceUrl: url,
         });
 
-        return {
-            criticsRating,
-            audienceRating,
-        };
+        return [criticsRating, audienceRating];
     }
 
-    async setAllocineRatings(movie: MovieType) {
+    async setAllocineRatings(movie: MovieType): Promise<Array<RatingType>> {
         const { title, id: movieId, year } = movie;
         const values = await getAllocineScore(title, year);
         if (!values) {
@@ -98,13 +96,10 @@ class RatingService {
             rating_unit: RATING_UNITS.STARS,
         });
 
-        return {
-            pressRating,
-            audienceRating,
-        };
+        return [pressRating, audienceRating];
     }
 
-    async setIMDBRating(movie: MovieType) {
+    async setIMDBRating(movie: MovieType): Promise<RatingType> {
         const { title, id: movieId, year } = movie;
         const value = await getIMDBScore(title, year);
         if (!value) {
@@ -120,9 +115,7 @@ class RatingService {
             sourceUrl: url,
         });
 
-        return {
-            rating,
-        };
+        return rating;
     }
 }
 
