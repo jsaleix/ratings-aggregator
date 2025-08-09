@@ -2,7 +2,7 @@ import { MovieRatingsStatus } from "../../../config/movies";
 import { prismaMock } from "../../../tests/singleton";
 import MovieService from "./movies.service";
 import TMDBService from "./tmdb.service";
-import { MovieCreateInput, type MovieType } from "../types/db";
+import { MovieCreateInput } from "../types/db";
 import { TMDBGetMovieType } from "../types/tmdb";
 
 const existingMovie = {
@@ -55,6 +55,7 @@ describe("MovieService", () => {
         it("should add a new movie by ID", async () => {
             const tmdbId = 67890;
             const mockMovieResponse = {
+                adult: false,
                 id: tmdbId,
                 title: "New Movie",
                 original_title: "New Movie",

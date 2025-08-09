@@ -21,13 +21,7 @@ export type MovieJob = {
 };
 
 class MovieHandler {
-    delay = 15000;
-
     constructor(private movieService: MovieService) {}
-
-    setDelay(value: number) {
-        this.delay = value;
-    }
 
     async handle(job: Job<MovieJob>): Promise<MovieType> {
         const { tmdbId } = job.data.payload;

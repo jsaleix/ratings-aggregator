@@ -7,22 +7,18 @@ const connection = RedisMqConnection;
 
 describe("MovieHandler Integration", () => {
     let movieQueue: Queue;
-    let ratingQueue: Queue;
     let worker: Worker;
     const mockMovieService = {
         addMovieByTMDBId: jest.fn(),
-        addMovieByName: jest.fn(),
+        updateMovieRatingsStatus: jest.fn(),
     };
 
     beforeAll(() => {
         movieQueue = new Queue(QUEUES.movie, { connection });
-        ratingQueue = new Queue(QUEUES.rating, { connection });
 
         const handler = new MovieHandler(
-            ratingQueue,
             mockMovieService as unknown as MovieService
         );
-        handler.setDelay(0);
 
         worker = new Worker(
             QUEUES.movie,
@@ -36,24 +32,20 @@ describe("MovieHandler Integration", () => {
     afterAll(async () => {
         await worker.close();
         await movieQueue.close();
-        await ratingQueue.close();
         await connection.quit();
     });
 
     afterEach(() => {
         movieQueue.drain();
-        ratingQueue.drain();
     });
 
     test("should handle addMovieByTMDBId ", async () => {
         mockMovieService.addMovieByTMDBId.mockResolvedValue({
             id: 42,
-            title: "Inception",
         });
 
         await movieQueue.add("add-movie", {
-            type: "add-movie:tmdbId",
-            payload: { tmdbId: 42},
+            payload: { tmdbId: 42 },
         });
 
         await new Promise((resolve) => worker.on("completed", resolve));
