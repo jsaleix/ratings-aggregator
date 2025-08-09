@@ -12,7 +12,6 @@ export type MovieApiResponseType = {
     year: number;
     budget: number;
     poster_path: string;
-    ratings_status: string;
 };
 
 export type GetAllMoviesResponse = MovieApiResponseType[];

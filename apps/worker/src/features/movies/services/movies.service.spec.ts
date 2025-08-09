@@ -17,7 +17,6 @@ const existingMovie = {
     budget: 1000000,
     tagLine: "A test movie tagline",
     created_at: new Date(),
-    ratings_status: MovieRatingsStatus.pending,
     updated_at: new Date(),
 } satisfies MovieCreateInput;
 
@@ -86,7 +85,6 @@ describe("MovieService", () => {
                 title: mockMovieResponse.title,
                 id: "2",
                 created_at: new Date(),
-                ratings_status: MovieRatingsStatus.pending,
             } satisfies MovieCreateInput);
 
             const result = await movieService.addMovieByTMDBId(tmdbId);

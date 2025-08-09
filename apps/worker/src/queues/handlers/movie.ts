@@ -27,7 +27,6 @@ class MovieHandler {
         const { tmdbId } = job.data.payload;
 
         const movie = await this.movieService.addMovieByTMDBId(tmdbId);
-        await this.movieService.updateMovieRatingsStatus(movie.id, "completed");
         return movie;
     }
 }

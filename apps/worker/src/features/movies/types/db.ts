@@ -19,7 +19,6 @@ const movieModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
         year: true,
         budget: true,
         poster_path: true,
-        ratings_status: true,
     },
 });
 

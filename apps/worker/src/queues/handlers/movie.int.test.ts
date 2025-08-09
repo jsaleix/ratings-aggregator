@@ -10,7 +10,6 @@ describe("MovieHandler Integration", () => {
     let worker: Worker;
     const mockMovieService = {
         addMovieByTMDBId: jest.fn(),
-        updateMovieRatingsStatus: jest.fn(),
     };
 
     beforeAll(() => {

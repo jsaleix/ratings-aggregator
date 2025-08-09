@@ -13,5 +13,4 @@ export const MovieMockData = {
     year: 2025,
     budget: 225000000,
     poster_path: "/ombsmhYUqR4qqOLOxAyr5V8hbyv.jpg",
-    ratings_status: "completed",
 } satisfies MovieModel;

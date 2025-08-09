@@ -11,7 +11,6 @@ export default function AuthLayout() {
     useEffect(() => {
         if (user === null) {
             const currentUrl = window.location.pathname;
-            console.log(currentUrl)
             const saveUrlInQueryParam = new URLSearchParams(
                 window.location.search
             );

@@ -112,12 +112,6 @@ export default function MoviePage() {
                         <h1 className="text-xl font-bold uppercase text-white">
                             <span className="text-secondary">R</span>atings
                         </h1>
-                        {/* <p className="text-text-secondary">
-                            Status:{" "}
-                            <span className="uppercase font-bold text-white">
-                                {movie.ratings_status}
-                            </span>
-                        </p> */}
                     </div>
                     <div className="flex flex-col">
                         {isConnected ? (

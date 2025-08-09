@@ -29,18 +29,6 @@ class MovieService {
         return createdMovie;
     }
 
-    async updateMovieRatingsStatus(
-        movieId: string,
-        ratingsStatus: MovieRatingsStatusType
-    ) {
-        const updatedMovie = await this.db.movie.update({
-            where: { id: movieId },
-            data: { ratings_status: ratingsStatus },
-        });
-
-        return updatedMovie;
-    }
-
     // Useless actually
     async addMovieByName(movieName: string): Promise<MovieType> {
         console.log(`🟦 Adding movie ${movieName}`);

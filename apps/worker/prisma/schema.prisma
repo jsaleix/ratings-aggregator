@@ -27,7 +27,6 @@ model Movie {
   poster_path    String
   created_at     DateTime       @default(now()) @db.Timestamp(6)
   updated_at     DateTime       @updatedAt
-  ratings_status RatingsStatus  @default(pending)
   Movie_Rating   Movie_Rating[]
 }
 
@@ -64,6 +63,11 @@ model User {
   updated_at    DateTime        @updatedAt
   deleted_at    DateTime?
   Movie_Request Movie_Request[]
+}
+
+model App_Config {
+  key   String @unique
+  value String
 }
 
 enum RatingUnit {

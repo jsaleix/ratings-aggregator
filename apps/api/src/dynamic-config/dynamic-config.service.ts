@@ -33,7 +33,6 @@ export class DynamicConfigService {
 
   async getMaxRequests(): Promise<number | null> {
     const val = await this.get(DynamicConfigService.MAX_REQUESTS_KEY);
-    console.log(val)
     if (val === null) return null;
     return +val;
   }
