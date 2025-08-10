@@ -47,6 +47,14 @@ class RatingService {
         }
     }
 
+    async getRatingsByMovieId(movieId: string): Promise<Array<RatingType>> {
+        return await this.db.movie_Rating.findMany({
+            where: {
+                movieId,
+            },
+        });
+    }
+
     async setRottenRatings(movie: MovieType): Promise<Array<RatingType>> {
         const { title, id: movieId, year } = movie;
         const values = await getRottenTomatoesScores(title, year);
