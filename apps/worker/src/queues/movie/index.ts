@@ -8,12 +8,17 @@ import MovieHandler, { MovieJob } from "./handler";
 import MovieRequestService from "../../features/requests/services/request";
 import { MovieType } from "../../features/movies/types/db";
 import { ratingQueue } from "..";
+import { AddMovieByTMDBIdUseCase } from "../../features/movies/use-cases/add-movie-by-tmdb-id";
 
 const tmdbService = new TMDBService();
-const movieService = new MovieService(db, tmdbService);
+const movieService = new MovieService(db);
 const movieRatingService = new MovieRequestService(db);
 
-const movieHandler = new MovieHandler(movieService);
+const addMovieByTMDBIdUseCase = new AddMovieByTMDBIdUseCase(
+    tmdbService,
+    movieService
+);
+const movieHandler = new MovieHandler(addMovieByTMDBIdUseCase);
 
 export const movieWorker = new Worker(
     QUEUES.movie,

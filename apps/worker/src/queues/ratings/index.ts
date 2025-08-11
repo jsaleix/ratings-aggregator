@@ -1,19 +1,16 @@
-import { Job, Queue, Worker } from "bullmq";
+import { Worker } from "bullmq";
 
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 import { db } from "../../core/db";
 
 import MovieService from "../../features/movies/services/movies.service";
-import TMDBService from "../../features/movies/services/tmdb.service";
 import RatingService from "../../features/ratings/services/rating.service";
-import { RatingType } from "../../features/ratings/types/db";
 
-import RatingHandler from "../handlers/rating";
+import RatingHandler from "./handler";
 
 import { summaryQueue } from "..";
 
-const tmdbService = new TMDBService();
-const movieService = new MovieService(db, tmdbService);
+const movieService = new MovieService(db);
 const ratingService = new RatingService(db);
 const ratingHandler = new RatingHandler(movieService, ratingService);
 

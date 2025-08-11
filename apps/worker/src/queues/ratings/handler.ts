@@ -30,7 +30,7 @@ class RatingHandler {
 
     async handle(job: Job<RatingJob>): Promise<Array<RatingType>> {
         const { movieId } = job.data.payload;
-        const movie = await this.movieService.getMovieById(movieId);
+        const movie = await this.movieService.getMovieBy({ id: movieId });
         if (!movie) {
             throw new Error(`Movie with ID ${movieId} not found`);
         }
