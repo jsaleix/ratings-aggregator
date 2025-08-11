@@ -1,5 +1,7 @@
 import { db } from "./core/db";
-import { movieWorker, ratingWorker, summaryWorker } from "./queues";
+import { movieWorker } from "./queues/movie";
+import { ratingWorker } from "./queues/ratings";
+import { summaryWorker } from "./queues/summary";
 
 try {
     movieWorker.run();

@@ -1,7 +1,7 @@
 import { Queue, Worker, Job } from "bullmq";
 import MovieService from "../../features/movies/services/movies.service";
-import MovieHandler from "./movie";
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
+import MovieHandler from "./handler";
 
 const connection = RedisMqConnection;
 
