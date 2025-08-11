@@ -82,7 +82,7 @@ export default function MovieRatingItem({ rating }: Props) {
                     )}
                 </div>
                 {rating.updated_at && (
-                    <p className="font-light text-sm text-text-se">
+                    <p className="font-light text-sm">
                         Last update:{" "}
                         <b>{new Date(rating.updated_at).toLocaleString()}</b>
                     </p>

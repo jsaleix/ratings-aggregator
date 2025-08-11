@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import apiMoviesService from "../services/api-movies.service";
 import apiRatingsService from "../services/api-ratings.service";
+import apiSummaryService from "../services/api-summary.service";
 import { BASE_POSTER_URL } from "../../../core/config/misc";
 import MovieRatingItem from "../components/movie-rating-item";
 import { useAuthContext } from "../../../core/auth/provider";
@@ -30,6 +31,17 @@ export default function MoviePage() {
             return apiRatingsService.getMovieRatings(id);
         },
         initialData: [],
+        refetchOnWindowFocus: false,
+    });
+
+    const { data: ratingsSummary } = useQuery({
+        queryKey: ["getMovieRatingsSummary", id],
+        queryFn: async () => {
+            if (!isConnected) throw new Error("Not authenticated");
+            if (!id) throw new Error("missing id");
+            return apiSummaryService.getMovieRatingSummary(id);
+        },
+        initialData: undefined,
         refetchOnWindowFocus: false,
     });
 
@@ -132,6 +144,22 @@ export default function MoviePage() {
                             <p>You must be authenticated to see the ratings</p>
                         )}
                     </div>
+                    {isConnected && ratingsSummary && (
+                        <div className="w-full xl:w-1/3 h-fit bg-bg-medium p-5 rounded-xl shadow-md flex flex-col gap-1">
+                            <h2 className="uppercase text-primary font-bold">
+                                Synthesis
+                            </h2>
+                            <p className="text-white">
+                                {ratingsSummary.content}
+                            </p>
+                            <p className="text-text-secondary font-light text-sm">
+                                <span>Last update: </span>
+                                {new Date(
+                                    ratingsSummary.updated_at
+                                ).toLocaleString()}
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
             <LastMoviesAdded />

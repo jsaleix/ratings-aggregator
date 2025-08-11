@@ -6,7 +6,6 @@ import { Public } from 'src/auth/decorators/public.decorator';
 export class SummaryController {
   constructor(private readonly summaryService: SummaryService) {}
 
-  @Public()
   @Get('/movie/:id')
   findOne(@Param('id') id: string) {
     return this.summaryService.findOneByMovieId(id);
