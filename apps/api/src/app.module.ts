@@ -12,6 +12,7 @@ import { RequestsModule } from './requests/requests.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { DynamicConfigModule } from './dynamic-config/dynamic-config.module';
+import { SummaryModule } from './summary/summary.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { DynamicConfigModule } from './dynamic-config/dynamic-config.module';
     UsersModule,
     AuthModule,
     DynamicConfigModule,
+    SummaryModule,
   ],
   controllers: [AppController],
   providers: [
