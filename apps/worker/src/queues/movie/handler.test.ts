@@ -1,26 +1,29 @@
 import { Queue, Worker, Job } from "bullmq";
-import MovieService from "../../features/movies/services/movies.service";
+
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
+import { AddMovieByTMDBIdUseCase } from "../../features/movies/use-cases/add-movie-by-tmdb-id";
+
 import MovieHandler from "./handler";
 
 const connection = RedisMqConnection;
+const queueName = QUEUES.movie;
 
 describe("MovieHandler Integration", () => {
     let movieQueue: Queue;
     let worker: Worker;
-    const mockMovieService = {
-        addMovieByTMDBId: jest.fn(),
+    const mockUseCaseService = {
+        execute: jest.fn(),
     };
 
     beforeAll(() => {
-        movieQueue = new Queue(QUEUES.movie, { connection });
+        movieQueue = new Queue(queueName, { connection });
 
         const handler = new MovieHandler(
-            mockMovieService as unknown as MovieService
+            mockUseCaseService as unknown as AddMovieByTMDBIdUseCase
         );
 
         worker = new Worker(
-            QUEUES.movie,
+            queueName,
             async (job: Job) => {
                 await handler.handle(job);
             },
@@ -35,11 +38,12 @@ describe("MovieHandler Integration", () => {
     });
 
     afterEach(() => {
+        mockUseCaseService.execute.mockClear();
         movieQueue.drain();
     });
 
     test("should handle addMovieByTMDBId ", async () => {
-        mockMovieService.addMovieByTMDBId.mockResolvedValue({
+        mockUseCaseService.execute.mockResolvedValue({
             id: 42,
         });
 
@@ -48,32 +52,6 @@ describe("MovieHandler Integration", () => {
         });
 
         await new Promise((resolve) => worker.on("completed", resolve));
-        expect(mockMovieService.addMovieByTMDBId).toHaveBeenCalledWith(42);
+        expect(mockUseCaseService.execute).toHaveBeenCalledWith(42);
     }, 5000);
-
-    // test("should handle addMovieWithRatingsByTMDBId and enqueue rating jobs", async () => {
-    //     mockMovieService.addMovieByTMDBId.mockResolvedValue({
-    //         id: 42,
-    //         title: "Inception",
-    //     });
-
-    //     await movieQueue.add("add-movie", {
-    //         type: "add-movie-with-ratings:tmdbId",
-    //         payload: { tmdbId: 42 },
-    //     });
-
-    //     await new Promise((resolve) => worker.on("completed", resolve));
-
-    //     expect(mockMovieService.addMovieByTMDBId).toHaveBeenCalledWith(42);
-
-    //     const ratingJobs = await ratingQueue.getJobs();
-    //     const jobNames = ratingJobs.map((j) => j.name);
-    //     expect(jobNames.sort()).toEqual(
-    //         [
-    //             "set-rating:rotten:42",
-    //             "set-rating:imdb:42",
-    //             "set-rating:letterboxd:42",
-    //         ].sort()
-    //     );
-    // });
 });

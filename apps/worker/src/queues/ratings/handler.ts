@@ -24,6 +24,7 @@ class RatingHandler {
             default:
                 throw new Error("Unknown type");
         }
+        
     }
 }
 
