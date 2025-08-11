@@ -46,7 +46,8 @@ movieWorker.on(
         // await movieHandler.gatherRatings(movie);
         console.log("GIVING ", movie.id);
         await ratingQueue.add("set-ratings", {
-            payload: { movieId: movie.id },
+            type: "movie",
+            payload: { id: movie.id },
         });
     }
 );

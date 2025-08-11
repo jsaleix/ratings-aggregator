@@ -1,4 +1,3 @@
-import { MovieRatingsStatus } from "../../../config/movies";
 import { prismaMock } from "../../../tests/singleton";
 import MovieService from "../services/movies.service";
 import TMDBService from "../services/tmdb.service";

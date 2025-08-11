@@ -4,7 +4,6 @@ import { MovieType } from "../../features/movies/types/db";
 import { AddMovieByTMDBIdUseCase } from "../../features/movies/use-cases/add-movie-by-tmdb-id";
 
 export type MovieJob = {
-    // type: MovieJobType;
     payload: {
         requestId: string;
         tmdbId: number;
