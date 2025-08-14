@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 
 import { UsersService } from 'src/users/users.service';
@@ -25,7 +25,12 @@ export class AuthController {
   @Public()
   @Post('login')
   @HttpCode(200)
-  async login(@Body() data: LoginDto) {
-    return await this.authService.login(data);
+  async login(@Body() data: LoginDto, @Res({ passthrough: true }) res) {
+    const { token } = await this.authService.login(data);
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: false,
+    });
+    return { success: true };
   }
 }
