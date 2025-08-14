@@ -65,8 +65,9 @@ export const AuthContextProvider = ({ children }: Props) => {
     }, []);
 
     useEffect(() => {
-        if (localStorage.getItem(STORAGE_TOKEN_KEY)) retrieveProfile();
-        else setUser(null);
+        retrieveProfile()
+        // if (localStorage.getItem(STORAGE_TOKEN_KEY)) retrieveProfile();
+        // else setUser(null);
     }, []);
 
     return (

@@ -3,8 +3,8 @@ import { createRoot } from "react-dom/client";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter } from "react-router";
 import { QueryClientProvider } from "@tanstack/react-query";
-
 import { queryClient } from "./core/query-client.ts";
+import "./shared/api/fetch.ts";
 import { AuthContextProvider } from "./core/auth/provider.tsx";
 import App from "./App.tsx";
 import "./index.css";

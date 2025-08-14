@@ -33,7 +33,9 @@ class UserService {
         const url = new URL("/auth/login", API_ENDPOINT).toString();
         const res = await fetch(url, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify({ email, password }),
         });
         if (!res.ok) {
