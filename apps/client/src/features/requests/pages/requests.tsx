@@ -36,17 +36,27 @@ export default function RequestsPage() {
             <div className="flex flex-col container mx-auto gap-5 py-5 items-center px-5 md:px-0">
                 <PageHeader title="Movie requests">
                     <p className="text-text-secondary">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Quis ipsam accusamus expedita voluptates eos
-                        perspiciatis, alias ullam esse aliquid minus maiores
-                        rem, saepe odio? Nulla doloribus accusamus culpa ut
-                        dolorem?
+                        You can add any movie of your choice by submitting a
+                        request. Once submitted, the request will be added to
+                        the queue and processed by retrieving the movie’s data
+                        and ratings.
+                        <br />
+                        You can also use this feature to update an existing
+                        movie — in that case, the data retrieval step will be
+                        skipped, and only the ratings will be refreshed.
+                        <br />
+                        Please note that this feature is subject to a daily
+                        request limit, which may change at any time. This limit
+                        is shared between all users and is in place to prevent
+                        the platform from sending too many requests to external
+                        websites, which could result in being blocked by them.
                         <br />
                         <span className="text-white">
                             Limits: max. {count.max} request(s) per day - Left:{" "}
                             {count.left}
                         </span>
-                        - (shared across users)
+                        {" "}
+                        (shared between users)
                     </p>
                     <Link to="/requests/create" className="mr-auto">
                         <Button variant={"primary"} disabled={count.left < 1}>

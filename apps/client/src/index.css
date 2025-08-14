@@ -25,6 +25,14 @@
     scrollbar-width: none; /* Firefox */
 }
 
+/* a {
+    @apply text-secondary underline hover:opacity-85
+} */
+
+@utility link {
+    @apply text-secondary underline hover:opacity-85;
+}
+
 @theme {
     --color-bg-dark: #121217;
     --color-bg-light: #d7d5e3;
@@ -34,14 +42,14 @@
     --color-text-dark: #000000;
 
     --color-utils-turquoise-dark: #043246;
-    --color-utils-green-light: #12A850;
+    --color-utils-green-light: #12a850;
     --color-utils-orange-light: #ee8363;
     --color-utils-orange: #ff3b00;
     --color-utils-yellow: #ffbb00;
     --color-utils-green: #07bc44;
     --color-utils-gray: #d9d9d9;
 
-    --color-primary: #08BE1D;
+    --color-primary: #08be1d;
     --color-secondary: #ffbb00;
 }
 

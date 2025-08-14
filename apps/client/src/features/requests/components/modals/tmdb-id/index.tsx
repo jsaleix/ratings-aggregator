@@ -30,21 +30,40 @@ export default function GetTMDBIdModal({ modalState, onClose }: Props) {
                 <form method="dialog" className="outline-none">
                     <button
                         className={
-                            "cursor-pointer absolute top-2 right-2 text-xl text-gray-500 hover:text-gray-700"
+                            "cursor-pointer absolute top-2 right-4 text-xl text-gray-500 hover:text-gray-700"
                         }
                     >
                         ✕
                     </button>
                 </form>
                 <div className="flex flex-col gap-5 w-full">
-                    <h2 className="text-white text-2xl">How to find the TMDB ID</h2>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Quibusdam consequuntur facere pariatur culpa quia
-                        animi sed molestiae molestias! Ea at assumenda neque
-                        voluptate earum necessitatibus quisquam eius quaerat
-                        soluta debitis.
-                    </p>
+                    <h2 className="text-white text-2xl">
+                        How to find the TMDB ID
+                    </h2>
+                    <ol className="flex flex-col gap-2">
+                        <li>
+                            1. Go to{" "}
+                            <a href="themoviedb.org" target="_blank" className="link">
+                                themoviedb.org
+                            </a>
+                        </li>
+                        <li>2. Search for your movie</li>
+                        <li>
+                            <p>
+                                3. Open its page — the number in the URL is the
+                                movie ID.
+                            </p>
+                        </li>
+                        <li className="flex flex-col gap-1">
+                            <p className="text-white">Example:</p>
+                            <code className="bg-secondary text-black px-2 w-fit select-none">
+                                https://www.themoviedb.org/movie/8619
+                            </code>
+                            <p>
+                                the ID is <b>8619</b>
+                            </p>
+                        </li>
+                    </ol>
                 </div>
             </div>
         </dialog>
