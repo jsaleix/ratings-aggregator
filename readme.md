@@ -10,3 +10,4 @@
 - TailwindCss
 - Storybook
 - TanStack-query & TanStack-form
+- Github Actions
