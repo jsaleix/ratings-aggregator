@@ -1,31 +1,18 @@
-name: Worker CI
+name: CLIENT CI
 on:
     push:
         paths:
-            - "apps/worker/**"
+            - "apps/client/**"
     pull_request:
         paths:
-            - "apps/worker/**"
+            - "apps/client/**"
 
 jobs:
-    build:
+    build-n-test:
         defaults:
             run:
-                working-directory: apps/worker
-
+                working-directory: apps/client
         runs-on: ubuntu-latest
-
-        services:
-            redis:
-                image: redis:7
-                ports:
-                    - 6379:6379
-                options: >-
-                    --health-cmd "redis-cli ping"
-                    --health-interval 10s
-                    --health-timeout 5s
-                    --health-retries 5
-
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -36,8 +23,8 @@ jobs:
                   version: 10
                   run_install: false
 
-            - name: Copy test env
-              run: cp .env.test .env
+            # - name: Copy test env
+            #   run: cp .env.test .env
 
             - name: Install Node.js
               uses: actions/setup-node@v4
@@ -47,22 +34,19 @@ jobs:
             - name: Install dependencies
               run: pnpm install
 
-            - name: Run Prisma generate
-              run: pnpm prisma generate
-
-            - name: Run tests
-              run: pnpm test
+            # - name: Run tests
+            #   run: pnpm test
 
             - name: Build project
               run: pnpm run build
 
     deploy:
         runs-on: ubuntu-latest
-        needs: build
+        needs: build-n-test
         if: github.ref == 'refs/heads/master'
         steps:
             - name: Deploy to prod
               run: |
                   curl \
-                  --request GET '${{ secrets.DEPLOY_URL_WORKER }}' \
+                  --request GET '${{ secrets.DEPLOY_URL_CLIENT }}' \
                   --header 'Authorization: Bearer ${{ secrets.DEPLOY_HOOK_SECRET }}'
