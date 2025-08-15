@@ -32,7 +32,16 @@ export const ratingWorker = new Worker(
     }
 );
 
+ratingWorker.on("active", (job) => {
+    console.log("---------------");
+    console.log("RATING WORKER ACTIVE");
+    const { id } = job.data.payload;
+    console.log("Movie Id:", id);
+    console.log("---------------");
+});
+
 ratingWorker.on("completed", (job) => {
+    console.log("---------------");
     const { id: movieId } = job.data.payload;
     console.log("RATING WORKER COMPLETED");
     if (!movieId) return;
@@ -40,6 +49,7 @@ ratingWorker.on("completed", (job) => {
         payload: { id: movieId },
         type: "movie",
     });
+    console.log("---------------");
 });
 
 ratingWorker.on("failed", (job, error) => {

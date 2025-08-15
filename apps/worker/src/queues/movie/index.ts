@@ -43,12 +43,15 @@ movieWorker.on(
     "completed",
     async (_: Job<MovieJob>, movie: MovieType | undefined) => {
         if (movie == undefined) return;
+        console.log("---------------");
+        console.log("MOVIE WORKER COMPLETED");
         // await movieHandler.gatherRatings(movie);
-        console.log("GIVING ", movie.id);
+        console.log("GENERATED MOVIE ID =", movie.id);
         await ratingQueue.add("set-ratings", {
             type: "movie",
             payload: { id: movie.id },
         });
+        console.log("---------------");
     }
 );
 
