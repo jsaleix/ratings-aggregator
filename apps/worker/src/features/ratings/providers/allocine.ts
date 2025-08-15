@@ -9,6 +9,7 @@ export const getAllocineScore = async (name: string, year: number) => {
         headless: "shell",
         args: ["--no-sandbox"],
     });
+    console.log("getAllocineScore")
     const page = await browser.newPage();
     await page.setUserAgent(userAgent);
     try {
