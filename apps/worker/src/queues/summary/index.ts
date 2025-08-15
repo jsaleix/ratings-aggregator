@@ -30,7 +30,7 @@ export const summaryWorker = new Worker(
 
 summaryWorker.on("active", async (job: Job<SummaryJob>) => {
     console.log("---------------");
-    console.log("MOVIE WORKER ACTIVE");
+    console.log("SUMMARY WORKER ACTIVE");
     console.log(`TYPE ${job?.data.type} | ID ${job?.data.payload.id}`);
     console.log("---------------");
 });

@@ -42,13 +42,16 @@ ratingWorker.on("active", (job) => {
 
 ratingWorker.on("completed", (job) => {
     console.log("---------------");
-    const { id: movieId } = job.data.payload;
+    const { id } = job.data.payload;
     console.log("RATING WORKER COMPLETED");
-    if (!movieId) return;
-    summaryQueue.add("generate-summary", {
-        payload: { id: movieId },
-        type: "movie",
-    });
+    if (!id) {
+        console.log("No id from payload");
+    } else {
+        summaryQueue.add("generate-summary", {
+            payload: { id },
+            type: "movie",
+        });
+    }
     console.log("---------------");
 });
 

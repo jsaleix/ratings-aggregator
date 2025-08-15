@@ -22,6 +22,11 @@ export class SetMovieRatings {
             .filter((result) => result.status === "fulfilled")
             .map((result) => result.value)
             .flat();
+
+        console.log(
+            "results",
+            results.map((r) => r.value)
+        );
         return results;
     }
 }
