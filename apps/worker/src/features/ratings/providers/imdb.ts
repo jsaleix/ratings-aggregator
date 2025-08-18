@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import { browserExecutablePath } from "../../../config/scrapping";
 // import { writeFileSync } from "fs";
 
 const userAgent =
@@ -9,6 +10,7 @@ export const getIMDBScore = async (name: string, year: number) => {
     const browser = await puppeteer.launch({
         headless: "shell",
         args: ["--no-sandbox"],
+        executablePath: browserExecutablePath,
     });
     const page = await browser.newPage();
     await page.setUserAgent(userAgent);

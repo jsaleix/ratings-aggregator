@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import { browserExecutablePath } from "../../../config/scrapping";
 // import { writeFileSync } from "fs";
 
 const userAgent =
@@ -8,8 +9,8 @@ export const getAllocineScore = async (name: string, year: number) => {
     const browser = await puppeteer.launch({
         headless: "shell",
         args: ["--no-sandbox"],
+        executablePath: browserExecutablePath,
     });
-    console.log("getAllocineScore")
     const page = await browser.newPage();
     await page.setUserAgent(userAgent);
     try {
@@ -43,8 +44,8 @@ export const getAllocineScore = async (name: string, year: number) => {
             const [press, audience] = vals;
 
             return {
-                press: press.textContent??"N/A",
-                audience: audience.textContent??"N/A",
+                press: press.textContent ?? "N/A",
+                audience: audience.textContent ?? "N/A",
             };
         }, year);
 
@@ -53,7 +54,7 @@ export const getAllocineScore = async (name: string, year: number) => {
     } catch (error) {
         if (error instanceof Error) console.error("❌ Erreur :", error.message);
         else console.error(error);
-        return null
+        return null;
     } finally {
         await browser.close();
     }
