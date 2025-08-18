@@ -1,9 +1,11 @@
 import puppeteer from "puppeteer";
+import { browserExecutablePath } from "../../../config/scrapping";
 
 export const getRottenTomatoesScores = async (name: string, year: number) => {
     const browser = await puppeteer.launch({
         headless: "shell",
         args: ["--no-sandbox"],
+        executablePath: browserExecutablePath
     });
     const page = await browser.newPage();
 

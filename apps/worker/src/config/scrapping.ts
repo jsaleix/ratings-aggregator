@@ -1,0 +1,1 @@
+export const browserExecutablePath = process.env.BROWSER_PATH ?? undefined;
