@@ -43,7 +43,7 @@ export default function GetTMDBIdModal({ modalState, onClose }: Props) {
                     <ol className="flex flex-col gap-2">
                         <li>
                             1. Go to{" "}
-                            <a href="themoviedb.org" target="_blank" className="link">
+                            <a href="https://www.themoviedb.org/" target="_blank" className="link">
                                 themoviedb.org
                             </a>
                         </li>

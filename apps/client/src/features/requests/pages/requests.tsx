@@ -6,8 +6,10 @@ import RequestListItem from "../components/requests-list-item";
 import Button from "../../../shared/ui/button";
 import PageHeader from "../../../shared/ui/page-header";
 import { mapApiRequestToMovieRequestModel } from "../types/api-request";
+import { useAuthContext } from "../../../core/auth/provider";
 
 export default function RequestsPage() {
+    const { role } = useAuthContext();
     const { data: count } = useQuery({
         queryKey: ["getMovieRequestsCount"],
         queryFn: async () => {
@@ -54,12 +56,14 @@ export default function RequestsPage() {
                         <span className="text-white">
                             Limits: max. {count.max} request(s) per day - Left:{" "}
                             {count.left}
-                        </span>
-                        {" "}
+                        </span>{" "}
                         (shared between users)
                     </p>
                     <Link to="/requests/create" className="mr-auto">
-                        <Button variant={"primary"} disabled={count.left < 1}>
+                        <Button
+                            variant={"primary"}
+                            disabled={count.left < 1 && role !== "admin"}
+                        >
                             Make a request
                         </Button>
                     </Link>
