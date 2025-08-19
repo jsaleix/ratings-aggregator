@@ -6,9 +6,9 @@ import apiMoviesService from "../services/api-movies.service";
 import apiRatingsService from "../services/api-ratings.service";
 import apiSummaryService from "../services/api-summary.service";
 import { BASE_POSTER_URL } from "../../../core/config/misc";
-import MovieRatingItem from "../components/movie-rating-item";
 import { useAuthContext } from "../../../core/auth/provider";
 import { setPageTitle } from "../../../shared/utils/page";
+import MovieRatingItem from "../components/movie-rating-item";
 import LastMoviesAdded from "../components/last-movies-added";
 import MoviePageSkeleton from "../components/movie-page-skeleton";
 

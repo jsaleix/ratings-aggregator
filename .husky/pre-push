@@ -1,7 +1,9 @@
 #!/usr/bin/env sh
 set -e
 
-CHANGED_FILES=$(git diff --cached --name-only)
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+CHANGED_FILES=$(git diff --name-only origin/$CURRENT_BRANCH...HEAD)
 
 # APPS/CLIENT
 
@@ -10,6 +12,8 @@ if echo "$CHANGED_FILES" | grep -q "^apps/client/"; then
   cd apps/client
   pnpm install
   pnpm run build
+else
+  echo "✅ No modification found in apps/client, skipping build"  
 fi
 
 # APPS/WORKER
