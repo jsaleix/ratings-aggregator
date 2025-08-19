@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { MemoryRouter } from "react-router";
+
 import MovieListComponent from "./movie-list";
 import { MovieMockData } from "../../../assets/data-test/movies";
-import { MemoryRouter } from "react-router";
 
 const meta: Meta<typeof MovieListComponent> = {
     title: "Movies/MovieList",
