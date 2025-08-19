@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+set -e
+
+CHANGED_FILES=$(git diff --cached --name-only)
+
+# APPS/CLIENT
+
+if echo "$CHANGED_FILES" | grep -q "^apps/client/"; then
+  echo "📦 Modification found in apps/client"
+  cd apps/client
+  pnpm install
+  pnpm run build
+fi
+
+# APPS/WORKER
+
+if echo "$CHANGED_FILES" | grep -q "^apps/worker/"; then
+  echo "📦 Modification found in apps/worker"
+  cd apps/worker
+  pnpm install
+  #pnpm run test // Will fail locally without redis
+  pnpm run build
+fi
+
+# APPS/API
+
+if echo "$CHANGED_FILES" | grep -q "^apps/api/"; then
+  echo "📦 Modification found in apps/api"
+  cd apps/api
+  pnpm install
+  pnpm run build
+fi
