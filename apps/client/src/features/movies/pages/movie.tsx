@@ -10,6 +10,7 @@ import MovieRatingItem from "../components/movie-rating-item";
 import { useAuthContext } from "../../../core/auth/provider";
 import { setPageTitle } from "../../../shared/utils/page";
 import LastMoviesAdded from "../components/last-movies-added";
+import MoviePageSkeleton from "../components/movie-page-skeleton";
 
 export default function MoviePage() {
     const { isConnected } = useAuthContext();
@@ -54,7 +55,7 @@ export default function MoviePage() {
         if (movie) setPageTitle(movie.title);
     }, [movie]);
 
-    if (isMovieFetching || !movie?.id) return <p>Loading...</p>;
+    if (isMovieFetching || !movie?.id) return <MoviePageSkeleton />;
 
     return (
         <div className="w-full max-w-screen">
