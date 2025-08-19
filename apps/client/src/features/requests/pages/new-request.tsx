@@ -13,6 +13,7 @@ export default function NewRequestPage() {
             return await apiRequestService.create(request);
         },
         onSuccess: () => {
+            displayMsg("Request successfuly added!", "success");
             navigate("/requests");
         },
         onError: (e) => {
