@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 set -e
 
+ROOT_DIR=$(pwd)
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-
 CHANGED_FILES=$(git diff --name-only origin/$CURRENT_BRANCH...HEAD)
 
 # APPS/CLIENT
@@ -12,6 +12,7 @@ if echo "$CHANGED_FILES" | grep -q "^apps/client/"; then
   cd apps/client
   pnpm install
   pnpm run build
+  cd "$ROOT_DIR"
 else
   echo "✅ No modification found in apps/client, skipping build"  
 fi
@@ -24,6 +25,7 @@ if echo "$CHANGED_FILES" | grep -q "^apps/worker/"; then
   pnpm install
   #pnpm run test // Will fail locally without redis
   pnpm run build
+  cd "$ROOT_DIR"
 fi
 
 # APPS/API
@@ -33,4 +35,5 @@ if echo "$CHANGED_FILES" | grep -q "^apps/api/"; then
   cd apps/api
   pnpm install
   pnpm run build
+  cd "$ROOT_DIR"
 fi
