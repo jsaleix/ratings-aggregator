@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import type { MovieModel } from "../types/movie";
 import { BASE_POSTER_URL } from "../../../core/config/misc";
 import { formatDistanceToNow } from "date-fns";
+import UpdatedIcon from "../../../shared/ui/icons/updated-icon";
 
 interface Props {
     movie: MovieModel;
@@ -32,7 +33,12 @@ export default function MoviePosterItem({ movie }: Props) {
                 />
             </div>
             <div className="absolute bottom-0 w-full h-8 bg-black/80 py-1 px-3 flex items-center justify-between">
-                <span className="text-xs capitalize text-text-secondary">{lastUpdateString}</span>
+                <span className="text-xs capitalize text-text-secondary flex items-center gap-2">
+                    <i title="Last updated">
+                        <UpdatedIcon />
+                    </i>
+                    {lastUpdateString}
+                </span>
                 {/* <div className="flex gap-3">
                     <p className="font-bold">
                         <i>​👍</i>12
