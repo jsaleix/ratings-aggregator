@@ -5,6 +5,7 @@ import Button from "../../../shared/ui/button";
 import Input from "../../../shared/ui/input";
 import { loginSchema } from "../types/auth";
 import { useAuthContext } from "../../../core/auth/provider";
+import { displayMsg } from "../../../shared/utils/toast";
 
 interface Props {
     containerCss?: string;
@@ -22,7 +23,12 @@ export default function LoginForm({ containerCss }: Props) {
             password: "",
         },
         onSubmit: async ({ value }) => {
-            return await login(value.email, value.password);
+            try {
+                return await login(value.email, value.password);
+            } catch (e) {
+                if (e instanceof Error) displayMsg(e.message, "error");
+                else displayMsg("An error occurred", "error");
+            }
         },
         validators: {
             onChange: loginSchema,

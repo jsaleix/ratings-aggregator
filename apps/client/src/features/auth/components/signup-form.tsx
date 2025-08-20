@@ -33,12 +33,13 @@ export default function SignupForm({ containerCss }: Props) {
             username: "",
         },
         onSubmit: async ({ value }) => {
-            const res = await userService.signup(value);
-            if (res) {
+            try {
+                await userService.signup(value);
                 form.reset();
                 displayMsg("Account created! You can login now", "success");
-            } else {
-                displayMsg("Could not create your account", "error");
+            } catch (e) {
+                if (e instanceof Error) displayMsg(e.message, "error");
+                else displayMsg("Could not create your account", "error");
             }
         },
         validators: {
