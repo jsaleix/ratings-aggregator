@@ -2,6 +2,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
+import { RedisModule } from '@nestjs-modules/ioredis';
 
 import configuration from './core/configuration';
 import { AppController } from './app.controller';
@@ -24,6 +25,7 @@ import { SummaryModule } from './summary/summary.module';
         },
       ],
     }),
+    RedisModule.forRoot({ type: "single", url: process.env.REDIS_URL  }),
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true,

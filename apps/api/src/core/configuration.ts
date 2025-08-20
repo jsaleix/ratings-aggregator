@@ -17,11 +17,11 @@ const jwtSchema = z.object({
 export type EnvType = z.infer<typeof redisSchema> & z.infer<typeof tmdbSchema> & z.infer<typeof jwtSchema>;
 
 export default () => {
-  const redisConfig = redisSchema.parse({
-    redis_host: process.env.REDIS_HOST,
-    redis_port: process.env.REDIS_PORT,
-    redis_password: process.env.REDIS_PASSWORD,
-  });
+  // const redisConfig = redisSchema.parse({
+  //   redis_host: process.env.REDIS_HOST,
+  //   redis_port: process.env.REDIS_PORT,
+  //   redis_password: process.env.REDIS_PASSWORD,
+  // });
 
   const tmdbConfig = tmdbSchema.parse({
     tmdb_token: process.env.TMDB_TOKEN,
@@ -31,5 +31,5 @@ export default () => {
     jwt_secret: process.env.JWT_SECRET,
   });
 
-  return { ...redisConfig, ...tmdbConfig, ...jwtConfig } as EnvType;
+  return { ...tmdbConfig, ...jwtConfig } as EnvType;
 };
