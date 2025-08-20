@@ -64,7 +64,7 @@ export const AuthContextProvider = ({ children }: Props) => {
             const profile = await userService.getSelf();
             setUser(profile);
         } catch (e) {
-            logout();
+            setUser(null);
         }
     }, []);
 
