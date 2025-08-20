@@ -5,6 +5,7 @@ import {
     useEffect,
     useState,
 } from "react";
+
 import type { UserType } from "../../features/auth/types/user";
 import userService from "../../features/auth/services/user.service";
 import { displayMsg } from "../../shared/utils/toast";

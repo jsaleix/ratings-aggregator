@@ -1,4 +1,5 @@
 import { db } from "./core/db";
+
 import { movieWorker } from "./queues/movie";
 import { ratingWorker } from "./queues/ratings";
 import { summaryWorker } from "./queues/summary";
