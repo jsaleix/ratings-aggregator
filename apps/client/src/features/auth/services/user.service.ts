@@ -41,7 +41,21 @@ class UserService {
         if (!res.ok) {
             throw new Error(`Error fetching requests: ${res.statusText}`);
         }
-        return (await res.json()) as { token: string };
+        return true;
+    }
+
+    async logout() {
+        const url = new URL("/auth/logout", API_ENDPOINT).toString();
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            throw new Error(`Error fetching requests: ${res.statusText}`);
+        }
+        return true;
     }
 }
 

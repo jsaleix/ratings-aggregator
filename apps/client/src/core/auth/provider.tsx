@@ -8,6 +8,7 @@ import {
 import type { UserType } from "../../features/auth/types/user";
 import userService from "../../features/auth/services/user.service";
 import { STORAGE_TOKEN_KEY } from "../config/storage";
+import { displayMsg } from "../../shared/utils/toast";
 
 type AuthContextType = {
     user: undefined | null | UserType;
@@ -43,16 +44,19 @@ export const AuthContextProvider = ({ children }: Props) => {
     const login = useCallback(
         async (email: string, password: string) => {
             if (isConnected) return;
-            const response = await userService.login(email, password);
-            localStorage.setItem(STORAGE_TOKEN_KEY, response.token);
+            await userService.login(email, password);
             retrieveProfile();
         },
         [isConnected]
     );
 
-    const logout = useCallback(() => {
-        localStorage.removeItem(STORAGE_TOKEN_KEY);
-        setUser(null);
+    const logout = useCallback(async () => {
+        try {
+            await userService.logout();
+            setUser(null);
+        } catch (e) {
+            displayMsg("An error occurred", "error");
+        }
     }, []);
 
     const retrieveProfile = useCallback(async () => {
@@ -65,9 +69,7 @@ export const AuthContextProvider = ({ children }: Props) => {
     }, []);
 
     useEffect(() => {
-        retrieveProfile()
-        // if (localStorage.getItem(STORAGE_TOKEN_KEY)) retrieveProfile();
-        // else setUser(null);
+        retrieveProfile();
     }, []);
 
     return (
