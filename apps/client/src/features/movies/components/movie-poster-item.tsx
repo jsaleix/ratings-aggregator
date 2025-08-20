@@ -15,10 +15,12 @@ export default function MoviePosterItem({ movie }: Props) {
         [movie]
     );
 
-    // Format like "2 hours ago" using date-fns
-    const lastUpdateString = formatDistanceToNow(new Date(movie.updated_at), {
-        addSuffix: true,
-    });
+    const lastUpdateString = useMemo(() => {
+        if (!movie) return "";
+        const date = new Date(movie.updated_at);
+        if (isNaN(date.getTime())) return "Unknown";
+        return formatDistanceToNow(date, { addSuffix: true });
+    }, [movie]);
 
     return (
         <Link

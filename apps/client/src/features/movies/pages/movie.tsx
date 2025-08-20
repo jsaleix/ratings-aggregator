@@ -11,10 +11,12 @@ import { setPageTitle } from "../../../shared/utils/page";
 import MovieRatingItem from "../components/movie-rating-item";
 import LastMoviesAdded from "../components/last-movies-added";
 import MoviePageSkeleton from "../components/movie-page-skeleton";
+import { formatDistanceToNow } from "date-fns";
 
 export default function MoviePage() {
     const { isConnected } = useAuthContext();
     let { id } = useParams();
+
     const { data: movie, isFetching: isMovieFetching } = useQuery({
         queryKey: ["getMovie", id],
         queryFn: async () => {
@@ -45,6 +47,13 @@ export default function MoviePage() {
         initialData: undefined,
         refetchOnWindowFocus: false,
     });
+
+    const lastUpdatedStr = useMemo(() => {
+        if (!movie) return "";
+        const date = new Date(movie.updated_at);
+        if (isNaN(date.getTime())) return "Unknown date";
+        return formatDistanceToNow(date, { addSuffix: true });
+    }, [movie]);
 
     const posterUrl = useMemo(
         () => (movie ? BASE_POSTER_URL + movie.poster_path : ""),
@@ -125,6 +134,7 @@ export default function MoviePage() {
                         <h1 className="text-xl font-bold uppercase text-white">
                             <span className="text-secondary">R</span>atings
                         </h1>
+                        <p>Updated {lastUpdatedStr}</p>
                     </div>
                     <div className="flex flex-col">
                         {isConnected ? (
