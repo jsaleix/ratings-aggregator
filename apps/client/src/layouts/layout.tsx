@@ -1,9 +1,9 @@
 import { Outlet, useNavigate } from "react-router";
+import { useEffect } from "react";
 
 import { useAuthContext } from "../core/auth/provider";
 import Header from "./header";
 import Footer from "./footer";
-import { useEffect } from "react";
 
 export default function BaseLayout() {
     const { user } = useAuthContext();
@@ -13,9 +13,7 @@ export default function BaseLayout() {
         if (user?.id) {
             const queryParam = new URLSearchParams(window.location.search);
             const redirect = queryParam.get("redirect");
-            if (redirect) {
-                navigate(redirect);
-            }
+            if (redirect) navigate(redirect);
         }
     }, [user]);
 

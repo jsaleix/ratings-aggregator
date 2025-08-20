@@ -6,7 +6,6 @@ import NotFoundPage from "./features/general/pages/not-found";
 
 import BaseLayout from "./layouts/layout";
 import AuthLayout from "./layouts/auth/layout";
-import { useAuthContext } from "./core/auth/provider";
 import AdminLayout from "./layouts/admin/layout";
 
 const AboutPage = lazy(() => import("./features/general/pages/about"));
@@ -30,7 +29,6 @@ const Requests = lazy(() => import("./features/admin/pages/requests"));
 
 function App() {
     const { pathname } = useLocation();
-    const { isConnected } = useAuthContext();
 
     useEffect(() => {
         document.title = "Aggregator";
@@ -57,9 +55,7 @@ function App() {
                         />
                     </Route>
 
-                    {!isConnected && (
-                        <Route path="/auth" element={<AuthPage />} />
-                    )}
+                    <Route path="/auth" element={<AuthPage />} />
 
                     <Route path="/requests" element={<RequestsPage />} />
                     <Route path="/movies" element={<MoviesPage />} />

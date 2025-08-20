@@ -1,9 +1,20 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+
+import { useAuthContext } from "../../../core/auth/provider";
 import PageHeader from "../../../shared/ui/page-header";
 import LoginForm from "../components/login-form";
 import ProsPart from "../components/pros-parts";
 import SignupForm from "../components/signup-form";
 
 export default function AuthPage() {
+    const {isConnected} = useAuthContext()
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(isConnected) navigate("/")
+    }, [isConnected])
+    
     return (
         <div className="w-full">
             <div className="flex flex-col container mx-auto gap-5 py-5 px-5 md:px-0">
