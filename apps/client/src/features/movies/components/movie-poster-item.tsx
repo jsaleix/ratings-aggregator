@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { useMemo } from "react";
 import type { MovieModel } from "../types/movie";
 import { BASE_POSTER_URL } from "../../../core/config/misc";
+import { formatDistanceToNow } from "date-fns";
 
 interface Props {
     movie: MovieModel;
@@ -13,10 +14,15 @@ export default function MoviePosterItem({ movie }: Props) {
         [movie]
     );
 
+    // Format like "2 hours ago" using date-fns
+    const lastUpdateString = formatDistanceToNow(new Date(movie.updated_at), {
+        addSuffix: true,
+    });
+
     return (
         <Link
             to={`/movies/${movie.id}`}
-            className="block hover:opacity-90 duration-150 rounded-md overflow-hidden w-55"
+            className="relative block hover:opacity-90 duration-150 rounded-md overflow-hidden w-55"
         >
             <div className="w-55 overflow-hidden object-contain shadow-xl">
                 <img
@@ -24,6 +30,14 @@ export default function MoviePosterItem({ movie }: Props) {
                     alt={movie.title}
                     className="w-full h-auto select-none drag-none"
                 />
+            </div>
+            <div className="absolute bottom-0 w-full h-8 bg-black/80 py-1 px-3 flex items-center justify-between">
+                <span className="text-xs capitalize text-text-secondary">{lastUpdateString}</span>
+                {/* <div className="flex gap-3">
+                    <p className="font-bold">
+                        <i>​👍</i>12
+                    </p>
+                </div> */}
             </div>
         </Link>
     );

@@ -4,6 +4,7 @@ export const MovieMockData = {
     id: "f576483e-6538-4334-a937-a75256e739fb",
     title: "Superman",
     created_at: "2025-07-20T14:02:54.881Z",
+    updated_at: "2025-07-20T14:02:54.881Z",
     tmdbId: 1061474,
     tagLine: "Look up.",
     summary:

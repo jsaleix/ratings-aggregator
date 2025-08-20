@@ -2,6 +2,7 @@ export interface MovieModel {
     id: string;
     title: string;
     created_at: string;
+    updated_at: string;
     tmdbId: number;
     tagLine: string;
     summary: string;
