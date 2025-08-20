@@ -15,6 +15,13 @@ class MovieService {
 
         return movie ? movie : null;
     }
+
+    async updateMovie(id: string, data: Partial<MovieCreateInput>) {
+        return await this.db.movie.update({
+            where: { id },
+            data,
+        });
+    }
 }
 
 export default MovieService;

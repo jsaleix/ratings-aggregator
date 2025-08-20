@@ -7,7 +7,6 @@ import {
 } from "react";
 import type { UserType } from "../../features/auth/types/user";
 import userService from "../../features/auth/services/user.service";
-import { STORAGE_TOKEN_KEY } from "../config/storage";
 import { displayMsg } from "../../shared/utils/toast";
 
 type AuthContextType = {
