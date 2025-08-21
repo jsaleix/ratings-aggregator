@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 
@@ -7,10 +8,15 @@ import apiRequestService from "../services/api-request.service";
 import { displayMsg } from "../../../shared/utils/toast";
 import { useAuthContext } from "../../../core/auth/provider";
 import RequestPremiumForm from "../components/new-request-premium-form";
+import PageHeader from "../../../shared/ui/page-header";
+import Button from "../../../shared/ui/button";
 
 export default function NewRequestPage() {
     const navigate = useNavigate();
     const { role } = useAuthContext();
+    const [searchBy, setSearchBy] = useState<"title" | "tmdbId">("tmdbId");
+
+    const displayChoices = role === "admin" || role === "premium";
 
     const { mutateAsync: createRequest } = useMutation({
         mutationFn: async (request: CreateRequestType) => {
@@ -28,16 +34,38 @@ export default function NewRequestPage() {
     return (
         <div className="w-full">
             <div className="flex flex-col container mx-auto gap-5 py-5 px-5 md:px-0">
-                <header className="relative flex flex-col items">
-                    <h2 className="text-2xl">Movie Request</h2>
-                </header>
+                <PageHeader title="New request">
+                    {displayChoices && (
+                        <div className="flex items-center gap-5">
+                            <Button
+                                variant={
+                                    searchBy === "title" ? "primary" : "default"
+                                }
+                                onClick={() => setSearchBy("title")}
+                            >
+                                Search by Title
+                            </Button>
+                            <Button
+                                variant={
+                                    searchBy === "tmdbId"
+                                        ? "primary"
+                                        : "default"
+                                }
+                                onClick={() => setSearchBy("tmdbId")}
+                            >
+                                Search by TMDB ID
+                            </Button>
+                        </div>
+                    )}
+                </PageHeader>
                 <div className="flex md:w-2/3">
-                    {role === "premium" || role === "admin" ? (
+                    {searchBy === "title" && (
                         <RequestPremiumForm
-                            action={createRequest}
                             label="Create"
+                            action={createRequest}
                         />
-                    ) : (
+                    )}
+                    {searchBy === "tmdbId" && (
                         <RequestForm label="Create" action={createRequest} />
                     )}
                 </div>

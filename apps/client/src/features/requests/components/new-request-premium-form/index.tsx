@@ -1,13 +1,9 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
 import Button from "../../../../shared/ui/button";
 import Input from "../../../../shared/ui/input";
-import GetTMDBIdModal from "../modals/tmdb-id";
-import { useForm, useStore } from "@tanstack/react-form";
-import {
-    createRequestSchema,
-    type CreateRequestType,
-} from "../../types/schemas";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { type CreateRequestType } from "../../types/schemas";
 import apiMoviesService from "../../../movies/services/api-movies.service";
 import TMDBMovieItem from "../tmdb-movie-item";
 
@@ -16,8 +12,6 @@ interface Props {
     action?: (data: CreateRequestType) => any;
 }
 
-const errorClass = "font-bold text-red-400 text-sm";
-
 export default function RequestPremiumForm({ label, action }: Props) {
     const [title, setTitle] = useState("");
     const [movieSelected, setMovieSelected] = useState<{
@@ -25,7 +19,6 @@ export default function RequestPremiumForm({ label, action }: Props) {
         title: string;
     } | null>(null);
 
-    // It searchs movies by title by requesting my service class apiMovieService.searchByTMDBID(str: string)
     const { data, refetch, isLoading, isFetching, isFetched } = useQuery({
         queryKey: ["search-movie-by-title", title],
         queryFn: async () => {
