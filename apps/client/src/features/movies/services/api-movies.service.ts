@@ -1,5 +1,6 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import type { PaginatedResult } from "../../../shared/types/pagination";
+import type { TMDBGetMovieType } from "../../requests/types/tmdb";
 import type { MovieModel } from "../types/movie";
 
 type SearchMovieParams = {
@@ -66,6 +67,20 @@ class ApiMoviesService {
             throw new Error(`Error searching movies: ${res.statusText}`);
         }
         return (await res.json()) as PaginatedResult<MovieModel>;
+    }
+
+    async searchByTMDBID(title: string): Promise<Array<TMDBGetMovieType>> {
+        const url = new URL("/movies/search-with-tmdb", API_ENDPOINT);
+
+        url.searchParams.append("title", title);
+
+        const res = await fetch(url, {
+            method: "GET",
+        });
+        if (!res.ok) {
+            throw new Error(`Error searching movies: ${res.statusText}`);
+        }
+        return (await res.json()) as Array<TMDBGetMovieType>;
     }
 
     async searchTMDB(query: string) {

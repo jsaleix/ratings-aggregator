@@ -5,9 +5,13 @@ import RequestForm from "../components/new-request-form";
 import type { CreateRequestType } from "../types/schemas";
 import apiRequestService from "../services/api-request.service";
 import { displayMsg } from "../../../shared/utils/toast";
+import { useAuthContext } from "../../../core/auth/provider";
+import RequestPremiumForm from "../components/new-request-premium-form";
 
 export default function NewRequestPage() {
     const navigate = useNavigate();
+    const { role } = useAuthContext();
+
     const { mutateAsync: createRequest } = useMutation({
         mutationFn: async (request: CreateRequestType) => {
             return await apiRequestService.create(request);
@@ -28,7 +32,14 @@ export default function NewRequestPage() {
                     <h2 className="text-2xl">Movie Request</h2>
                 </header>
                 <div className="flex md:w-2/3">
-                    <RequestForm label="Create" action={createRequest} />
+                    {role === "premium" || role === "admin" ? (
+                        <RequestPremiumForm
+                            action={createRequest}
+                            label="Create"
+                        />
+                    ) : (
+                        <RequestForm label="Create" action={createRequest} />
+                    )}
                 </div>
             </div>
         </div>
