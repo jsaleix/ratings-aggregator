@@ -95,7 +95,7 @@ export default function LastMoviesAdded() {
                     </div>
 
                     {movies.length === 0 && (
-                        <p className="text-slate-800">No movie found</p>
+                        <p className="text-text-secondary">No movie found</p>
                     )}
                     {movies.length > 0 && (
                         <div className="w-full">
