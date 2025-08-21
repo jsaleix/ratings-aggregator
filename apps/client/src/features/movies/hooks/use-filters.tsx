@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 
 export type FiltersType = {
     order: "asc" | "desc" | undefined;
-    orderBy: "title" | "id" | "created_at" | "year" | undefined;
+    orderBy: "title" | "id" | "created_at" | "year" | "updated_at" | undefined;
 };
 
 export default function useMovieFilters() {

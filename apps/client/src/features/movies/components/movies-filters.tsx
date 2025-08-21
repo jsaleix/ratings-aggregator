@@ -15,7 +15,8 @@ const orders = ["asc", "desc"] as const;
 const orderByValues = {
     title: "Title",
     created_at: "Recently added",
-    year: "Release year"
+    year: "Release year",
+    updated_at: "Last updated",
 } as const;
 
 export default function FiltersPart({
