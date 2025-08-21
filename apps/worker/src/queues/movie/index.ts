@@ -50,6 +50,8 @@ movieWorker.on(
         await ratingQueue.add("set-ratings", {
             type: "movie",
             payload: { id: movie.id },
+            removeOnComplete: true,
+            removeOnFail: true,
         });
         console.log("---------------");
     }

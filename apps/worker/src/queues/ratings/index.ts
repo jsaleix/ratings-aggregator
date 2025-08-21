@@ -48,11 +48,13 @@ ratingWorker.on("completed", (job) => {
         console.log("No id from payload");
     } else {
         movieService.updateMovie(id, {
-            updated_at: (new Date()).toISOString(),
+            updated_at: new Date().toISOString(),
         });
         summaryQueue.add("generate-summary", {
             payload: { id },
             type: "movie",
+            removeOnComplete: true,
+            removeOnFail: true,
         });
     }
     console.log("---------------");
