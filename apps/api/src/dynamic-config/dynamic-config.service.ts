@@ -9,7 +9,6 @@ export class DynamicConfigService {
   constructor(private readonly prismaService: PrismaService) {}
 
   private async get(key: string): Promise<string | null> {
-    console.log(this.cache)
     if (this.cache.has(key)) return this.cache.get(key) || null;
     const config = await this.prismaService.app_Config.findUnique({
       where: { key },
@@ -29,7 +28,6 @@ export class DynamicConfigService {
       create: { key, value },
     });
     this.cache.set(key, value);
-    console.log(this.cache)
     return res.value;
   }
 
