@@ -48,18 +48,19 @@ const settings = {
     ],
 };
 
-export default function LastMoviesAdded() {
+export default function LastMoviesUpdated() {
     const { data: movies } = useQuery({
-        queryKey: ["lastMovies"],
+        queryKey: ["lastUpdatedMovies"],
         queryFn: async () => {
             const res = await apiMoviesService.getAll({
                 order: "desc",
-                orderBy: "created_at",
+                orderBy: "updated_at",
             });
             return res.data;
         },
         initialData: [],
-        refetchOnWindowFocus: false,
+        refetchOnWindowFocus: true,
+        refetchInterval: 15000,
     });
 
     return (
@@ -68,10 +69,10 @@ export default function LastMoviesAdded() {
                 <div className="flex flex-col py-5 gap-3 items-center">
                     <div className="w-full flex justify-between">
                         <h2 className="text-white text-xl">
-                            Last movies added
+                            Last movies updated
                         </h2>
                         <Link
-                            to="/movies?orderBy=created_at&order=desc"
+                            to="/movies?orderBy=updated_at&order=desc"
                             className="text-white font-bold hover:underline flex items-center gap-3"
                         >
                             See all

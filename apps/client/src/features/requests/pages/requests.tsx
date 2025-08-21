@@ -7,6 +7,7 @@ import Button from "../../../shared/ui/button";
 import PageHeader from "../../../shared/ui/page-header";
 import { mapApiRequestToMovieRequestModel } from "../types/api-request";
 import { useAuthContext } from "../../../core/auth/provider";
+import LastMoviesUpdated from "../../movies/components/last-movies-updated";
 
 export default function RequestsPage() {
     const { role } = useAuthContext();
@@ -68,7 +69,7 @@ export default function RequestsPage() {
                         </Button>
                     </Link>
                 </PageHeader>
-                <div className="flex w-full flex-col justify-center px-5 md:px-0 ">
+                <div className="flex w-full flex-col justify-center px-5 md:px-0 md:py-5">
                     {data.length === 0 && (
                         <p className="text-center text-text-secondary font-thin">
                             There is no request pending
@@ -86,6 +87,7 @@ export default function RequestsPage() {
                     )}
                 </div>
             </div>
+            <LastMoviesUpdated />
         </div>
     );
 }
