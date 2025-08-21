@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import Button from "../../../shared/ui/button";
 import LastMoviesAdded from "../../movies/components/last-movies-added";
 import { useAuthContext } from "../../../core/auth/provider";
+import LastMoviesUpdated from "../../movies/components/last-movies-updated";
 
 const MAX = 3;
 const img1 = Math.floor(Math.random() * 3) + 1;
@@ -50,6 +51,8 @@ export default function HomePage() {
                 </section>
 
                 <LastMoviesAdded />
+                <hr className="divider" />
+                <LastMoviesUpdated />
             </div>
         </div>
     );

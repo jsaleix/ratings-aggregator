@@ -12,6 +12,7 @@ import MovieRatingItem from "../components/movie-rating-item";
 import LastMoviesAdded from "../components/last-movies-added";
 import MoviePageSkeleton from "../components/movie-page-skeleton";
 import { formatDistanceToNow } from "date-fns";
+import LastMoviesUpdated from "../components/last-movies-updated";
 
 export default function MoviePage() {
     const { isConnected } = useAuthContext();
@@ -174,6 +175,8 @@ export default function MoviePage() {
                 </div>
             </div>
             <LastMoviesAdded />
+            <hr className="divider" />
+            <LastMoviesUpdated />
         </div>
     );
 }
