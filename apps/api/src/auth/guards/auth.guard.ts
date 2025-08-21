@@ -11,6 +11,8 @@ import { Reflector } from '@nestjs/core';
 import { EnvType } from 'src/core/configuration';
 import { UsersService } from 'src/users/users.service';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { InjectRedis } from '@nestjs-modules/ioredis';
+import Redis from 'ioredis';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -19,6 +21,7 @@ export class AuthGuard implements CanActivate {
     private configService: ConfigService<EnvType>,
     private userService: UsersService,
     private reflector: Reflector,
+    @InjectRedis() private readonly redis: Redis,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -31,10 +34,16 @@ export class AuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
-    const token = request.cookies?.access_token
+    const token = request.cookies?.access_token;
     if (!token) {
       throw new UnauthorizedException();
     }
+
+    const isBlacklisted = await this.redis.get(token);
+    if (isBlacklisted) {
+      return false;
+    }
+
     try {
       const secret = this.configService.get('jwt_secret');
       const payload = await this.jwtService.verifyAsync(token, {
