@@ -73,6 +73,7 @@ model User {
   updated_at    DateTime        @updatedAt
   deleted_at    DateTime?
   Movie_Request Movie_Request[]
+  verified      Boolean         @default(false)
 }
 
 model App_Config {
