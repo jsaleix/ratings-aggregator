@@ -31,10 +31,10 @@ export class MoviesController {
     return await this.moviesService.search(query);
   }
 
-  @Role('admin')
+  @Role('premium', 'mod')
   @Get('search-with-tmdb')
   async searchWithTmdb(@Query() query: SearchMovieQueryDto) {
-    return await this.tmdbService.searchByName(query);
+    return await this.tmdbService.searchByName(query)
   }
 
   @Role('admin')

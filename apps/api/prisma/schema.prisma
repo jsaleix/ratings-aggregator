@@ -96,4 +96,5 @@ enum Role {
   user
   admin
   mod
+  premium
 }
