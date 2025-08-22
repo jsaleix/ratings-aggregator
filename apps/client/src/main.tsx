@@ -13,7 +13,7 @@ import { queryClient } from "./core/query-client.ts";
 import { AuthContextProvider } from "./core/auth/provider.tsx";
 import ScrollToTop from "./shared/ui/scroll-to-top.tsx";
 import App from "./App.tsx";
-
+import AnalyticsPageViews from "./shared/ui/analytics/index.tsx";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
@@ -22,6 +22,7 @@ createRoot(document.getElementById("root")!).render(
                 <BrowserRouter>
                     <App />
                     <ScrollToTop />
+                    <AnalyticsPageViews />
                 </BrowserRouter>
             </AuthContextProvider>
             <ToastContainer />
