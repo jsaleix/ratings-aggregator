@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
+import { formatDistanceToNow } from "date-fns";
 
 import apiMoviesService from "../services/api-movies.service";
 import apiRatingsService from "../services/api-ratings.service";
@@ -8,10 +9,10 @@ import apiSummaryService from "../services/api-summary.service";
 import { BASE_POSTER_URL } from "../../../core/config/misc";
 import { useAuthContext } from "../../../core/auth/provider";
 import { setPageTitle } from "../../../shared/utils/page";
+import Button from "../../../shared/ui/button";
 import MovieRatingItem from "../components/movie-rating-item";
 import LastMoviesAdded from "../components/last-movies-added";
 import MoviePageSkeleton from "../components/movie-page-skeleton";
-import { formatDistanceToNow } from "date-fns";
 import LastMoviesUpdated from "../components/last-movies-updated";
 
 export default function MoviePage() {
@@ -137,9 +138,9 @@ export default function MoviePage() {
                         </h1>
                         <p>Updated {lastUpdatedStr}</p>
                     </div>
-                    <div className="flex flex-col">
-                        {isConnected ? (
-                            <>
+                    {isConnected ? (
+                        <>
+                            <div className="flex flex-col">
                                 {ratings.length === 0 && <p>No rating</p>}
                                 {ratings.length > 0 && (
                                     <ul className="flex flex-col md:w-[100%]">
@@ -151,25 +152,35 @@ export default function MoviePage() {
                                         ))}
                                     </ul>
                                 )}
-                            </>
-                        ) : (
+                            </div>
+                            {ratingsSummary && (
+                                <div className="w-full xl:w-1/3 h-fit bg-bg-medium p-5 rounded-xl shadow-md flex flex-col gap-1">
+                                    <h2 className="uppercase text-primary font-bold">
+                                        Synthesis
+                                    </h2>
+                                    <p className="text-white">
+                                        {ratingsSummary.content}
+                                    </p>
+                                    <p className="text-text-secondary font-light text-sm">
+                                        <span>Last update: </span>
+                                        {new Date(
+                                            ratingsSummary.updated_at
+                                        ).toLocaleString()}
+                                    </p>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className="w-full flex flex-col items-center justify-center gap-3">
                             <p>You must be authenticated to see the ratings</p>
-                        )}
-                    </div>
-                    {isConnected && ratingsSummary && (
-                        <div className="w-full xl:w-1/3 h-fit bg-bg-medium p-5 rounded-xl shadow-md flex flex-col gap-1">
-                            <h2 className="uppercase text-primary font-bold">
-                                Synthesis
-                            </h2>
-                            <p className="text-white">
-                                {ratingsSummary.content}
-                            </p>
-                            <p className="text-text-secondary font-light text-sm">
-                                <span>Last update: </span>
-                                {new Date(
-                                    ratingsSummary.updated_at
-                                ).toLocaleString()}
-                            </p>
+                            <Link
+                                to={`/auth`}
+                                state={{
+                                    redirect: `/movies/${movie.id}`,
+                                }}
+                            >
+                                <Button variant="primary">Login</Button>
+                            </Link>
                         </div>
                     )}
                 </div>

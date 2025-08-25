@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 import { useEffect } from "react";
 
 import { useAuthContext } from "../core/auth/provider";
@@ -8,11 +8,11 @@ import Footer from "./footer";
 export default function BaseLayout() {
     const { user } = useAuthContext();
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         if (user?.id) {
-            const queryParam = new URLSearchParams(window.location.search);
-            const redirect = queryParam.get("redirect");
+            const redirect = location.state?.redirect;
             if (redirect) navigate(redirect);
         }
     }, [user]);

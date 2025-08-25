@@ -11,11 +11,7 @@ export default function AuthLayout() {
     useEffect(() => {
         if (user === null) {
             const currentUrl = window.location.pathname;
-            const saveUrlInQueryParam = new URLSearchParams(
-                window.location.search
-            );
-            saveUrlInQueryParam.set("redirect", currentUrl);
-            navigate(`/auth?${saveUrlInQueryParam.toString()}`, {});
+            navigate(`/auth`, { state: { redirect: currentUrl } });
             notify("You must be logged in to access this page");
         }
     }, [user]);
