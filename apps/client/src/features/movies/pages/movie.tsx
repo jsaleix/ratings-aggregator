@@ -72,8 +72,10 @@ export default function MoviePage() {
         <div className="w-full max-w-screen">
             <div className="flex flex-col items-center container mx-auto gap-5 pb-5 md:py-5">
                 <header className="flex flex-col w-full md:flex-row gap-5 justify-center">
-                    <div className="hidden md:flex h-auto md:w-75 overflow-hidden aspect-[9/16]">
+                    <div className="hidden md:flex overflow-hidden aspect-[9/16] w-[300px] h-[450px]">
                         <img
+                            width={300}
+                            height={450}
                             src={posterUrl}
                             alt={movie.title}
                             className="w-full h-full object-contain select-none pointer-events-none"
@@ -100,12 +102,6 @@ export default function MoviePage() {
                         </p>
                         <div className="flex flex-col gap-2">
                             <p className="text-text-secondary">
-                                Budget:{" "}
-                                <span className="text-white">
-                                    ${movie.budget.toLocaleString()}
-                                </span>
-                            </p>
-                            <p className="text-text-secondary">
                                 Runtime:{" "}
                                 <span className="text-white">
                                     {movie.runtime.toLocaleString()} minutes
@@ -121,11 +117,19 @@ export default function MoviePage() {
                                     </span>
                                 </p>
                             )}
+                            {movie.budget !== -1 && (
+                                <p className="text-text-secondary">
+                                    Budget:{" "}
+                                    <span className="bg-secondary px-1 text-black w-fit select-none font-bold">
+                                        ${movie.budget.toLocaleString()}
+                                    </span>
+                                </p>
+                            )}
                             <p className="text-text-secondary">
                                 TMDB ID:{" "}
-                                <span className="text-white">
+                                <code className="bg-secondary px-1 text-black w-fit">
                                     {movie.tmdbId}
-                                </span>
+                                </code>
                             </p>
                         </div>
                     </div>
