@@ -35,7 +35,7 @@ class AIService {
         });
 
         if (res.status !== 200) {
-            throw new Error("Failed to fetch AI response");
+            throw new Error(`Failed to fetch AI response: res.statusText`);
         }
 
         const responseData: AIResponseType = await res.json();

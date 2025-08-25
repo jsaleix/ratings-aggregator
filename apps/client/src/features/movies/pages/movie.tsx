@@ -14,6 +14,7 @@ import MovieRatingItem from "../components/movie-rating-item";
 import LastMoviesAdded from "../components/last-movies-added";
 import MoviePageSkeleton from "../components/movie-page-skeleton";
 import LastMoviesUpdated from "../components/last-movies-updated";
+import MovieSummaryItem from "../components/movie-summary-item";
 
 export default function MoviePage() {
     const { isConnected } = useAuthContext();
@@ -158,20 +159,7 @@ export default function MoviePage() {
                                 )}
                             </div>
                             {ratingsSummary && (
-                                <div className="w-full xl:w-1/3 h-fit bg-bg-medium p-5 rounded-xl shadow-md flex flex-col gap-1">
-                                    <h2 className="uppercase text-primary font-bold">
-                                        Synthesis
-                                    </h2>
-                                    <p className="text-white">
-                                        {ratingsSummary.content}
-                                    </p>
-                                    <p className="text-text-secondary font-light text-sm">
-                                        <span>Last update: </span>
-                                        {new Date(
-                                            ratingsSummary.updated_at
-                                        ).toLocaleString()}
-                                    </p>
-                                </div>
+                                <MovieSummaryItem data={ratingsSummary} />
                             )}
                         </>
                     ) : (
