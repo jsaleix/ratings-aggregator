@@ -9,3 +9,8 @@ export type AIResponseType = {
         };
     }[];
 };
+
+export type AISummaryResponseType = {
+    content: string;
+    score: string;
+};

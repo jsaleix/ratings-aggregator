@@ -48,7 +48,10 @@ describe("UseCase GenerateSummary", () => {
 
     it("should save the summary in db", async () => {
         dbService.getRatingsByMovieId.mockResolvedValue(ratings);
-        aiService.sendRequest.mockResolvedValue("Summary");
+        aiService.sendRequest.mockResolvedValue({
+            content: "Summary",
+            score: "A",
+        });
 
         await useCase.execute("movie-1");
 

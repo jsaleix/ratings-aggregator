@@ -1,5 +1,5 @@
 import { AI_CONFIG } from "../../../config/ai";
-import { AIResponseType } from "../types/ai";
+import { AIResponseType, AISummaryResponseType } from "../types/ai";
 
 class AIService {
     async sendRequest({
@@ -8,7 +8,7 @@ class AIService {
     }: {
         user: string;
         system?: string;
-    }): Promise<string> {
+    }): Promise<AISummaryResponseType> {
         const data = {
             model: "deepseek/deepseek-r1-0528:free",
             messages: [],
@@ -35,11 +35,18 @@ class AIService {
         });
 
         if (res.status !== 200) {
-            throw new Error(`Failed to fetch AI response: res.statusText`);
+            throw new Error(`Failed to fetch AI response: ${res.status} ${res.statusText}`);
         }
 
         const responseData: AIResponseType = await res.json();
-        return responseData.choices[0].message.content;
+        const rawContent = responseData.choices[0].message.content;
+        console.log(rawContent)
+        const result = JSON.parse(rawContent) as AISummaryResponseType;
+        if (!result.content || !result.score)
+            throw new Error(
+                "Invalid response type, missing content and/or score"
+            );
+        return result;
     }
 }
 
