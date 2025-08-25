@@ -7,8 +7,15 @@ import FiltersPart from "../components/movies-filters";
 export default function MoviesPage() {
     let [searchParams] = useSearchParams();
     const query = searchParams.get("query") ?? "";
-    const { movies, fetchNextPage, filters, changeOrder, changeOrderBy } =
-        UseSearchMovies(query);
+    const {
+        movies,
+        fetchNextPage,
+        hasNextPage,
+        isFetched,
+        filters,
+        changeOrder,
+        changeOrderBy,
+    } = UseSearchMovies(query);
 
     return (
         <div className="w-full">
@@ -20,7 +27,13 @@ export default function MoviesPage() {
                         changeOrder={changeOrder}
                     />
                 </PageHeader>
-                <MovieList movies={movies} onScrollEnd={fetchNextPage} />
+                {isFetched && (
+                    <MovieList
+                        canLoadMore={hasNextPage}
+                        movies={movies}
+                        loadMore={fetchNextPage}
+                    />
+                )}
             </div>
         </div>
     );

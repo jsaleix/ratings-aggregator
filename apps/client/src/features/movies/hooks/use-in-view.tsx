@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export function useScrollEnd() {
+export function useInView() {
     const [inView, setInView] = useState(false);
     const ref = useRef(null);
 
@@ -26,7 +26,7 @@ export function useScrollEnd() {
             observer.unobserve(element);
             observer.disconnect();
         };
-    }, [ref]);
+    }, []);
 
     return { ref, inView };
 }

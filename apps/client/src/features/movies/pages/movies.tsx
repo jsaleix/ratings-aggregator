@@ -4,7 +4,7 @@ import FiltersPart from "../components/movies-filters";
 import useMovies from "../hooks/use-movies";
 
 export default function MoviesPage() {
-    const { movies, fetchNextPage, filters, changeOrder, changeOrderBy } =
+    const { movies, fetchNextPage, isFetched, filters, changeOrder, changeOrderBy, hasNextPage } =
         useMovies();
 
     return (
@@ -17,7 +17,7 @@ export default function MoviesPage() {
                         changeOrder={changeOrder}
                     />
                 </PageHeader>
-                <MovieList movies={movies} onScrollEnd={fetchNextPage} />
+                {isFetched && <MovieList movies={movies} loadMore={fetchNextPage} canLoadMore={hasNextPage} />}
             </div>
         </div>
     );

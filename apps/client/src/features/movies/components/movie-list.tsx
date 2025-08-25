@@ -1,20 +1,24 @@
 import { useEffect } from "react";
 
-import { useScrollEnd } from "../hooks/use-scrollend";
+import { useInView } from "../hooks/use-in-view";
 import type { MovieModel } from "../types/movie";
 import MovieListItem from "./movie-list-item";
 
 interface Props {
     movies: MovieModel[];
-    onScrollEnd?: () => void;
+    loadMore?: () => void;
+    canLoadMore: boolean;
 }
 
-export default function MovieList({ movies, onScrollEnd }: Props) {
-    const { ref, inView } = useScrollEnd();
+export default function MovieList({ movies, loadMore, canLoadMore }: Props) {
+    const { ref, inView: reachedBottom } = useInView();
 
     useEffect(() => {
-        if (inView && onScrollEnd) onScrollEnd();
-    }, [inView]);
+        if (!loadMore) return;
+        if (reachedBottom && canLoadMore) {
+            loadMore();
+        }
+    }, [reachedBottom]);
 
     return (
         <div className="flex flex-col">

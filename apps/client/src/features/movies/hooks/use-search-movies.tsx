@@ -7,7 +7,7 @@ import useMovieFilters from "./use-filters";
 export default function UseSearchMovies(query: string) {
     const { filters, changeOrder, changeOrderBy } = useMovieFilters();
 
-    const { refetch, data, isFetching, hasNextPage, fetchNextPage } =
+    const { refetch, data, isFetching, isFetched, hasNextPage, fetchNextPage } =
         useInfiniteQuery({
             queryKey: ["searchMovies", query],
             queryFn: async ({ pageParam = 1 }) => {
@@ -40,6 +40,7 @@ export default function UseSearchMovies(query: string) {
     return {
         movies,
         isFetching,
+        isFetched,
         fetchNextPage,
         currentPage,
         hasNextPage,
