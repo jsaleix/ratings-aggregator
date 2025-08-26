@@ -26,9 +26,9 @@ export const summaryWorker = new Worker(
         concurrency: 1,
         autorun: false,
         limiter: {
-            // Add a delay of 2 minutes between jobs 
+            // Add a delay of 5 minutes between jobs 
             max: 1,
-            duration: 2 * 60 * 1000
+            duration: 5 * 60 * 1000
         }
     }
 );
