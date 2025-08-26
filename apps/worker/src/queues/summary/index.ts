@@ -25,6 +25,11 @@ export const summaryWorker = new Worker(
         connection: RedisMqConnection,
         concurrency: 1,
         autorun: false,
+        limiter: {
+            // Add a delay of 2 minutes between jobs 
+            max: 1,
+            duration: 2 * 60 * 1000
+        }
     }
 );
 

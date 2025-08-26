@@ -36,6 +36,7 @@ const createQueueMQ = (name) => new QueueMQ(name, { connection: redisOptions });
 const run = async () => {
   const movieQueue = createQueueMQ('movie-queue');
   const ratingsQueue = createQueueMQ('rating-queue');
+  const summaryQueue = createQueueMQ('summary-queue');
 
   // await setupBullMQProcessor(exampleBullMq.name);
 
@@ -45,7 +46,7 @@ const run = async () => {
   serverAdapter.setBasePath('/ui');
 
   createBullBoard({
-    queues: [new BullMQAdapter(movieQueue), new BullMQAdapter(ratingsQueue)],
+    queues: [new BullMQAdapter(movieQueue), new BullMQAdapter(ratingsQueue), new BullMQAdapter(summaryQueue)],
     serverAdapter,
   });
 

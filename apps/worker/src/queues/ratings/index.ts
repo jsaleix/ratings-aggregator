@@ -29,6 +29,11 @@ export const ratingWorker = new Worker(
         connection: RedisMqConnection,
         concurrency: 1,
         autorun: false,
+        limiter: {
+            // Add a delay of 1 minute between jobs
+            max: 1,
+            duration: 1 * 60 * 1000,
+        },
     }
 );
 
