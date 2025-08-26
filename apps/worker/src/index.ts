@@ -8,6 +8,7 @@ try {
     movieWorker.run();
     ratingWorker.run();
     summaryWorker.run();
+    console.log("Worker up");
 } catch (error) {
     console.error("Error starting workers:", error);
 }

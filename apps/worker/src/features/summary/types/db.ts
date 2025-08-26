@@ -8,6 +8,7 @@ const movieRatingSummaryModel =
             movieId: true,
             created_at: true,
             updated_at: true,
+            score: true,
         },
     });
 

@@ -34,6 +34,7 @@ model Movie {
 model Movie_Ratings_Summary {
   id         String   @id @default(uuid())
   content    String   @default("N/A")
+  score      String   @default("N/A")
   movieId    String   @unique
   Movie      Movie    @relation(fields: [movieId], references: [id])
   created_at DateTime @default(now()) @db.Timestamp(6)
@@ -73,6 +74,7 @@ model User {
   updated_at    DateTime        @updatedAt
   deleted_at    DateTime?
   Movie_Request Movie_Request[]
+  verified      Boolean         @default(false)
 }
 
 model App_Config {
@@ -96,4 +98,5 @@ enum Role {
   user
   admin
   mod
+  premium
 }

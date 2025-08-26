@@ -10,7 +10,7 @@ export default function MovieSummaryItem({ data }: Props) {
             <h2 className="uppercase text-primary font-bold">Synthesis</h2>
 
             <div className="flex items-start gap-5">
-                {/* <span className="font-bold text-8xl">A</span> */}
+                <span className="font-bold text-8xl">{data.score}</span>
                 <div>
                     <p className="text-white">{data.content}</p>
                     <p className="text-text-secondary font-light text-sm">

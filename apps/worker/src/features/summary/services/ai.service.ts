@@ -40,7 +40,6 @@ class AIService {
 
         const responseData: AIResponseType = await res.json();
         const rawContent = responseData.choices[0].message.content;
-        console.log(rawContent)
         const result = JSON.parse(rawContent) as AISummaryResponseType;
         if (!result.content || !result.score)
             throw new Error(

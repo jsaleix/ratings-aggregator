@@ -46,7 +46,7 @@ services:
         build:
             context: ./apps/worker
             dockerfile: ../../docker/worker/Dockerfile
-            target: prod
+            target: dev
         depends_on:
             - postgres
             - redis
