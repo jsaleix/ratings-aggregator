@@ -58,6 +58,7 @@ describe("UseCase GenerateSummary", () => {
         expect(dbService.saveSummary).toHaveBeenCalledWith({
             movieId: "movie-1",
             content: "Summary",
+            score: "A",
         });
     });
 
