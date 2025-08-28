@@ -9,6 +9,7 @@ import MovieRequestService from "../../features/requests/services/request";
 import { MovieType } from "../../features/movies/types/db";
 import { ratingQueue } from "..";
 import { AddMovieByTMDBIdUseCase } from "../../features/movies/use-cases/add-movie-by-tmdb-id";
+import { logger } from "@sentry/node";
 
 const tmdbService = new TMDBService();
 const movieService = new MovieService(db);
@@ -31,38 +32,52 @@ export const movieWorker = new Worker(
 );
 
 movieWorker.on("active", async (job: Job<MovieJob>) => {
-    console.log("---------------");
-    console.log("MOVIE WORKER ACTIVE");
-    const { requestId } = job.data.payload;
-    console.log("Active: ", requestId);
-    await movieRatingService.updateRequestState(requestId, true);
-    console.log("---------------");
+    // console.log("---------------");
+    // console.log("MOVIE WORKER ACTIVE");
+    // console.log("Active: ", requestId);
+    // console.log("---------------");
+    const { payload } = job.data;
+    logger.info("Movie worker active", {
+        tags: ["movie-worker", "worker"],
+        payload: job.data.payload,
+    });
+    await movieRatingService.updateRequestState(payload.requestId, true);
 });
 
 movieWorker.on(
     "completed",
-    async (_: Job<MovieJob>, movie: MovieType | undefined) => {
+    async (job: Job<MovieJob>, movie: MovieType | undefined) => {
         if (movie == undefined) return;
-        console.log("---------------");
-        console.log("MOVIE WORKER COMPLETED");
-        // await movieHandler.gatherRatings(movie);
-        console.log("GENERATED MOVIE ID =", movie.id);
+        // console.log("---------------");
+        // console.log("MOVIE WORKER COMPLETED");
+        // console.log("GENERATED MOVIE ID =", movie.id);
+        // console.log("---------------");
+        logger.info("Movie worker completed", {
+            tags: ["movie-worker", "worker"],
+            payload: job.data.payload,
+            movie,
+            movieId: movie.id,
+        });
         await ratingQueue.add("set-ratings", {
             type: "movie",
             payload: { id: movie.id },
             removeOnComplete: true,
             removeOnFail: true,
         });
-        console.log("---------------");
     }
 );
 
 movieWorker.on("failed", (job, error) => {
-    console.log("---------------");
-    console.log("MOVIE WORKER FAILED");
-    console.log(
-        `Request ${job?.data.payload.requestId} | TMDBID ${job?.data.payload.tmdbId}`
-    );
-    console.log(error.message);
-    console.log("---------------");
+    // console.log("---------------");
+    // console.log("MOVIE WORKER FAILED");
+    // console.log(
+    //     `Request ${job?.data.payload.requestId} | TMDBID ${job?.data.payload.tmdbId}`
+    // );
+    // console.log(error.message);
+    // console.log("---------------");
+    logger.error("Movie worker failed", {
+        tags: ["movie-worker", "worker"],
+        payload: job?.data.payload,
+        error: error.message,
+    });
 });

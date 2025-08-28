@@ -1,11 +1,12 @@
 import puppeteer from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
+import { logger } from "@sentry/node";
 
 export const getRottenTomatoesScores = async (name: string, year: number) => {
     const browser = await puppeteer.launch({
         headless: "shell",
         args: ["--no-sandbox"],
-        executablePath: browserExecutablePath
+        executablePath: browserExecutablePath,
     });
     const page = await browser.newPage();
 
@@ -77,6 +78,10 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
             audienceRatings,
         };
     } catch (error) {
+        logger.error("providers/getRottenTomatoesScores error", {
+            error,
+            name,
+        });
         if (error instanceof Error) console.error("❌ Erreur :", error.message);
     } finally {
         await browser.close();

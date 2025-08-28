@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
+import { logger } from "@sentry/node";
 // import { writeFileSync } from "fs";
 
 const userAgent =
@@ -79,6 +80,10 @@ export const getIMDBScore = async (name: string, year: number) => {
             score,
         };
     } catch (error) {
+        logger.error("providers/getIMDBScore error", {
+            error,
+            name
+        });
         if (error instanceof Error) console.error("❌ Erreur :", error.message);
         else console.error(error);
         return null;

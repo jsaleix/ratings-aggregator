@@ -8,9 +8,11 @@ import { GenerateMovieSummaryUseCase } from "../../features/summary/use-cases/ge
 import { DBService as SummaryDBService } from "../../features/summary/services/db.service";
 import SummaryHandler, { SummaryJob } from "./handler";
 import { MovieRatingSummaryType } from "../../features/summary/types/db";
-import TooManyRequestsError from "../../features/summary/errors/too-many-requests";
+import { logger } from "@sentry/node";
+import MovieService from "../../features/movies/services/movies.service";
 
 const aiService = new AIService();
+const movieService = new MovieService(db);
 const summaryDbService = new SummaryDBService(db);
 const generateMovieSummaryUseCase = new GenerateMovieSummaryUseCase(
     aiService,
@@ -35,28 +37,48 @@ export const summaryWorker = new Worker(
 );
 
 summaryWorker.on("active", async (job: Job<SummaryJob>) => {
-    console.log("---------------");
-    console.log("SUMMARY WORKER ACTIVE");
-    console.log(`TYPE ${job?.data.type} | ID ${job?.data.payload.id}`);
-    console.log("---------------");
+    logger.info("Summary worker active", {
+        tags: ["summary-worker", "worker"],
+        payload: job.data.payload,
+        movieId: job.data.payload.id,
+    });
+    // console.log("---------------");
+    // console.log("SUMMARY WORKER ACTIVE");
+    // console.log(`TYPE ${job?.data.type} | ID ${job?.data.payload.id}`);
+    // console.log("---------------");
 });
 
 summaryWorker.on("failed", (job, error) => {
-    console.log("---------------");
-    console.log("SUMMARY WORKER FAILED");
-    console.log(`TYPE ${job?.data.type} | ID ${job?.data.payload.id}`);
-    console.log(error.message);
-    console.log("---------------");
+    logger.error(`Summary worker failed ${error.message}`, {
+        tags: ["summary-worker", "worker"],
+        payload: job?.data.payload,
+        error: error.message,
+        movieId: job?.data.payload.id,
+    });
+    // console.log("---------------");
+    // console.log("SUMMARY WORKER FAILED");
+    // console.log(`TYPE ${job?.data.type} | ID ${job?.data.payload.id}`);
+    // console.log(error.message);
+    // console.log("---------------");
 });
 
 summaryWorker.on(
     "completed",
     (job, summary: MovieRatingSummaryType | undefined) => {
-        console.log("---------------");
-        console.log("SUMMARY WORKER COMPLETED");
-        console.log(`ID ${job?.data.payload.id}`);
-        if (summary) console.log(summary.id);
-        else console.log("Something wrong happened: no summary returned");
-        console.log("---------------");
+        logger.info("Summary worker completed", {
+            tags: ["summary-worker", "worker"],
+            payload: job.data.payload,
+            summary,
+            movieId: job.data.payload.id,
+        });
+        movieService.updateMovie(job.data.payload.id, {
+            updated_at: new Date().toISOString(),
+        });
+        // console.log("---------------");
+        // console.log("SUMMARY WORKER COMPLETED");
+        // console.log(`ID ${job?.data.payload.id}`);
+        // if (summary) console.log(summary.id);
+        // else console.log("Something wrong happened: no summary returned");
+        // console.log("---------------");
     }
 );

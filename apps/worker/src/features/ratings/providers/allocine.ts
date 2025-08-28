@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
+import { logger } from "@sentry/node";
 // import { writeFileSync } from "fs";
 
 const userAgent =
@@ -52,6 +53,10 @@ export const getAllocineScore = async (name: string, year: number) => {
         if (!scores) throw new Error("Score not found");
         return scores;
     } catch (error) {
+        logger.error("providers/getAllocineScore error", {
+            error,
+            name,
+        });
         if (error instanceof Error) console.error("❌ Erreur :", error.message);
         else console.error(error);
         return null;
