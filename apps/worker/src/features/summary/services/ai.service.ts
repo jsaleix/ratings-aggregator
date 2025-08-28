@@ -1,4 +1,5 @@
 import { AI_CONFIG } from "../../../config/ai";
+import TooManyRequestsError from "../errors/too-many-requests";
 import { AIResponseType, AISummaryResponseType } from "../types/ai";
 
 class AIService {
@@ -35,7 +36,11 @@ class AIService {
         });
 
         if (res.status !== 200) {
-            throw new Error(`Failed to fetch AI response: ${res.status} ${res.statusText}`);
+            if (res.status === 429) throw new TooManyRequestsError();
+            else
+                throw new Error(
+                    `Failed to fetch AI response: ${res.status} ${res.statusText}`
+                );
         }
 
         const responseData: AIResponseType = await res.json();

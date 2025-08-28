@@ -55,12 +55,22 @@ ratingWorker.on("completed", (job) => {
         movieService.updateMovie(id, {
             updated_at: new Date().toISOString(),
         });
-        summaryQueue.add("generate-summary", {
-            payload: { id },
-            type: "movie",
-            removeOnComplete: true,
-            removeOnFail: true,
-        });
+        summaryQueue.add(
+            "generate-summary",
+            {
+                payload: { id },
+                type: "movie",
+                removeOnComplete: true,
+                removeOnFail: true,
+            },
+            {
+                attempts: 5,
+                backoff: {
+                    type: "fixed",
+                    delay: 5 * 60 * 1000,
+                },
+            }
+        );
     }
     console.log("---------------");
 });

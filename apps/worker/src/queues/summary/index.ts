@@ -8,6 +8,7 @@ import { GenerateMovieSummaryUseCase } from "../../features/summary/use-cases/ge
 import { DBService as SummaryDBService } from "../../features/summary/services/db.service";
 import SummaryHandler, { SummaryJob } from "./handler";
 import { MovieRatingSummaryType } from "../../features/summary/types/db";
+import TooManyRequestsError from "../../features/summary/errors/too-many-requests";
 
 const aiService = new AIService();
 const summaryDbService = new SummaryDBService(db);
@@ -26,10 +27,10 @@ export const summaryWorker = new Worker(
         concurrency: 1,
         autorun: false,
         limiter: {
-            // Add a delay of 5 minutes between jobs 
+            // Add a delay of 5 minutes between jobs
             max: 1,
-            duration: 5 * 60 * 1000
-        }
+            duration: 5 * 60 * 1000,
+        },
     }
 );
 
@@ -50,9 +51,10 @@ summaryWorker.on("failed", (job, error) => {
 
 summaryWorker.on(
     "completed",
-    (_, summary: MovieRatingSummaryType | undefined) => {
+    (job, summary: MovieRatingSummaryType | undefined) => {
         console.log("---------------");
         console.log("SUMMARY WORKER COMPLETED");
+        console.log(`ID ${job?.data.payload.id}`);
         if (summary) console.log(summary.id);
         else console.log("Something wrong happened: no summary returned");
         console.log("---------------");
