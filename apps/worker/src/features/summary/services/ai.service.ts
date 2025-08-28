@@ -1,3 +1,4 @@
+import { logger } from "@sentry/node";
 import { AI_CONFIG } from "../../../config/ai";
 import TooManyRequestsError from "../errors/too-many-requests";
 import { AIResponseType, AISummaryResponseType } from "../types/ai";
@@ -44,6 +45,11 @@ class AIService {
         }
 
         const responseData: AIResponseType = await res.json();
+        logger.info("summary/aiService/sendRequest() response", {
+            payload: responseData,
+            tags: ["summary", "aiService"],
+            request: data,
+        });
         const rawContent = responseData.choices[0].message.content;
         const result = JSON.parse(rawContent) as AISummaryResponseType;
         if (!result.content || !result.score)
