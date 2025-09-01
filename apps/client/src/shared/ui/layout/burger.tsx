@@ -1,22 +1,24 @@
-import { useState } from "react";
+import clsx from "clsx";
 
 interface Props {
     size?: number;
     toggle?: (val: boolean) => void;
     open?: boolean;
+    css?: string;
 }
 
-export default function BurgerMenu({ size = 36, toggle, open }: Props) {
-    const [status, setStatus] = useState(open ? open : false);
+export default function BurgerMenu({
+    size = 36,
+    toggle,
+    open = true,
+    css,
+}: Props) {
+    const style = clsx("cursor-pointer hover:opacity-80 duration-150", css);
     const onClick = () => {
-        setStatus((prev) => {
-            const val = !prev;
-            if (toggle) toggle(val);
-            return val;
-        });
+        toggle && toggle(!open);
     };
 
-    if (status)
+    if (open)
         return (
             <svg
                 width={size}
@@ -24,7 +26,7 @@ export default function BurgerMenu({ size = 36, toggle, open }: Props) {
                 viewBox="0 0 36 36"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="cursor-pointer hover:opacity-80 duration-150"
+                className={style}
                 onClick={onClick}
             >
                 <path
@@ -41,7 +43,7 @@ export default function BurgerMenu({ size = 36, toggle, open }: Props) {
             viewBox="0 0 36 36"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="cursor-pointer hover:opacity-80 duration-150"
+            className={style}
             onClick={onClick}
         >
             <path
