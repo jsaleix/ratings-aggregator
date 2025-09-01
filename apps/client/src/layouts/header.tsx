@@ -10,7 +10,7 @@ export default function Header() {
     const { isConnected, role } = useAuthContext();
 
     return (
-        <header className="h-16 p-5 border-b-1 border-b-bg-light bg-bg-dark">
+        <header className="h-16 p-5 border-b-1 border-b-bg-light bg-bg-dark w-full">
             <div className="container mx-auto flex items-center justify-between h-full w-full">
                 <Link to="/" className="h-full">
                     <div className="h-full hover:opacity-85 active:opacity-85 duration-150">
