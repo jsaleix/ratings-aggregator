@@ -15,4 +15,6 @@ export type TMDBGetMovieType = {
     release_date: string;
     runtime?: number;
     adult: boolean;
+    imdb_id: string;
+    original_language: string
 };

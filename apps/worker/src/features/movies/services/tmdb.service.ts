@@ -55,6 +55,9 @@ class TMDBService {
             poster_path,
             release_date: rawReleaseDate,
             runtime,
+            original_language,
+            original_title,
+            imdb_id,
         } = tmdbMovie;
 
         const year = rawReleaseDate
@@ -77,6 +80,9 @@ class TMDBService {
             poster_path,
             release_date: new Date(release_date),
             runtime: runtime ? +runtime : -1,
+            imdbId: imdb_id,
+            original_title,
+            language: original_language,
         } satisfies MovieCreateInput;
     }
 }

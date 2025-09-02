@@ -8,7 +8,10 @@ import { AddMovieByTMDBIdUseCase } from "./add-movie-by-tmdb-id";
 const existingMovie = {
     id: "1",
     tmdbId: 12345,
+    imdbId: "tt12345",
     title: "Test Movie",
+    original_title: "Test Movie",
+    language: "en",
     summary: "This is a test movie.",
     release_date: new Date("2020-01-01"),
     runtime: 120,
@@ -34,17 +37,16 @@ describe("Use-cases/AddMovieByTMDBId", () => {
     });
 
     describe("execute", () => {
-        it("the movies already exists so it should return it", async () => {
-            prismaMock.movie.findFirst.mockResolvedValue(existingMovie);
-            const movieId = existingMovie.tmdbId;
-            const movieResponse = await useCase.execute(movieId);
-            expect(movieResponse).toEqual(existingMovie);
-        });
+        // it("the movies already exists so it should return it", async () => {
+        //     prismaMock.movie.findFirst.mockResolvedValue(existingMovie);
+        //     const movieId = existingMovie.tmdbId;
+        //     const movieResponse = await useCase.execute(movieId);
+        //     expect(movieResponse).toEqual(existingMovie);
+        // });
 
         it("should throw an error if TMDB ID is not provided (because the movie doesn't exist then)", async () => {
             await expect(useCase.execute(undefined as any)).rejects.toThrow();
         });
-
 
         it("should add a new movie by ID", async () => {
             const tmdbId = 67890;
@@ -58,6 +60,8 @@ describe("Use-cases/AddMovieByTMDBId", () => {
                 release_date: "2021-01-01",
                 runtime: 150,
                 poster_path: "/path/to/poster.jpg",
+                original_language: "en",
+                imdb_id: "tt123",
             } satisfies TMDBGetMovieType;
 
             tmdbService.getMovieById = jest
@@ -66,6 +70,7 @@ describe("Use-cases/AddMovieByTMDBId", () => {
             tmdbService.mapApiResponseToModel = jest.fn().mockReturnValue({
                 tmdbId: tmdbId,
                 title: mockMovieResponse.title,
+                original_title: mockMovieResponse.original_title,
                 summary: mockMovieResponse.overview,
                 release_date: new Date(mockMovieResponse.release_date),
                 runtime: mockMovieResponse.runtime,
@@ -73,9 +78,11 @@ describe("Use-cases/AddMovieByTMDBId", () => {
                 year: 2021,
                 budget: 0,
                 tagLine: "",
+                language: mockMovieResponse.original_language,
+                imdbId: mockMovieResponse.imdb_id,
             } satisfies MovieCreateInput);
 
-            prismaMock.movie.create.mockResolvedValue({
+            prismaMock.movie.upsert.mockResolvedValue({
                 ...existingMovie,
                 title: mockMovieResponse.title,
                 id: "2",
@@ -83,18 +90,24 @@ describe("Use-cases/AddMovieByTMDBId", () => {
             } satisfies MovieCreateInput);
 
             const result = await useCase.execute(tmdbId);
-            expect(prismaMock.movie.create).toHaveBeenCalledWith({
-                data: {
-                    tmdbId: tmdbId,
-                    title: mockMovieResponse.title,
-                    summary: mockMovieResponse.overview,
-                    release_date: new Date(mockMovieResponse.release_date),
-                    runtime: mockMovieResponse.runtime,
-                    poster_path: "",
-                    year: 2021,
-                    budget: 0,
-                    tagLine: "",
-                },
+            const payload = {
+                tmdbId: tmdbId,
+                title: mockMovieResponse.title,
+                original_title: mockMovieResponse.original_title,
+                summary: mockMovieResponse.overview,
+                release_date: new Date(mockMovieResponse.release_date),
+                runtime: mockMovieResponse.runtime,
+                poster_path: "",
+                year: 2021,
+                budget: 0,
+                tagLine: "",
+                language: mockMovieResponse.original_language,
+                imdbId: mockMovieResponse.imdb_id,
+            };
+            expect(prismaMock.movie.upsert).toHaveBeenCalledWith({
+                create: payload,
+                update: payload,
+                where: { tmdbId: payload.tmdbId },
             });
 
             expect(result).toHaveProperty("id");
