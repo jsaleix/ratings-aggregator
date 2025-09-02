@@ -9,9 +9,18 @@ export class RatingCollectorService {
     constructor(private ratingService: RatingService) {}
 
     async collectAllocine(movie: MovieType) {
-        const { title, id: movieId, year } = movie;
-        const values = await getAllocineScore(title, year);
-        if (!values) throw new Error(`Allociné ratings for ${title} not found`);
+        const { title, id: movieId, year, language, original_title } = movie;
+
+        let values: Awaited<ReturnType<typeof getAllocineScore>>;
+        if (language === "fr") {
+            values = await getAllocineScore(original_title, year);
+            if (!values)
+                throw new Error(`Allociné ratings for ${original_title} not found`);
+        } else {
+            values = await getAllocineScore(title, year);
+            if (!values)
+                throw new Error(`Allociné ratings for ${title} not found`);
+        }
 
         const { press, audience } = values;
 

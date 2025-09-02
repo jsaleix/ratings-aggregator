@@ -11,5 +11,3 @@ Sentry.init({
     enableLogs: true,
     tracesSampleRate: 1.0, //  Capture 100% of the transactions
 });
-
-console.log(SENTRY_CONFIG.dsn);
