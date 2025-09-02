@@ -7,6 +7,12 @@ export class CreateMovieDto {
   title: string;
 
   @IsString()
+  original_title: string;
+
+  @IsString()
+  language: string;
+
+  @IsString()
   tagLine: string;
 
   @IsString()
@@ -30,4 +36,7 @@ export class CreateMovieDto {
 
   @IsNumber()
   tmdbId: number;
+
+  @IsNumber()
+  imdbId: number;
 }

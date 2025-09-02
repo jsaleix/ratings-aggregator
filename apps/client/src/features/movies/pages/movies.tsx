@@ -1,11 +1,14 @@
 import PageHeader from "../../../shared/ui/page-header";
 import MovieList from "../components/movie-list";
 import FiltersPart from "../components/movies-filters";
+import useMovieFilters from "../hooks/use-filters";
 import useMovies from "../hooks/use-movies";
 
 export default function MoviesPage() {
-    const { movies, fetchNextPage, isFetched, filters, changeOrder, changeOrderBy, hasNextPage } =
-        useMovies();
+    const { filters, changeOrder, changeOrderBy } = useMovieFilters();
+
+    const { movies, fetchNextPage, isFetched, hasNextPage } =
+        useMovies(filters);
 
     return (
         <div className="w-full">
@@ -17,7 +20,13 @@ export default function MoviesPage() {
                         changeOrder={changeOrder}
                     />
                 </PageHeader>
-                {isFetched && <MovieList movies={movies} loadMore={fetchNextPage} canLoadMore={hasNextPage} />}
+                {isFetched && (
+                    <MovieList
+                        movies={movies}
+                        loadMore={fetchNextPage}
+                        canLoadMore={hasNextPage}
+                    />
+                )}
             </div>
         </div>
     );

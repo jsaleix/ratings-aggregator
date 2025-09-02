@@ -2,12 +2,10 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 
 import apiMoviesService from "../services/api-movies.service";
-import useMovieFilters from "./use-filters";
+import { type FiltersType } from "./use-filters";
 
-export default function useMovies() {
-    const { filters, changeOrder, changeOrderBy } = useMovieFilters();
-
-    const { refetch, data, isFetching,isFetched, hasNextPage, fetchNextPage } =
+export default function useMovies(filters: FiltersType) {
+    const { refetch, data, isFetching, isFetched, hasNextPage, fetchNextPage } =
         useInfiniteQuery({
             queryKey: ["getMovies"],
             queryFn: async ({ pageParam = 1 }) => {
@@ -43,8 +41,5 @@ export default function useMovies() {
         fetchNextPage,
         currentPage,
         hasNextPage,
-        filters,
-        changeOrder,
-        changeOrderBy,
     };
 }

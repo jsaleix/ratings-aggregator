@@ -15,7 +15,7 @@ const orders = ["asc", "desc"] as const;
 const orderByValues = {
     title: "Title",
     created_at: "Recently added",
-    year: "Release year",
+    release_date: "Release date",
     updated_at: "Last updated",
 } as const;
 

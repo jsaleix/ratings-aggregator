@@ -41,7 +41,7 @@ export class MoviesService {
     findMoviesDTO: FindMoviesDTO,
   ): Promise<PaginatedResult<MovieType>> {
     let { order, orderBy, page } = findMoviesDTO;
-    if (!orderBy) orderBy = 'year';
+    if (!orderBy) orderBy = 'release_date';
     if (!order) order = 'desc';
     if (!page) page = 1;
 

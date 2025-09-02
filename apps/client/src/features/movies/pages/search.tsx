@@ -1,21 +1,19 @@
 import { useSearchParams } from "react-router";
 import PageHeader from "../../../shared/ui/page-header";
 import MovieList from "../components/movie-list";
-import UseSearchMovies from "../hooks/use-search-movies";
+import useSearchMovies from "../hooks/use-search-movies";
 import FiltersPart from "../components/movies-filters";
+import useMovieFilters from "../hooks/use-filters";
 
 export default function MoviesPage() {
     let [searchParams] = useSearchParams();
     const query = searchParams.get("query") ?? "";
-    const {
-        movies,
-        fetchNextPage,
-        hasNextPage,
-        isFetched,
+    const { filters, changeOrder, changeOrderBy } = useMovieFilters();
+
+    const { movies, fetchNextPage, hasNextPage, isFetched } = useSearchMovies(
         filters,
-        changeOrder,
-        changeOrderBy,
-    } = UseSearchMovies(query);
+        query
+    );
 
     return (
         <div className="w-full">
