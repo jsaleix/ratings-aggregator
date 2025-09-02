@@ -32,8 +32,8 @@ export class RatingCollectorService {
     }
 
     async collectIMDB(movie: MovieType) {
-        const { title, id: movieId, year } = movie;
-        const value = await getIMDBScore(title, year);
+        const { title, id: movieId, year, imdbId } = movie;
+        const value = await getIMDBScore(title, year, imdbId);
         if (!value) throw new Error(`IMDB rating for ${title} not found`);
 
         const { score, url } = value;

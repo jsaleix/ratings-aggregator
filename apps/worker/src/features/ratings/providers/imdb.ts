@@ -7,7 +7,11 @@ const userAgent =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36";
 const baseUrl = "https://imdb.com";
 
-export const getIMDBScore = async (name: string, year: number) => {
+export const getIMDBScore = async (
+    name: string,
+    year: number,
+    imdbId?: string
+) => {
     const browser = await puppeteer.launch({
         headless: "shell",
         args: ["--no-sandbox"],
@@ -16,52 +20,58 @@ export const getIMDBScore = async (name: string, year: number) => {
     const page = await browser.newPage();
     await page.setUserAgent(userAgent);
     try {
-        const searchUrl = `https://www.imdb.com/find/?exact=true&s=tt&q=${encodeURIComponent(
-            `${name} ${year}`
-        )}`;
-        console.log(searchUrl);
+        let imdbUrl: string = "";
 
-        await page.goto(searchUrl, { waitUntil: "domcontentloaded" });
-        await page.waitForSelector(
-            "ul.ipc-metadata-list.ipc-metadata-list--dividers-after.ipc-metadata-list--base > li",
-            { timeout: 10000 }
-        );
+        if (!imdbId) {
+            const searchUrl = `https://www.imdb.com/find/?exact=true&s=tt&q=${encodeURIComponent(
+                `${name} ${year}`
+            )}`;
+            console.log(searchUrl);
 
-        // const screenshotPath = `./debug-imdb-${Date.now()}.png`;
-        // await page.screenshot({
-        //     path: screenshotPath as `${string}.png`,
-        //     fullPage: true,
-        // });
-        // console.log(`📸 Screenshot sauvegardé dans : ${screenshotPath}`);
-
-        let movieUrl = await page.evaluate((targetYear: number) => {
-            const rows = document.querySelectorAll(
-                "ul.ipc-metadata-list.ipc-metadata-list--dividers-after.ipc-metadata-list--base > li"
+            await page.goto(searchUrl, { waitUntil: "domcontentloaded" });
+            await page.waitForSelector(
+                "ul.ipc-metadata-list.ipc-metadata-list--dividers-after.ipc-metadata-list--base > li",
+                { timeout: 10000 }
             );
 
-            for (const row of rows) {
-                const anchor = row.querySelector("a");
-                const url = anchor?.getAttribute("href");
-                const year = row
-                    .getElementsByTagName("ul")[0]
-                    ?.getElementsByTagName("li")[0]
-                    ?.querySelector("span")?.textContent;
+            // const screenshotPath = `./debug-imdb-${Date.now()}.png`;
+            // await page.screenshot({
+            //     path: screenshotPath as `${string}.png`,
+            //     fullPage: true,
+            // });
+            // console.log(`📸 Screenshot sauvegardé dans : ${screenshotPath}`);
 
-                if (year && +year === targetYear) return url;
-            }
+            let movieUrl = await page.evaluate((targetYear: number) => {
+                const rows = document.querySelectorAll(
+                    "ul.ipc-metadata-list.ipc-metadata-list--dividers-after.ipc-metadata-list--base > li"
+                );
 
-            return null;
-        }, year);
+                for (const row of rows) {
+                    const anchor = row.querySelector("a");
+                    const url = anchor?.getAttribute("href");
+                    const year = row
+                        .getElementsByTagName("ul")[0]
+                        ?.getElementsByTagName("li")[0]
+                        ?.querySelector("span")?.textContent;
 
-        if (!movieUrl)
-            throw new Error(
-                "Aucun lien de film trouvé dans le premier résultat"
-            );
+                    if (year && +year === targetYear) return url;
+                }
 
-        const fullUrl = `${baseUrl}${movieUrl}`;
-        console.log(`🔗 Redirection vers : ${fullUrl}`);
+                return null;
+            }, year);
 
-        await page.goto(fullUrl, {
+            if (!movieUrl)
+                throw new Error(
+                    "Aucun lien de film trouvé dans le premier résultat"
+                );
+
+            imdbUrl = `${baseUrl}${movieUrl}`;
+        } else {
+            imdbUrl = `${baseUrl}/title/${imdbId}`;
+        }
+
+        console.log(`🔗 Redirection vers : ${imdbUrl}`);
+        await page.goto(imdbUrl, {
             timeout: 10000,
         });
 
@@ -76,13 +86,13 @@ export const getIMDBScore = async (name: string, year: number) => {
         if (!score) throw new Error("No score found");
 
         return {
-            url: fullUrl,
+            url: imdbUrl,
             score,
         };
     } catch (error) {
         logger.error("providers/getIMDBScore error", {
             error,
-            name
+            name,
         });
         if (error instanceof Error) console.error("❌ Erreur :", error.message);
         else console.error(error);
