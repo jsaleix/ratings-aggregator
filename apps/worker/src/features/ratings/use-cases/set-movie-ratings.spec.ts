@@ -1,4 +1,5 @@
 import MovieService from "../../movies/services/movies.service";
+import { MovieType } from "../../movies/types/db";
 import { RatingCollectorService } from "../services/rating-collector.service";
 import { RatingType } from "../types/db";
 import { SetMovieRatings } from "./set-movie-ratings";
@@ -21,7 +22,10 @@ describe("UseCase SetMovieRatings", () => {
         tagLine: "A test movie tagline",
         created_at: new Date(),
         updated_at: new Date(),
-    };
+        language: "en",
+        original_title: "movie-1",
+        imdbId: "tt123",
+    } satisfies MovieType;
 
     const mockRatingsAllocine = [
         {

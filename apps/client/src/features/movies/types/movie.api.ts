@@ -12,6 +12,9 @@ export type MovieApiResponseType = {
     year: number;
     budget: number;
     poster_path: string;
+    language: string;
+    original_title: string;
+    imdbId: string;
 };
 
 export type GetAllMoviesResponse = MovieApiResponseType[];

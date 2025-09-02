@@ -14,4 +14,7 @@ export const MovieMockData = {
     year: 2025,
     budget: 225000000,
     poster_path: "/ombsmhYUqR4qqOLOxAyr5V8hbyv.jpg",
+    original_title: "Superman",
+    language: "en",
+    imdbId: "tt5950044",
 } satisfies MovieModel;

@@ -1,52 +1,9 @@
 import { Link } from "react-router";
-import Slider from "react-slick";
 import { useQuery } from "@tanstack/react-query";
 
 import MoviePosterItem from "./movie-poster-item";
+import MoviesSlider from "./movies-slider";
 import apiMoviesService from "../services/api-movies.service";
-
-const settings = {
-    dots: false,
-    class: "h-55 w-full",
-    infinite: false,
-    speed: 500,
-    slidesToShow: 6,
-    slidesToScroll: 4,
-    initialSlide: 0,
-
-    responsive: [
-        {
-            breakpoint: 2048,
-            settings: {
-                slidesToShow: 4,
-                slidesToScroll: 3,
-            },
-        },
-        {
-            breakpoint: 1024,
-            settings: {
-                slidesToShow: 3,
-                slidesToScroll: 3,
-            },
-        },
-        {
-            breakpoint: 700,
-            settings: {
-                slidesToShow: 2,
-                slidesToScroll: 2,
-            },
-        },
-        {
-            breakpoint: 480,
-            settings: {
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                centerMode: true,
-                initialSlide: 2,
-            },
-        },
-    ],
-};
 
 export default function LastMoviesAdded() {
     const { data: movies } = useQuery({
@@ -99,14 +56,14 @@ export default function LastMoviesAdded() {
                     )}
                     {movies.length > 0 && (
                         <div className="w-full">
-                            <Slider {...settings}>
+                            <MoviesSlider>
                                 {movies.map((movie) => (
                                     <MoviePosterItem
                                         movie={movie}
                                         key={movie.id}
                                     />
                                 ))}
-                            </Slider>
+                            </MoviesSlider>
                         </div>
                     )}
                 </div>

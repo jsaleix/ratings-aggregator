@@ -87,9 +87,17 @@ export default function MoviePage() {
                         style={{ backgroundImage: `url(${posterUrl})` }}
                     ></div>
                     <div className="flex flex-col gap-3 px-5 md:px-0">
-                        <h1 className="text-3xl font-bold text-white md:max-w-90">
-                            {movie.title}
-                        </h1>
+                        <div className="flex flex-col">
+                            <h1 className="text-3xl font-bold text-white md:max-w-90">
+                                {movie.title}
+                            </h1>
+                            <h3
+                                className="italic text-2xl text-text-secondary"
+                                title="original title"
+                            >
+                                / {movie.original_title}
+                            </h3>
+                        </div>
                         <h2 className="text-xl text-text-secondary">
                             {movie.year}
                         </h2>
