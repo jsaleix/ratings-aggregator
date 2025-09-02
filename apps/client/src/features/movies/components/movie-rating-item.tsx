@@ -5,11 +5,21 @@ interface Props {
 }
 
 function ScoreItem({ rating }: { rating: MovieRatingModel }) {
+    if (rating.value === "N/A")
+        return (
+            <h2 className="font-bold text-text-secondary text-3xl">
+                {rating.value}
+            </h2>
+        );
+
     switch (rating.rating_unit) {
         case "percentage":
             const [val] = rating.value.split("%");
             return (
-                <div className="flex items-start" title="Percentage of positive reviews">
+                <div
+                    className="flex items-start"
+                    title="Percentage of positive reviews"
+                >
                     <h2 className="font-bold text-white text-3xl">
                         {val}
                         <span className="text-secondary">%</span>

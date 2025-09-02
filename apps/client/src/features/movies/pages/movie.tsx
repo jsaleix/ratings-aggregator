@@ -157,12 +157,17 @@ export default function MoviePage() {
                                 {ratings.length === 0 && <p>No rating</p>}
                                 {ratings.length > 0 && (
                                     <ul className="flex flex-col md:w-[100%]">
-                                        {ratings?.map((rating) => (
-                                            <MovieRatingItem
-                                                rating={rating}
-                                                key={rating.id}
-                                            />
-                                        ))}
+                                        {ratings
+                                            ?.filter(
+                                                (rating) =>
+                                                    rating.value !== "N/A"
+                                            )
+                                            .map((rating) => (
+                                                <MovieRatingItem
+                                                    rating={rating}
+                                                    key={rating.id}
+                                                />
+                                            ))}
                                     </ul>
                                 )}
                             </div>
