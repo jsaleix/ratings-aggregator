@@ -30,7 +30,7 @@ model Movie {
   Movie_Rating          Movie_Rating[]
   Movie_Ratings_Summary Movie_Ratings_Summary[]
   original_title        String
-  imdbId                Int
+  imdbId                String
   language              String
 }
 

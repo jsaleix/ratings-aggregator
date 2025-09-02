@@ -37,6 +37,6 @@ export class CreateMovieDto {
   @IsNumber()
   tmdbId: number;
 
-  @IsNumber()
-  imdbId: number;
+  @IsString()
+  imdbId: string;
 }
