@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Movie" ADD COLUMN     "imdbId" INTEGER NOT NULL DEFAULT -1,
+ADD COLUMN     "language" TEXT NOT NULL DEFAULT 'N/A',
+ADD COLUMN     "original_title" TEXT NOT NULL DEFAULT 'N/A';

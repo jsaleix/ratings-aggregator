@@ -29,6 +29,9 @@ model Movie {
   updated_at            DateTime                @updatedAt
   Movie_Rating          Movie_Rating[]
   Movie_Ratings_Summary Movie_Ratings_Summary[]
+  original_title        String
+  imdbId                Int
+  language              String
 }
 
 model Movie_Ratings_Summary {

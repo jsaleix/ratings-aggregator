@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Movie" ALTER COLUMN "imdbId" DROP DEFAULT,
+ALTER COLUMN "language" DROP DEFAULT,
+ALTER COLUMN "original_title" DROP DEFAULT;
