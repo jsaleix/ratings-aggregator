@@ -4,6 +4,7 @@ import Button from "../../../shared/ui/button";
 import { useAuthContext } from "../../../core/auth/provider";
 import LastMoviesAdded from "../../movies/components/movie-posters-section/last-movies-added";
 import LastMoviesUpdated from "../../movies/components/movie-posters-section/last-movies-updated";
+import RandomMovies from "../../movies/components/movie-posters-section/random-movies";
 
 const MAX = 3;
 const img1 = Math.floor(Math.random() * 3) + 1;
@@ -52,6 +53,8 @@ export default function HomePage() {
                 </section>
 
                 <LastMoviesAdded />
+                <hr className="divider" />
+                <RandomMovies />
                 <hr className="divider" />
                 <LastMoviesUpdated />
             </div>

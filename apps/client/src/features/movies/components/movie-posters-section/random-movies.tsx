@@ -17,6 +17,8 @@ export default function RandomMovies() {
         refetchInterval: 15000,
     });
 
+    if (!Array.isArray(movies)) return;
+    
     return (
         <section className="bg-slate-900 w-full">
             <div className="container mx-auto px-8 md:px-0 pb-5">

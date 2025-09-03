@@ -37,7 +37,7 @@ class ApiMoviesService {
     }
 
     async getRandom(): Promise<Array<MovieModel>> {
-        const url = new URL("/movies", API_ENDPOINT);
+        const url = new URL("/movies/random", API_ENDPOINT);
 
         const res = await fetch(url, {
             method: "GET",
