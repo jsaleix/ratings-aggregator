@@ -6,7 +6,7 @@ interface Props {
 
 export default function MovieSummaryItem({ data }: Props) {
     return (
-        <div className="w-full xl:w-2/4 h-fit bg-bg-medium p-5 rounded-xl shadow-md flex flex-col gap-1">
+        <div className="w-full xl:w-2/4 h-fit bg-gradient-medium p-5 rounded-xl shadow-md flex flex-col gap-1">
             <h2 className="uppercase text-primary font-bold">Synthesis</h2>
 
             <div className="flex flex-col items-center md:flex-row md:items-start gap-5">

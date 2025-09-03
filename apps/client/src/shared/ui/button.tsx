@@ -2,13 +2,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
 
 const buttonVariants = cva(
-    "border-1 border-transparent px-3 py-1 rounded-md cursor-pointer hover:opacity-85 duration-150 disabled:cursor-not-allowed",
+    "border-1 border-transparent px-3 py-1 rounded-md cursor-pointer hover:opacity-85 duration-150 disabled:cursor-not-allowed outline-none",
     {
         variants: {
             variant: {
                 default: "bg-bg-light text-black",
                 primary: "bg-primary font-bold disabled:opacity-60",
-                secondary: "bg-utils-yellow font-bold disabled:opacity-60"
+                secondary: "bg-utils-yellow font-bold disabled:opacity-60",
+                danger: "bg-gradient-to-b from-red-600 to-red-700 font-bold disabled:opacity-60",
             },
             size: {
                 medium: "text-md",

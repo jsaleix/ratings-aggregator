@@ -20,7 +20,7 @@ export default function LastMoviesAdded() {
     });
 
     return (
-        <section className="bg-bg-medium w-full">
+        <section className="bg-slate-900 w-full">
             <div className="container mx-auto px-8 md:px-0 pb-5">
                 <div className="flex flex-col py-5 gap-3 items-center">
                     <div className="w-full flex justify-between">

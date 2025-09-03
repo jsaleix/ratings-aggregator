@@ -16,7 +16,9 @@ export default function DeletePart({ deleteAction }: Props) {
 
     return (
         <ProfilePart name="Delete my account">
-            <Button onClick={onClick}>Delete my account...</Button>
+            <Button variant={"danger"} onClick={onClick}>
+                Delete my account...
+            </Button>
         </ProfilePart>
     );
 }

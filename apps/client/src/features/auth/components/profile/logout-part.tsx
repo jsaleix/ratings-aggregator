@@ -1,4 +1,5 @@
 import Button from "../../../../shared/ui/button";
+import LogoutIcon from "../../../../shared/ui/icons/logout-icon";
 import ProfilePart from "./field";
 
 interface Props {
@@ -8,7 +9,14 @@ interface Props {
 export default function LogoutPart({ logout }: Props) {
     return (
         <ProfilePart name="Session">
-            <Button onClick={logout}>Logout</Button>
+            <Button
+                variant={"default"}
+                onClick={logout}
+                className="flex items-center gap-3"
+            >
+                <LogoutIcon />
+                Logout
+            </Button>
         </ProfilePart>
     );
 }
