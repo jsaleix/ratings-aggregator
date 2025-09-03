@@ -37,6 +37,15 @@ export class MoviesService {
     return { message: `Movie with id ${id} deleted successfully` };
   }
 
+  async getRandomMovies() {
+    const moviesCount = await this.prisma.movie.count();
+    const movies = await this.prisma.movie.findMany({
+      skip: Math.floor(Math.random() * (moviesCount - 10)),
+      take: 15,
+    });
+    return movies;
+  }
+
   async findAll(
     findMoviesDTO: FindMoviesDTO,
   ): Promise<PaginatedResult<MovieType>> {
@@ -87,7 +96,7 @@ export class MoviesService {
         orderBy: {
           [orderBy]: order,
         },
-        where
+        where,
       },
       {
         page,

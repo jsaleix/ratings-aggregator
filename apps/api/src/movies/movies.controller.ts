@@ -34,7 +34,7 @@ export class MoviesController {
   @Role('premium', 'mod')
   @Get('search-with-tmdb')
   async searchWithTmdb(@Query() query: SearchMovieQueryDto) {
-    return await this.tmdbService.searchByName(query)
+    return await this.tmdbService.searchByName(query);
   }
 
   @Role('admin')
@@ -47,6 +47,12 @@ export class MoviesController {
   @Get()
   async findAll(@Query() query: FindMoviesDTO) {
     return await this.moviesService.findAll(query);
+  }
+
+  @Public()
+  @Get('/random')
+  async getRandomMovies() {
+    return await this.moviesService.getRandomMovies();
   }
 
   @Public()

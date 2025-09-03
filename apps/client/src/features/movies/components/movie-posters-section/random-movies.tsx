@@ -13,12 +13,11 @@ export default function RandomMovies() {
             return res;
         },
         initialData: [],
-        refetchOnWindowFocus: true,
-        refetchInterval: 15000,
+        refetchOnWindowFocus: false,
     });
 
     if (!Array.isArray(movies)) return;
-    
+
     return (
         <section className="bg-slate-900 w-full">
             <div className="container mx-auto px-8 md:px-0 pb-5">
