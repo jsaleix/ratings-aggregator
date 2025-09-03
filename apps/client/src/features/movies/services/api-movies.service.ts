@@ -36,6 +36,18 @@ class ApiMoviesService {
         return (await res.json()) as PaginatedResult<MovieModel>;
     }
 
+    async getRandom(): Promise<Array<MovieModel>> {
+        const url = new URL("/movies", API_ENDPOINT);
+
+        const res = await fetch(url, {
+            method: "GET",
+        });
+        if (!res.ok) {
+            throw new Error(`Error fetching movies: ${res.statusText}`);
+        }
+        return (await res.json()) as Array<MovieModel>;
+    }
+
     async getById(id: string) {
         const url = new URL(`/movies/${id}`, API_ENDPOINT);
         const res = await fetch(url, {

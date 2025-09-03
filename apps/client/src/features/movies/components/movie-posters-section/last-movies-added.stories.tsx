@@ -4,11 +4,11 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { QueryClient } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router";
 
-import Component from "./last-movies-updated";
-import apiMoviesService from "../services/api-movies.service";
-import type { PaginatedResult } from "../../../shared/types/pagination";
-import type { MovieModel } from "../types/movie";
-import { MovieMockData } from "../../../assets/data-test/movies";
+import { MovieMockData } from "../../../../assets/data-test/movies";
+import type { PaginatedResult } from "../../../../shared/types/pagination";
+import type { MovieModel } from "../../types/movie";
+import apiMoviesService from "../../services/api-movies.service";
+import Component from "./last-movies-added";
 
 const client = new QueryClient();
 
@@ -27,7 +27,7 @@ const mockData = {
 } satisfies PaginatedResult<MovieModel>;
 
 const meta: Meta<typeof Component> = {
-    title: "Movies/LastMoviesUpdated",
+    title: "Movies/MoviePostersSection/LastMoviesAdded",
     component: Component,
     beforeEach: async () => {
         apiMoviesService.getAll = fn().mockResolvedValue(mockData);
@@ -46,6 +46,6 @@ const meta: Meta<typeof Component> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const LastMoviesUpdated: Story = {
+export const LastMoviesAdded: Story = {
     args: {},
 };

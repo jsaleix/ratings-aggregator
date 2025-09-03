@@ -1,23 +1,22 @@
 import { Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 
+import apiMoviesService from "../../services/api-movies.service";
+import MoviePosterItem from "../movie-poster-item";
 import MoviesSlider from "./movies-slider";
-import MoviePosterItem from "./movie-poster-item";
-import apiMoviesService from "../services/api-movies.service";
 
-export default function LastMoviesUpdated() {
+export default function LastMoviesAdded() {
     const { data: movies } = useQuery({
-        queryKey: ["lastUpdatedMovies"],
+        queryKey: ["lastMovies"],
         queryFn: async () => {
             const res = await apiMoviesService.getAll({
                 order: "desc",
-                orderBy: "updated_at",
+                orderBy: "created_at",
             });
             return res.data;
         },
         initialData: [],
-        refetchOnWindowFocus: true,
-        refetchInterval: 15000,
+        refetchOnWindowFocus: false,
     });
 
     return (
@@ -26,10 +25,10 @@ export default function LastMoviesUpdated() {
                 <div className="flex flex-col py-5 gap-3 items-center">
                     <div className="w-full flex justify-between">
                         <h2 className="text-white text-xl">
-                            Last movies updated
+                            Last movies added
                         </h2>
                         <Link
-                            to="/movies?orderBy=updated_at&order=desc"
+                            to="/movies?orderBy=created_at&order=desc"
                             className="text-white font-bold hover:underline flex items-center gap-3"
                         >
                             See all

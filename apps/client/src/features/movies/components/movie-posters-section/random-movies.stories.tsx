@@ -1,35 +1,25 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Component from "./last-movies-added";
 import { fn } from "@storybook/test";
-import apiMoviesService from "../services/api-movies.service";
-import type { PaginatedResult } from "../../../shared/types/pagination";
-import type { MovieModel } from "../types/movie";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { QueryClient } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router";
-import { MovieMockData } from "../../../assets/data-test/movies";
+
+import { MovieMockData } from "../../../../assets/data-test/movies";
+import apiMoviesService from "../../services/api-movies.service";
+import type { MovieModel } from "../../types/movie";
+import Component from "./random-movies";
 
 const client = new QueryClient();
 
-const movies = new Array(8)
+const mockMovies = new Array(8)
     .fill(MovieMockData)
     .map((m, idx) => ({ ...m, id: idx })) satisfies MovieModel[];
 
-const mockData = {
-    data: movies,
-    pagination: {
-        total: movies.length,
-        currentPage: 1,
-        next: null,
-        prev: null,
-    },
-} satisfies PaginatedResult<MovieModel>;
-
 const meta: Meta<typeof Component> = {
-    title: "Movies/LastMoviesAdded",
+    title: "Movies/MoviePostersSection/RandomMovies",
     component: Component,
     beforeEach: async () => {
-        apiMoviesService.getAll = fn().mockResolvedValue(mockData);
+        apiMoviesService.getRandom = fn().mockResolvedValue(mockMovies);
     },
     decorators: [
         (Story) => (
@@ -45,6 +35,6 @@ const meta: Meta<typeof Component> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const LastMoviesAdded: Story = {
+export const RandomMovies: Story = {
     args: {},
 };

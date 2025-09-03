@@ -7,7 +7,7 @@ import Button from "../../../shared/ui/button";
 import PageHeader from "../../../shared/ui/page-header";
 import { mapApiRequestToMovieRequestModel } from "../types/api-request";
 import { useAuthContext } from "../../../core/auth/provider";
-import LastMoviesUpdated from "../../movies/components/last-movies-updated";
+import LastMoviesUpdated from "../../movies/components/movie-posters-section/last-movies-updated";
 
 export default function RequestsPage() {
     const { role } = useAuthContext();

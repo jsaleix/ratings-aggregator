@@ -11,10 +11,10 @@ import { useAuthContext } from "../../../core/auth/provider";
 import { setPageTitle } from "../../../shared/utils/page";
 import Button from "../../../shared/ui/button";
 import MovieRatingItem from "../components/movie-rating-item";
-import LastMoviesAdded from "../components/last-movies-added";
 import MoviePageSkeleton from "../components/movie-page-skeleton";
-import LastMoviesUpdated from "../components/last-movies-updated";
 import MovieSummaryItem from "../components/movie-summary-item";
+import LastMoviesAdded from "../components/movie-posters-section/last-movies-added";
+import LastMoviesUpdated from "../components/movie-posters-section/last-movies-updated";
 
 export default function MoviePage() {
     const { isConnected } = useAuthContext();

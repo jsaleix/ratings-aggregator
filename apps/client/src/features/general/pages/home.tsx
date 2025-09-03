@@ -1,8 +1,9 @@
 import { Link } from "react-router";
+
 import Button from "../../../shared/ui/button";
-import LastMoviesAdded from "../../movies/components/last-movies-added";
 import { useAuthContext } from "../../../core/auth/provider";
-import LastMoviesUpdated from "../../movies/components/last-movies-updated";
+import LastMoviesAdded from "../../movies/components/movie-posters-section/last-movies-added";
+import LastMoviesUpdated from "../../movies/components/movie-posters-section/last-movies-updated";
 
 const MAX = 3;
 const img1 = Math.floor(Math.random() * 3) + 1;
