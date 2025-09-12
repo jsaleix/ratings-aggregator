@@ -25,14 +25,34 @@ export default function MediaSelector({ compareFn }: Props) {
                     searchFn={searchFn}
                     onSelect={(movie: MovieModel) => setSelectedA(movie)}
                 />
-                {selectedA && <p>{selectedA.title}</p>}
+                {selectedA && (
+                    <div>
+                        <p>{selectedA.title}</p>
+                        <button
+                            data-testid="media-selector-remove"
+                            onClick={() => setSelectedA(null)}
+                        >
+                            X
+                        </button>
+                    </div>
+                )}
             </div>
             <div data-testid="movie-b">
                 <SingleMediaSelector
                     searchFn={searchFn}
                     onSelect={(movie: MovieModel) => setSelectedB(movie)}
                 />
-                {selectedB && <p>{selectedB.title}</p>}
+                {selectedB && (
+                    <div>
+                        <p>{selectedB.title}</p>
+                        <button
+                            data-testid="media-selector-remove"
+                            onClick={() => setSelectedB(null)}
+                        >
+                            X
+                        </button>
+                    </div>
+                )}
             </div>
             <Button
                 variant={"primary"}

@@ -124,13 +124,33 @@ describe("Features/Compare/MediaSelector", () => {
             fireEvent.click(await within(divA).findByText(MovieMockData.title));
             fireEvent.click(await within(divB).findByText(MovieMockData.title));
             await sleep(1);
-            
+
             expect(
                 await within(divA).findByText(MovieMockData.title)
             ).toBeDefined();
             expect(
                 await within(divB).findByText(MovieMockData.title)
             ).toBeDefined();
+        });
+
+        test("Can remove a movie", async () => {
+            render(<MediaSelector compareFn={compareFn} />, {
+                wrapper: createQueryWrapper(),
+            });
+            const divA = screen.getByTestId("movie-a");
+            const inputA = within(divA).getAllByTestId(
+                "media-selector-input"
+            )[0] as HTMLInputElement;
+
+            fireEvent.change(inputA, { target: { value: "Movie A" } });
+            fireEvent.click(await within(divA).findByText(MovieMockData.title));
+            await sleep(1);
+
+            const removeBtn = within(divA).getByTestId("media-selector-remove");
+            fireEvent.click(removeBtn);
+            expect(
+                within(divA).queryByTestId(MovieMockData.title)
+            ).toBeNull();
         });
     });
 
