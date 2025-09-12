@@ -124,7 +124,7 @@ describe("Features/Compare/SingleMediaSelector", () => {
         fireEvent.change(input, { target: { value: "Movie A" } });
         await sleep(2);
         expect(screen.getByTestId("results-list")).toBeDefined();
-        expect(screen.findAllByText(MovieMockData.title));
+        expect(screen.queryByText(MovieMockData.title)).not.toBeNull();
     });
 
     test("Should select a movie by clicking it and clear results", async () => {
