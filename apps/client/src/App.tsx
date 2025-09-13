@@ -10,6 +10,8 @@ import AdminLayout from "./layouts/admin/layout";
 
 const AboutPage = lazy(() => import("./features/general/pages/about"));
 
+const ComparePage = lazy(() => import("./features/compare/pages/compare"));
+
 const MoviePage = lazy(() => import("./features/movies/pages/movie"));
 const MoviesPage = lazy(() => import("./features/movies/pages/movies"));
 const SearchMoviesPage = lazy(() => import("./features/movies/pages/search"));
@@ -49,6 +51,7 @@ function App() {
                             />
                         </Route>
                         <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/compare" element={<ComparePage />} />
                         <Route
                             path="/requests/create"
                             element={<CreateRequestsPage />}

@@ -1,0 +1,18 @@
+import type { RatingsSummaryModel } from "../../../movies/types/ratings-summary";
+
+interface Props {
+    summary: RatingsSummaryModel | null;
+}
+
+export default function SummaryElement({ summary }: Props) {
+    return (
+        <div className="flex flex-col w-[50%]">
+            {summary && summary?.score !== "N/A" && (
+                <h2 className="text-6xl font-bold">{summary.score}</h2>
+            )}
+            {(!summary || summary?.score === "N/A") && (
+                <h2 className="text-6xl text-text-secondary">N/A</h2>
+            )}
+        </div>
+    );
+}
