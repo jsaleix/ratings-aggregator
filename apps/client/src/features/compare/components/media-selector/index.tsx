@@ -4,6 +4,7 @@ import Button from "../../../../shared/ui/button";
 import { type MovieModel } from "../../../movies/types/movie";
 import SingleMediaSelector from "../single-media-selector";
 import apiMoviesService from "../../../movies/services/api-movies.service";
+import RemoveIcon from "../../../../shared/ui/icons/remove-icon";
 
 interface Props {
     compareFn: (mediaAId: string, mediaBId: string) => void;
@@ -19,37 +20,39 @@ export default function MediaSelector({ compareFn }: Props) {
     }, []);
 
     return (
-        <div className="flex flex-col" data-testid="media-selector">
-            <div data-testid="movie-a">
+        <div className="flex flex-col gap-5" data-testid="media-selector">
+            <div data-testid="movie-a" className="flex flex-col gap-3">
                 <SingleMediaSelector
                     searchFn={searchFn}
                     onSelect={(movie: MovieModel) => setSelectedA(movie)}
                 />
                 {selectedA && (
-                    <div>
+                    <div className="flex gap-3 items-center">
                         <p>{selectedA.title}</p>
                         <button
+                            className="cursor-pointer hover:opacity-85 duration-150"
                             data-testid="media-selector-remove"
                             onClick={() => setSelectedA(null)}
                         >
-                            X
+                            <RemoveIcon className="fill-red-500" />
                         </button>
                     </div>
                 )}
             </div>
-            <div data-testid="movie-b">
+            <div data-testid="movie-b" className="flex flex-col gap-3">
                 <SingleMediaSelector
                     searchFn={searchFn}
                     onSelect={(movie: MovieModel) => setSelectedB(movie)}
                 />
                 {selectedB && (
-                    <div>
+                    <div className="flex gap-3 items-center">
                         <p>{selectedB.title}</p>
                         <button
+                            className="cursor-pointer hover:opacity-85 duration-150"
                             data-testid="media-selector-remove"
                             onClick={() => setSelectedB(null)}
                         >
-                            X
+                            <RemoveIcon className="fill-red-500" />
                         </button>
                     </div>
                 )}

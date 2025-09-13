@@ -47,11 +47,18 @@ interface ResultsListProps {
 
 function ResultsList({ items, onSelect }: ResultsListProps) {
     return (
-        <div data-testid={"results-list"}>
-            <ul>
+        <div
+            data-testid={"results-list"}
+            className="rounded-md overflow-hidden"
+        >
+            <ul className="flex flex-col ">
                 {items.map((movie) => (
-                    <li key={movie.id} onClick={() => onSelect?.(movie)}>
-                        {movie.title}
+                    <li
+                        className="flex p-3 bg-slate-700 duration-150 hover:opacity-80 cursor-pointer"
+                        key={movie.id}
+                        onClick={() => onSelect?.(movie)}
+                    >
+                        {movie.title} - {movie.year}
                     </li>
                 ))}
             </ul>

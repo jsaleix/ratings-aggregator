@@ -11,7 +11,7 @@ const client = new QueryClient();
 const searchFn = async (str: string): Promise<MovieModel[]> => {
     if (!str) return [];
     await sleep(1);
-    return [MovieMockData];
+    return [MovieMockData, MovieMockData];
 };
 
 const meta: Meta<typeof Component> = {
