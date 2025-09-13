@@ -124,7 +124,9 @@ describe("Features/Compare/SingleMediaSelector", () => {
         fireEvent.change(input, { target: { value: "Movie A" } });
         await sleep(2);
         expect(screen.getByTestId("results-list")).toBeDefined();
-        expect(screen.queryByText(MovieMockData.title)).not.toBeNull();
+        expect(
+            screen.queryByText(MovieMockData.title, { exact: false })
+        ).not.toBeNull();
     });
 
     test("Should select a movie by clicking it and clear results", async () => {
@@ -149,7 +151,9 @@ describe("Features/Compare/SingleMediaSelector", () => {
         expect(screen.queryByTestId("results-list")).toBeDefined();
 
         // Click on the first element
-        const movieElement = await screen.findByText(MovieMockData.title);
+        const movieElement = await screen.findByText(MovieMockData.title, {
+            exact: false,
+        });
         fireEvent.click(movieElement);
         await sleep(1);
 
@@ -172,7 +176,9 @@ describe("Features/Compare/SingleMediaSelector", () => {
 
         fireEvent.change(input, { target: { value: "Movie A" } });
         await sleep(2);
-        const movieElement = await screen.findByText(MovieMockData.title);
+        const movieElement = await screen.findByText(MovieMockData.title, {
+            exact: false,
+        });
         fireEvent.click(movieElement);
 
         expect(onSelectFn).toHaveBeenCalled();

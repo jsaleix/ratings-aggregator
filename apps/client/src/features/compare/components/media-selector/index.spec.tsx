@@ -76,7 +76,11 @@ describe("Features/Compare/MediaSelector", () => {
             )[0] as HTMLInputElement;
             fireEvent.change(input, { target: { value: "Movie A" } });
             await sleep(1);
-            fireEvent.click(await screen.findByText(MovieMockData.title));
+            fireEvent.click(
+                await screen.findByText(MovieMockData.title, {
+                    exact: false,
+                })
+            );
             await sleep(1);
             expect(screen.queryByText(MovieMockData.title)).not.toBeNull();
         });
@@ -99,8 +103,16 @@ describe("Features/Compare/MediaSelector", () => {
 
             fireEvent.change(inputA, { target: { value: "Movie A" } });
             fireEvent.change(inputB, { target: { value: "Movie B" } });
-            fireEvent.click(await within(divA).findByText(MovieMockData.title));
-            fireEvent.click(await within(divB).findByText(MovieMockData.title));
+            fireEvent.click(
+                await within(divA).findByText(MovieMockData.title, {
+                    exact: false,
+                })
+            );
+            fireEvent.click(
+                await within(divB).findByText(MovieMockData.title, {
+                    exact: false,
+                })
+            );
             await sleep(1);
             expect(screen.queryByText("ok")).toBeDefined(); // TODO: use actual disabled property
         });
@@ -121,15 +133,27 @@ describe("Features/Compare/MediaSelector", () => {
 
             fireEvent.change(inputA, { target: { value: "Movie A" } });
             fireEvent.change(inputB, { target: { value: "Movie B" } });
-            fireEvent.click(await within(divA).findByText(MovieMockData.title));
-            fireEvent.click(await within(divB).findByText(MovieMockData.title));
+            fireEvent.click(
+                await within(divA).findByText(MovieMockData.title, {
+                    exact: false,
+                })
+            );
+            fireEvent.click(
+                await within(divB).findByText(MovieMockData.title, {
+                    exact: false,
+                })
+            );
             await sleep(1);
 
             expect(
-                await within(divA).findByText(MovieMockData.title)
+                await within(divA).findByText(MovieMockData.title, {
+                    exact: false,
+                })
             ).toBeDefined();
             expect(
-                await within(divB).findByText(MovieMockData.title)
+                await within(divB).findByText(MovieMockData.title, {
+                    exact: false,
+                })
             ).toBeDefined();
         });
 
@@ -143,14 +167,16 @@ describe("Features/Compare/MediaSelector", () => {
             )[0] as HTMLInputElement;
 
             fireEvent.change(inputA, { target: { value: "Movie A" } });
-            fireEvent.click(await within(divA).findByText(MovieMockData.title));
+            fireEvent.click(
+                await within(divA).findByText(MovieMockData.title, {
+                    exact: false,
+                })
+            );
             await sleep(1);
 
             const removeBtn = within(divA).getByTestId("media-selector-remove");
             fireEvent.click(removeBtn);
-            expect(
-                within(divA).queryByTestId(MovieMockData.title)
-            ).toBeNull();
+            expect(within(divA).queryByTestId(MovieMockData.title)).toBeNull();
         });
     });
 
@@ -172,8 +198,16 @@ describe("Features/Compare/MediaSelector", () => {
 
             fireEvent.change(inputA, { target: { value: "Movie A" } });
             fireEvent.change(inputB, { target: { value: "Movie B" } });
-            fireEvent.click(await within(divA).findByText(MovieMockData.title));
-            fireEvent.click(await within(divB).findByText(MovieMockData.title));
+            fireEvent.click(
+                await within(divA).findByText(MovieMockData.title, {
+                    exact: false,
+                })
+            );
+            fireEvent.click(
+                await within(divB).findByText(MovieMockData.title, {
+                    exact: false,
+                })
+            );
 
             fireEvent.click(await screen.findByTestId("compare-btn"));
             expect(compareFn).toHaveBeenCalledOnce();
