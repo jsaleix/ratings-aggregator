@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { MoviesService } from 'src/movies/services/movies.service';
 import { RatingsService } from 'src/ratings/ratings.service';
+import { SummaryService } from 'src/summary/summary.service';
 
 @Injectable()
 export class CompareService {
   constructor(
     private movieService: MoviesService,
     private ratingsService: RatingsService,
+    private summaryService: SummaryService,
   ) {}
 
   async compareMovies(movieAId: string, movieBId: string) {
@@ -24,6 +26,12 @@ export class CompareService {
       this.ratingsService.findForMovie(movieAId),
       this.ratingsService.findForMovie(movieBId),
     ]);
+
+    const [summaryA, summaryB] = await Promise.all([
+      this.summaryService.findOneByMovieId(movieAId),
+      this.summaryService.findOneByMovieId(movieBId),
+    ]);
+
     const ratingsAKeys = ratingsA.map((r) => r.rating_source);
     const ratingsBKeys = ratingsB.map((r) => r.rating_source);
 
@@ -39,6 +47,7 @@ export class CompareService {
       movies: [
         {
           data: movieA.movie,
+          summary: summaryA,
           ratings: {
             common: ratingsA.filter((r) =>
               commonKeys.includes(r.rating_source),
@@ -50,6 +59,7 @@ export class CompareService {
         },
         {
           data: movieB.movie,
+          summary: summaryB,
           ratings: {
             common: ratingsB.filter((r) =>
               commonKeys.includes(r.rating_source),
