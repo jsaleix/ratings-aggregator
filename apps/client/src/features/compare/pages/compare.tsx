@@ -3,7 +3,7 @@ import PageHeader from "../../../shared/ui/page-header";
 import MediaSelector from "../components/media-selector";
 
 export default function ComparePage() {
-    const compareFn = useCallback((movieA: string, movieB: string) => {}, []);
+    const compareFn = useCallback((_: string, __: string) => {}, []);
 
     return (
         <div className="w-full">
