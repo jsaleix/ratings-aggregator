@@ -1,5 +1,8 @@
 import { API_ENDPOINT } from "../../../core/config/api";
-import type { CompareMoviesApiResponse } from "../types/api";
+import type {
+    CompareMoviesApiResponse,
+    FullMovieApiResponse,
+} from "../types/api";
 
 class ApiComparingService {
     async compareMovies(movieAIdx: string, movieBIdx: string) {
@@ -15,6 +18,19 @@ class ApiComparingService {
             );
         }
         return (await res.json()) as CompareMoviesApiResponse;
+    }
+
+    async getFullMovie(movieId: string) {
+        const url = new URL("/compare/movies/" + movieId, API_ENDPOINT);
+        const res = await fetch(url, {
+            method: "GET",
+        });
+        if (!res.ok) {
+            throw new Error(
+                `Error fetching comparaison data: ${res.statusText}`
+            );
+        }
+        return (await res.json()) as FullMovieApiResponse;
     }
 }
 

@@ -1,7 +1,7 @@
-import type { MovieModel } from "../../movies/types/movie";
-import type { MovieRatingModel } from "../../movies/types/movie-rating";
-import type { RatingsSummaryModel } from "../../movies/types/ratings-summary";
-import type { CompareMoviesApiResponse } from "../types/api";
+import type { MovieModel } from "../../../movies/types/movie";
+import type { MovieRatingModel } from "../../../movies/types/movie-rating";
+import type { RatingsSummaryModel } from "../../../movies/types/ratings-summary";
+import type { CompareMoviesApiResponse } from "../../types/api";
 
 export interface MoviesComparaisonModel {
     movies: [

@@ -23,7 +23,8 @@ const meta: Meta<typeof Component> = {
         ),
     ],
     args: {
-        compareFn: fn(),
+        onSelectA: fn(),
+        onSelectB: fn(),
     },
 };
 

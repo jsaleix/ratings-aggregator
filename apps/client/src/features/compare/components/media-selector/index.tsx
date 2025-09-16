@@ -1,19 +1,16 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
-import Button from "../../../../shared/ui/button";
-import { type MovieModel } from "../../../movies/types/movie";
 import SingleMediaSelector from "../single-media-selector";
 import apiMoviesService from "../../../movies/services/api-movies.service";
-import RemoveIcon from "../../../../shared/ui/icons/remove-icon";
 
 interface Props {
-    compareFn: (mediaAId: string, mediaBId: string) => void;
+    onSelectA: (movieId: string) => void;
+    onSelectB: (movieId: string) => void;
 }
 
-export default function MediaSelector({ compareFn }: Props) {
-    const [selectedA, setSelectedA] = useState<MovieModel | null>(null);
-    const [selectedB, setSelectedB] = useState<MovieModel | null>(null);
-    const disableSubmitBtn = !(selectedA && selectedB);
+export default function MediaSelector({ onSelectA, onSelectB }: Props) {
+    // const [selectedA, setSelectedA] = useState<MovieModel | null>(null);
+    // const [selectedB, setSelectedB] = useState<MovieModel | null>(null);
 
     const searchFn = useCallback(async (title: string) => {
         return (await apiMoviesService.search({ title })).data;
@@ -24,9 +21,9 @@ export default function MediaSelector({ compareFn }: Props) {
             <div data-testid="movie-a" className="flex flex-col gap-3">
                 <SingleMediaSelector
                     searchFn={searchFn}
-                    onSelect={(movie: MovieModel) => setSelectedA(movie)}
+                    onSelect={({ id }) => onSelectA(id)}
                 />
-                {selectedA && (
+                {/* {selectedA && (
                     <div className="flex gap-3 items-center">
                         <p>{selectedA.title}</p>
                         <button
@@ -37,14 +34,14 @@ export default function MediaSelector({ compareFn }: Props) {
                             <RemoveIcon className="fill-red-500" />
                         </button>
                     </div>
-                )}
+                )} */}
             </div>
             <div data-testid="movie-b" className="flex flex-col gap-3">
                 <SingleMediaSelector
                     searchFn={searchFn}
-                    onSelect={(movie: MovieModel) => setSelectedB(movie)}
+                    onSelect={({ id }) => onSelectB(id)}
                 />
-                {selectedB && (
+                {/* {selectedB && (
                     <div className="flex gap-3 items-center">
                         <p>{selectedB.title}</p>
                         <button
@@ -55,9 +52,9 @@ export default function MediaSelector({ compareFn }: Props) {
                             <RemoveIcon className="fill-red-500" />
                         </button>
                     </div>
-                )}
+                )} */}
             </div>
-            <Button
+            {/* <Button
                 variant={"primary"}
                 data-testid="compare-btn"
                 disabled={disableSubmitBtn}
@@ -66,7 +63,7 @@ export default function MediaSelector({ compareFn }: Props) {
                 }
             >
                 Compare {disableSubmitBtn ? "no" : "ok"}
-            </Button>
+            </Button> */}
         </div>
     );
 }

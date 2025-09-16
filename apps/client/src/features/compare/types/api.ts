@@ -25,3 +25,9 @@ export type CompareMoviesApiResponse = {
         common: string[];
     };
 };
+
+export type FullMovieApiResponse = {
+    data: MovieApiResponseType;
+    ratings: MovieRatingApiResponseType[];
+    summary: RatingsSummaryApiResponseType | null;
+};
