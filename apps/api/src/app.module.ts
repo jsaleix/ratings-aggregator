@@ -14,6 +14,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { DynamicConfigModule } from './dynamic-config/dynamic-config.module';
 import { SummaryModule } from './summary/summary.module';
+import { CompareModule } from './compare/compare.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { SummaryModule } from './summary/summary.module';
     AuthModule,
     DynamicConfigModule,
     SummaryModule,
+    CompareModule,
   ],
   controllers: [AppController],
   providers: [

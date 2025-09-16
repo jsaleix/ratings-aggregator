@@ -1,0 +1,14 @@
+import type { MovieModel } from "../../../movies/types/movie";
+import type { MovieRatingModel } from "../../../movies/types/movie-rating";
+import type { RatingsSummaryModel } from "../../../movies/types/ratings-summary";
+import type { FullMovieApiResponse } from "../../types/api";
+
+export interface FullMovieModel {
+    data: MovieModel;
+    ratings: MovieRatingModel[];
+    summary: RatingsSummaryModel | null;
+}
+
+export function mapApiResponseToModel(data: FullMovieApiResponse) {
+    return data as FullMovieModel;
+}
