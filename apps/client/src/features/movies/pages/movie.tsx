@@ -15,6 +15,7 @@ import MoviePageSkeleton from "../components/movie-page-skeleton";
 import MovieSummaryItem from "../components/movie-summary-item";
 import LastMoviesAdded from "../components/movie-posters-section/last-movies-added";
 import LastMoviesUpdated from "../components/movie-posters-section/last-movies-updated";
+import ArrowIcon from "../../../shared/ui/icons/arrow-icon";
 
 export default function MoviePage() {
     const { isConnected } = useAuthContext();
@@ -140,6 +141,11 @@ export default function MoviePage() {
                                     {movie.tmdbId}
                                 </code>
                             </p>
+                            <Link to={`/compare?a=${id}`}>
+                                <Button variant={"secondary"} className="text-black flex items-center gap-3">
+                                    Compare <ArrowIcon className="fill-black"/>
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </header>

@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 import { BASE_POSTER_URL } from "../../../../../core/config/misc";
 import type { MovieModel } from "../../../../movies/types/movie";
-import Button from "../../../../../shared/ui/button";
+import ExternalLinkIcon from "../../../../../shared/ui/icons/external-link-icon";
 
 interface Props {
     data: MovieModel | undefined;
@@ -37,9 +37,13 @@ export default function BaseInfoElement({ data }: Props) {
                             {new Date(data.release_date).toLocaleDateString()}
                         </p>
                     )}
-                    <Link to={`/movies/${data.id}`} target="_blank" className="flex items-center gap-2 w-fit hover:opacity-75">
+                    <Link
+                        to={`/movies/${data.id}`}
+                        target="_blank"
+                        className="flex items-center gap-2 w-fit hover:opacity-75"
+                    >
                         Full page
-                        <svg
+                        {/* <svg
                             width="12"
                             height="12"
                             viewBox="0 0 18 18"
@@ -51,7 +55,8 @@ export default function BaseInfoElement({ data }: Props) {
                                 d="M11 0V2H14.59L4.76 11.83L6.17 13.24L16 3.41V7H18V0M16 16H2V2H9V0H2C1.46957 0 0.960859 0.210714 0.585786 0.585786C0.210714 0.960859 0 1.46957 0 2V16C0 16.5304 0.210714 17.0391 0.585786 17.4142C0.960859 17.7893 1.46957 18 2 18H16C16.5304 18 17.0391 17.7893 17.4142 17.4142C17.7893 17.0391 18 16.5304 18 16V9H16V16Z"
                                 fill="current-color"
                             />
-                        </svg>
+                        </svg> */}
+                        <ExternalLinkIcon size={12} className="fill-white" />
                     </Link>
                 </div>
 

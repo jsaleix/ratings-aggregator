@@ -9,9 +9,6 @@ interface Props {
 }
 
 export default function MediaSelector({ onSelectA, onSelectB }: Props) {
-    // const [selectedA, setSelectedA] = useState<MovieModel | null>(null);
-    // const [selectedB, setSelectedB] = useState<MovieModel | null>(null);
-
     const searchFn = useCallback(async (title: string) => {
         return (await apiMoviesService.search({ title })).data;
     }, []);
@@ -23,47 +20,13 @@ export default function MediaSelector({ onSelectA, onSelectB }: Props) {
                     searchFn={searchFn}
                     onSelect={({ id }) => onSelectA(id)}
                 />
-                {/* {selectedA && (
-                    <div className="flex gap-3 items-center">
-                        <p>{selectedA.title}</p>
-                        <button
-                            className="cursor-pointer hover:opacity-85 duration-150"
-                            data-testid="media-selector-remove"
-                            onClick={() => setSelectedA(null)}
-                        >
-                            <RemoveIcon className="fill-red-500" />
-                        </button>
-                    </div>
-                )} */}
             </div>
             <div data-testid="movie-b" className="flex flex-col gap-3">
                 <SingleMediaSelector
                     searchFn={searchFn}
                     onSelect={({ id }) => onSelectB(id)}
                 />
-                {/* {selectedB && (
-                    <div className="flex gap-3 items-center">
-                        <p>{selectedB.title}</p>
-                        <button
-                            className="cursor-pointer hover:opacity-85 duration-150"
-                            data-testid="media-selector-remove"
-                            onClick={() => setSelectedB(null)}
-                        >
-                            <RemoveIcon className="fill-red-500" />
-                        </button>
-                    </div>
-                )} */}
             </div>
-            {/* <Button
-                variant={"primary"}
-                data-testid="compare-btn"
-                disabled={disableSubmitBtn}
-                onClick={() =>
-                    !disableSubmitBtn && compareFn(selectedA.id, selectedB.id)
-                }
-            >
-                Compare {disableSubmitBtn ? "no" : "ok"}
-            </Button> */}
         </div>
     );
 }

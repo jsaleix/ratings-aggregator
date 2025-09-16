@@ -1,12 +1,13 @@
+import { useSearchParams } from "react-router";
+import { useEffect } from "react";
+
 import PageHeader from "../../../shared/ui/page-header";
 import Divider from "../../../shared/ui/divider";
+import useMovieInfo from "../hooks/use-movie-info";
 import MediaSelector from "../components/media-selector";
 import BaseInfoElement from "../components/compare-page-elements/base-info-element";
 import RatingsElement from "../components/compare-page-elements/ratings-element";
 import SummaryElement from "../components/compare-page-elements/summary-element";
-import useMovieInfo from "../hooks/use-movie-info";
-import { useSearchParams } from "react-router";
-import { useEffect } from "react";
 
 export default function ComparePage() {
     const [searchParams, setSearchParams] = useSearchParams();
