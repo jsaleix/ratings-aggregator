@@ -75,4 +75,18 @@ export class CompareService {
       },
     };
   }
+
+  async getFullMovie(movieId: string) {
+    const [{ movie }, ratings, summary] = await Promise.all([
+      this.movieService.findOne(movieId),
+      this.ratingsService.findForMovie(movieId),
+      this.summaryService.findOneByMovieId(movieId),
+    ]);
+
+    return {
+      data: movie,
+      ratings,
+      summary,
+    };
+  }
 }
