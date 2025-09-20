@@ -89,6 +89,18 @@ describe("UseCase SetMovieRatings", () => {
         updated_at: new Date(),
     } satisfies RatingType;
 
+    const mockRatingLetterboxd = {
+        id: "r6",
+        rating_source: "letterboxd",
+        value: "4.5",
+        rating_unit: "stars",
+        sourceUrl: "https://letterboxd.com/film/superman-2025",
+        extra: "",
+        movieId: "movie-1",
+        created_at: new Date(),
+        updated_at: new Date(),
+    } satisfies RatingType;
+
     beforeEach(() => {
         movieService = {
             getMovieBy: jest.fn(),
@@ -98,6 +110,7 @@ describe("UseCase SetMovieRatings", () => {
             collectAllocine: jest.fn(),
             collectIMDB: jest.fn(),
             collectRotten: jest.fn(),
+            collectLetterboxd: jest.fn(),
         } as any;
 
         useCase = new SetMovieRatings(movieService, ratingCollector);
@@ -109,10 +122,13 @@ describe("UseCase SetMovieRatings", () => {
         ratingCollector.collectAllocine.mockResolvedValue(mockRatingsAllocine);
         ratingCollector.collectIMDB.mockResolvedValue(mockRatingIMDB);
         ratingCollector.collectRotten.mockResolvedValue(mockRatingsRotten);
+        ratingCollector.collectLetterboxd.mockResolvedValue(
+            mockRatingLetterboxd
+        );
 
         const results = await useCase.execute(mockMovie.id);
 
-        expect(results).toHaveLength(5);
+        expect(results).toHaveLength(6);
 
         expect(movieService.getMovieBy).toHaveBeenCalledWith({
             id: mockMovie.id,
@@ -124,7 +140,7 @@ describe("UseCase SetMovieRatings", () => {
 
         const allIds = results.map((r) => r.id);
         expect(allIds).toEqual(
-            expect.arrayContaining(["r1", "r2", "r3", "r4", "r5"])
+            expect.arrayContaining(["r1", "r2", "r3", "r4", "r5", "r6"])
         );
     });
 
