@@ -16,6 +16,7 @@ export class SetMovieRatings {
             this.ratingCollector.collectAllocine(movie),
             this.ratingCollector.collectIMDB(movie),
             this.ratingCollector.collectRotten(movie),
+            this.ratingCollector.collectLetterboxd(movie),
         ]);
 
         const results = rawResults
