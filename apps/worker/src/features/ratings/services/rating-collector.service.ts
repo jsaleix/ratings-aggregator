@@ -89,6 +89,8 @@ export class RatingCollectorService {
         const { title, id: movieId, year } = movie;
         const value = await getLetterBoxdScore(title, year);
         if (!value) throw new Error(`Letterboxd score for ${title} not found`);
+        if (value.score === "N/A")
+            throw new Error(`Letterboxd score not available for ${title}`);
 
         const { score, url } = value;
 
