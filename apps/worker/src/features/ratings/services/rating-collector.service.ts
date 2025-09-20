@@ -2,6 +2,7 @@ import { RATING_SOURCERS, RATING_UNITS } from "../../../config/ratings";
 import { MovieType } from "../../movies/types/db";
 import { getAllocineScore } from "../providers/allocine";
 import { getIMDBScore } from "../providers/imdb";
+import { getLetterBoxdScore } from "../providers/letterboxd";
 import { getRottenTomatoesScores } from "../providers/rotten";
 import RatingService from "./rating.service";
 
@@ -15,7 +16,9 @@ export class RatingCollectorService {
         if (language === "fr") {
             values = await getAllocineScore(original_title, year);
             if (!values)
-                throw new Error(`Allociné ratings for ${original_title} not found`);
+                throw new Error(
+                    `Allociné ratings for ${original_title} not found`
+                );
         } else {
             values = await getAllocineScore(title, year);
             if (!values)
@@ -80,5 +83,23 @@ export class RatingCollectorService {
                 sourceUrl: url,
             }),
         ]);
+    }
+
+    async collectLetterboxd(movie: MovieType) {
+        const { title, id: movieId, year } = movie;
+        const value = await getLetterBoxdScore(title, year);
+        if (!value) throw new Error(`Letterboxd score for ${title} not found`);
+        if (value.score === "N/A")
+            throw new Error(`Letterboxd score not available for ${title}`);
+
+        const { score, url } = value;
+
+        return this.ratingService.addOrUpdate({
+            movieId,
+            value: score,
+            rating_source: RATING_SOURCERS.LETTERBOXD,
+            rating_unit: RATING_UNITS.STARS,
+            sourceUrl: url,
+        });
     }
 }
