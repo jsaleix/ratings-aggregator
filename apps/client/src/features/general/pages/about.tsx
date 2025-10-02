@@ -1,3 +1,4 @@
+import { LEGALS_LINKS } from "../../../core/config/links";
 import PageHeader from "../../../shared/ui/page-header";
 
 export default function AboutPage() {
@@ -78,7 +79,7 @@ export default function AboutPage() {
                         <ul>
                             <li>
                                 <a
-                                    href="https://docs.google.com/document/d/1kPtMDzq4b4Btc9es2nGkVfmJWuOm6wMzsLvuBovujPY/edit?usp=sharing"
+                                    href={LEGALS_LINKS.termsOfUse}
                                     target="_blank"
                                     className="link"
                                 >
@@ -87,7 +88,7 @@ export default function AboutPage() {
                             </li>
                             <li>
                                 <a
-                                    href="https://docs.google.com/document/d/1U9K4JJt03XlQole3SftyZnVFOMwt5yKjd-hspuFoGTU/edit?usp=sharing"
+                                    href={LEGALS_LINKS.privacy}
                                     target="_blank"
                                     className="link"
                                 >

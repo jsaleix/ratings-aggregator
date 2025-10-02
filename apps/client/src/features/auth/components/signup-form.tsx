@@ -6,6 +6,8 @@ import Input from "../../../shared/ui/input";
 import { signupSchema } from "../types/auth";
 import { displayMsg } from "../../../shared/utils/toast";
 import userService from "../services/user.service";
+import { Link } from "react-router";
+import { LEGALS_LINKS } from "../../../core/config/links";
 
 interface Props {
     containerCss?: string;
@@ -148,7 +150,14 @@ export default function SignupForm({ containerCss }: Props) {
                                     }
                                 />
                                 <label htmlFor="gcu_consent">
-                                    I accept the GCU
+                                    I accept the{" "}
+                                    <Link
+                                        className="underline hover:text-amber-300"
+                                        target="_blank"
+                                        to={LEGALS_LINKS.termsOfUse}
+                                    >
+                                        Terms of use
+                                    </Link>
                                 </label>
                             </div>
                             <FieldInfo field={field} />

@@ -1,20 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Component from "./signup-form";
+
+import Component from ".";
 import { MemoryRouter } from "react-router";
 
 const meta: Meta<typeof Component> = {
-    title: "Auth/SignupForm",
+    title: "Movies/CompareBtn",
     component: Component,
     decorators: [
         (Story) => (
             <MemoryRouter>
-                <Story />
+                <div style={{ width: "100vw", height: "100vh" }}>
+                    <Story />
+                </div>
             </MemoryRouter>
         ),
     ],
+    args: { movieId: "123" },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const SignupForm: Story = {};
+export const CompareBtn: Story = {};
