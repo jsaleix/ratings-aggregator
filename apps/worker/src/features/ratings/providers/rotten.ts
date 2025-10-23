@@ -1,6 +1,5 @@
 import puppeteer from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
-import { logger } from "@sentry/node";
 
 export const getRottenTomatoesScores = async (name: string, year: number) => {
     const browser = await puppeteer.launch({
@@ -14,6 +13,7 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
         const searchUrl = `https://www.rottentomatoes.com/search?search=${encodeURIComponent(
             name
         )}`;
+        console.log("searchUrl:", searchUrl);
         await page.goto(searchUrl, { waitUntil: "domcontentloaded" });
 
         const mediaRowSelector =
@@ -31,7 +31,7 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
             );
 
             for (const row of rows) {
-                const releaseYear = row.getAttribute("releaseyear");
+                const releaseYear = row.getAttribute("release-year");
                 if (releaseYear === String(targetYear)) {
                     const anchor = row.querySelector("a");
                     return anchor?.getAttribute("href") || null;
@@ -41,10 +41,7 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
             return null;
         }, year);
 
-        if (!movieUrl)
-            throw new Error(
-                "Aucun lien de film trouvé dans le premier résultat"
-            );
+        if (!movieUrl) throw new Error("Aucun lien de film trouvé");
 
         const fullMovieUrl = `${movieUrl}`;
         console.log(`🔗 Redirection vers : ${fullMovieUrl}`);
@@ -78,11 +75,12 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
             audienceRatings,
         };
     } catch (error) {
-        logger.error("providers/getRottenTomatoesScores error", {
-            error,
-            name,
-        });
+        // logger.error("providers/getRottenTomatoesScores error", {
+        //     error,
+        //     name,
+        // });
         if (error instanceof Error) console.error("❌ Erreur :", error.message);
+        throw error;
     } finally {
         await browser.close();
     }
