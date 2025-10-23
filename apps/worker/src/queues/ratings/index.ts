@@ -98,6 +98,6 @@ ratingWorker.on("failed", (job, error) => {
         tags: ["rating-worker", "worker"],
         payload: job?.data.payload,
         movieId: job?.data.payload.id,
-        error: error.message,
+        error: error,
     });
 });
