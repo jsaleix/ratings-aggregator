@@ -147,7 +147,7 @@ export default function MoviePage() {
                         </div>
                     </div>
                 </header>
-                <hr className="w-full border-bg-light" />
+                <span className={"w-full h-[10px] bg-bg-light"} />
                 <div className="flex flex-col gap-3 w-full md:px-0 px-5">
                     <div className="w-full flex justify-between">
                         <h1 className="text-xl font-bold uppercase text-white">
