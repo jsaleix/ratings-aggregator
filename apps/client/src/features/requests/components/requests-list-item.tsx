@@ -27,14 +27,14 @@ export default function RequestListItem({ request }: Props) {
 
             <div className="flex flex-col md:items-end">
                 <p className="font-light">
-                    Created at:{" "}
+                    {/* Created at:{" "} */}
                     <span className="font-medium">
                         {new Date(request.created_at).toLocaleString()}
                     </span>
                 </p>
-                <p>
+                {/* <p>
                     Status: <span>N/A</span>
-                </p>
+                </p> */}
             </div>
         </article>
     );

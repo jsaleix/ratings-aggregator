@@ -1,13 +1,46 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
+import { motion, stagger } from "motion/react";
 
-import apiRequestService from "../services/api-request.service";
-import RequestListItem from "../components/requests-list-item";
 import Button from "../../../shared/ui/button";
 import PageHeader from "../../../shared/ui/page-header";
-import { mapApiRequestToMovieRequestModel } from "../types/api-request";
+
 import { useAuthContext } from "../../../core/auth/provider";
+import apiRequestService from "../services/api-request.service";
+import RequestListItem from "../components/requests-list-item";
+import { mapApiRequestToMovieRequestModel } from "../types/api-request";
 import LastMoviesUpdated from "../../movies/components/movie-posters-section/last-movies-updated";
+
+const itemVariants = {
+    hidden: {
+        opacity: 0,
+        y: -20,
+    },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.3,
+        },
+    },
+};
+
+const wrapperVariants = {
+    hidden: {
+        opacity: 0,
+        transition: {
+            when: "afterChildren",
+        },
+    },
+    visible: {
+        opacity: 1,
+        transition: {
+            when: "beforeChildren",
+            delayChildren: stagger(0.1),
+            // staggerChildren: .2
+        },
+    },
+};
 
 export default function RequestsPage() {
     const { role } = useAuthContext();
@@ -39,20 +72,15 @@ export default function RequestsPage() {
             <div className="flex flex-col container mx-auto gap-5 py-5 items-center px-5 md:px-0">
                 <PageHeader title="Movie requests">
                     <p className="text-text-secondary">
-                        You can add any movie of your choice by submitting a
-                        request. Once submitted, the request will be added to
-                        the queue and processed by retrieving the movie’s data
-                        and ratings.
+                        You can request any movie to be added. Once submitted,
+                        it will be queued and processed to fetch its data and
+                        ratings. You can also use this feature to update an
+                        existing movie.
                         <br />
-                        You can also use this feature to update an existing
-                        movie — in that case, the data retrieval step will be
-                        skipped, and only the ratings will be refreshed.
-                        <br />
-                        Please note that this feature is subject to a daily
-                        request limit, which may change at any time. This limit
-                        is shared between all users and is in place to prevent
-                        the platform from sending too many requests to external
-                        websites, which could result in being blocked by them.
+                        Please note that there is a daily limit on requests,
+                        shared by all users. This limit helps prevent the
+                        platform from sending too many requests to external
+                        sites.
                         <br />
                         <span className="text-white">
                             Limits: max. {count.max} request(s) per day - Left:{" "}
@@ -76,14 +104,22 @@ export default function RequestsPage() {
                         </p>
                     )}
                     {data.length > 0 && (
-                        <div className="w-full flex flex-col border-0 border-t-bg-light">
+                        <motion.ul
+                            className="w-full flex flex-col border-0 border-t-bg-light gap-2"
+                            variants={wrapperVariants}
+                            animate="visible"
+                            initial="hidden"
+                        >
                             {data.map((request) => (
-                                <RequestListItem
-                                    request={request}
+                                <motion.li
+                                    className="list-none"
+                                    variants={itemVariants}
                                     key={request.id}
-                                />
+                                >
+                                    <RequestListItem request={request} />
+                                </motion.li>
                             ))}
-                        </div>
+                        </motion.ul>
                     )}
                 </div>
             </div>

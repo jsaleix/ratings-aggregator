@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import { useRef, useCallback, useEffect } from "react";
 
 interface Props {
@@ -5,6 +6,20 @@ interface Props {
     onClose?: () => void;
 }
 
+const divVariants = {
+    hidden: {
+        opacity: 0,
+        transform: "translateY(40px)",
+    },
+    visible: {
+        opacity: 1,
+        transform: "translateY(0px)",
+        transition: {
+            duration: 0.4,
+            delay: 0.2,
+        },
+    },
+};
 export default function GetTMDBIdModal({ modalState, onClose }: Props) {
     const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -26,7 +41,12 @@ export default function GetTMDBIdModal({ modalState, onClose }: Props) {
             id="tmdb_id_modal"
             className={"modal"}
         >
-            <div className={"modalBox"}>
+            <motion.div
+                className={"modalBox"}
+                variants={divVariants}
+                initial={false}
+                animate={modalState ? "visible" : "hidden"}
+            >
                 <form method="dialog" className="outline-none">
                     <button
                         className={
@@ -43,7 +63,11 @@ export default function GetTMDBIdModal({ modalState, onClose }: Props) {
                     <ol className="flex flex-col gap-2">
                         <li>
                             1. Go to{" "}
-                            <a href="https://www.themoviedb.org/" target="_blank" className="link">
+                            <a
+                                href="https://www.themoviedb.org/"
+                                target="_blank"
+                                className="link"
+                            >
                                 themoviedb.org
                             </a>
                         </li>
@@ -65,7 +89,7 @@ export default function GetTMDBIdModal({ modalState, onClose }: Props) {
                         </li>
                     </ol>
                 </div>
-            </div>
+            </motion.div>
         </dialog>
     );
 }

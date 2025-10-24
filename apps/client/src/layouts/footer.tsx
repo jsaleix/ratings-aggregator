@@ -1,6 +1,6 @@
 export default function Footer() {
     return (
-        <footer className="h-32 p-5 border-t-1 border-b-bg-light">
+        <footer className="h-32 p-5">
             <div className="container mx-auto flex flex-col center">
                 <p className="font-light text-sm text-text-secondary">
                     © Aggregator

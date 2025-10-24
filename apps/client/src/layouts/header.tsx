@@ -18,7 +18,7 @@ export default function Header() {
     }, [location]);
 
     return (
-        <header className="relative h-16 p-5 border-b-1 border-b-bg-light bg-bg-dark w-full">
+        <header className="relative h-16 p-5 bg-bg-dark w-full">
             <div className="container mx-auto flex items-center justify-between h-full w-full">
                 <Link to="/" className="h-full z-100">
                     <div className="h-full hover:opacity-85 active:opacity-85 duration-150">
