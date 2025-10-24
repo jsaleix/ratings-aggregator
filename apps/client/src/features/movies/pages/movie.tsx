@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
+import { motion } from "motion/react";
 
 import apiMoviesService from "../services/api-movies.service";
 import apiRatingsService from "../services/api-ratings.service";
@@ -10,12 +11,13 @@ import { BASE_POSTER_URL } from "../../../core/config/misc";
 import { useAuthContext } from "../../../core/auth/provider";
 import { setPageTitle } from "../../../shared/utils/page";
 import Button from "../../../shared/ui/button";
-import MovieRatingItem from "../components/movie-rating-item";
+
 import MoviePageSkeleton from "../components/movie-page-skeleton";
 import MovieSummaryItem from "../components/movie-summary-item";
 import LastMoviesAdded from "../components/movie-posters-section/last-movies-added";
 import LastMoviesUpdated from "../components/movie-posters-section/last-movies-updated";
 import CompareBtn from "../components/compare-btn";
+import RatingListPart from "../components/rating-list-part";
 
 export default function MoviePage() {
     const { isConnected } = useAuthContext();
@@ -155,26 +157,29 @@ export default function MoviePage() {
                     </div>
                     {isConnected ? (
                         <>
-                            <div className="flex flex-col">
-                                {ratings.length === 0 && <p>No rating</p>}
-                                {ratings.length > 0 && (
-                                    <ul className="flex flex-col md:w-[100%]">
-                                        {ratings
-                                            ?.filter(
-                                                (rating) =>
-                                                    rating.value !== "N/A"
-                                            )
-                                            .map((rating) => (
-                                                <MovieRatingItem
-                                                    rating={rating}
-                                                    key={rating.id}
-                                                />
-                                            ))}
-                                    </ul>
-                                )}
-                            </div>
+                            <RatingListPart ratings={ratings} />
                             {ratingsSummary && (
-                                <MovieSummaryItem data={ratingsSummary} />
+                                <motion.div
+                                    initial={"hidden"}
+                                    whileInView={"visible"}
+                                    viewport={{ once: true }}
+                                    variants={{
+                                        hidden: {
+                                            opacity: 0,
+                                            y: -20,
+                                        },
+                                        visible: {
+                                            opacity: 1,
+                                            y: 0,
+                                            transition: {
+                                                duration: 0.5,
+                                                delay: 0.2,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    <MovieSummaryItem data={ratingsSummary} />
+                                </motion.div>
                             )}
                         </>
                     ) : (
