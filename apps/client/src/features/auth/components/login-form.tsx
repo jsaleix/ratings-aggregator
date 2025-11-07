@@ -15,7 +15,7 @@ const errorClass = "font-bold text-red-400 text-sm";
 
 export default function LoginForm({ containerCss }: Props) {
     const { login } = useAuthContext();
-    const containerStyle = clsx("flex flex-col gap-5 rounded-md", containerCss);
+    const containerStyle = clsx("w-full flex flex-col gap-5 rounded-md", containerCss);
 
     const form = useForm({
         defaultValues: {
