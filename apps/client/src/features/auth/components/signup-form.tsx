@@ -1,26 +1,18 @@
+import { Link } from "react-router";
+import { useForm, useStore } from "@tanstack/react-form";
 import clsx from "clsx";
-import { useForm, useStore, type AnyFieldApi } from "@tanstack/react-form";
 
 import Button from "../../../shared/ui/button";
 import Input from "../../../shared/ui/input";
 import { signupSchema } from "../types/auth";
 import { displayMsg } from "../../../shared/utils/toast";
 import userService from "../services/user.service";
-import { Link } from "react-router";
 import { LEGALS_LINKS } from "../../../core/config/links";
+
+import FieldInfo from "./field-info";
 
 interface Props {
     containerCss?: string;
-}
-
-const errorClass = "font-bold text-red-400 text-sm";
-
-function FieldInfo({ field }: { field: AnyFieldApi }) {
-    return (
-        field.state.meta.errors.length > 0 && (
-            <p className={errorClass}>{field.state.meta.errors[0]?.message}</p>
-        )
-    );
 }
 
 export default function SignupForm({ containerCss }: Props) {

@@ -7,15 +7,18 @@ import { loginSchema } from "../types/auth";
 import { useAuthContext } from "../../../core/auth/provider";
 import { displayMsg } from "../../../shared/utils/toast";
 
+import FieldInfo from "./field-info";
+
 interface Props {
     containerCss?: string;
 }
 
-const errorClass = "font-bold text-red-400 text-sm";
-
 export default function LoginForm({ containerCss }: Props) {
     const { login } = useAuthContext();
-    const containerStyle = clsx("w-full flex flex-col gap-5 rounded-md", containerCss);
+    const containerStyle = clsx(
+        "w-full flex flex-col gap-5 rounded-md",
+        containerCss
+    );
 
     const form = useForm({
         defaultValues: {
@@ -64,11 +67,7 @@ export default function LoginForm({ containerCss }: Props) {
                                 placeholder="Email"
                                 type="email"
                             />
-                            {field.state.meta.errors.length > 0 && (
-                                <p className={errorClass}>
-                                    {field.state.meta.errors[0]?.message}
-                                </p>
-                            )}
+                            <FieldInfo field={field} />
                         </>
                     )}
                 </form.Field>
@@ -85,11 +84,7 @@ export default function LoginForm({ containerCss }: Props) {
                                 placeholder="Password"
                                 type="password"
                             />
-                            {field.state.meta.errors.length > 0 && (
-                                <p className={errorClass}>
-                                    {field.state.meta.errors[0]?.message}
-                                </p>
-                            )}
+                            <FieldInfo field={field} />
                         </>
                     )}
                 </form.Field>
