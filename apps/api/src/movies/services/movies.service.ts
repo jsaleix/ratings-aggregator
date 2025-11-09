@@ -40,8 +40,10 @@ export class MoviesService {
 
   async getRandomMovies() {
     const moviesCount = await this.prisma.movie.count();
+    const skip =
+      moviesCount > 10 ? Math.floor(Math.random() * (moviesCount - 10)) : 0;
     const movies = await this.prisma.movie.findMany({
-      skip: Math.floor(Math.random() * (moviesCount - 10)),
+      skip,
       take: 15,
     });
     return movies;
