@@ -5,51 +5,45 @@ import { useAuthContext } from "../../../core/auth/provider";
 import LastMoviesAdded from "../../movies/components/movie-posters-section/last-movies-added";
 import LastMoviesUpdated from "../../movies/components/movie-posters-section/last-movies-updated";
 import RandomMovies from "../../movies/components/movie-posters-section/random-movies";
-
-const MAX = 3;
-const img1 = Math.floor(Math.random() * 3) + 1;
-const img2 = img1 === MAX ? 1 : img1 + 1;
+import HeroRatings from "../components/hero-ratings";
 
 export default function HomePage() {
     const { isConnected } = useAuthContext();
-    const imageA = `assets/images/home/${img1}.webp`;
-    const imageB = `assets/images/home/${img2}.webp`;
 
     return (
         <div className="w-full">
             <div className="flex flex-col gap-0">
-                <section className="w-full flex  md:flex-row items-center gap-5 justify-center bg-black h-[80vh] md:h-[50vh] z-1 overflow-hidden">
-                    <div className="container mx-auto flex flex-row items-center w-full relative h-full">
-                        <div className="flex flex-col w-fit mmd:w-2/4 z-1 items-center md:items-start gap-5">
-                            <h2 className="uppercase text-white text-5xl md:text-4xl font-bold text-center md:text-start text-shadow-lg">
-                                Gathering ratings across different websites
+                <section className="w-full flex md:flex-row items-center gap-5 justify-center bg-black h-[80vh] md:h-[50vh] z-1 overflow-hidden relative">
+                    <div className="z-1 container mx-auto flex flex-row gap-10 items-center w-full relative h-full">
+                        <div className="flex flex-col w-fit z-1 items-center md:items-start gap-5 p-5 lg:p-0">
+                            <h2 className="uppercase text-white text-4xl font-bold text-center md:text-start text-shadow-lg">
+                                Your all-in-one
+                                <br />
+                                hub for movie ratings
                             </h2>
-                            <p className="text-white text-2xl md:text-xl text-shadow-lg">
-                                So you don't have to.
+                            <p className="text-white text-2xl md:text-xl text-shadow-lg font-light md:text-start text-center">
+                                See how films score across
+                                <br />
+                                IMDb, Metacritic, and more — instantly.
                             </p>
                             {!isConnected && (
                                 <Link to={"/auth"} className="">
-                                    <Button variant={"primary"}>
+                                    <Button variant={"primary"} size={"large"}>
                                         Join now (for free)
                                     </Button>
                                 </Link>
                             )}
                         </div>
-
-                        <div className="md:w-3/4 h-[80vh] md:max-h-[50vh] overflow-hidden md:relative absolute opacity-70 md:opacity-100">
-                            <img
-                                className="mask-radial-[100%_100%] mask-radial-from-75% md:mask-x-from-50% md:mask-x-to-90% w-full h-full object-cover pointer-events-none drag-none select-none"
-                                src={imageA}
-                            />
-                        </div>
-
-                        <div className="top-0 left-0 w-[30vw] h-[80vh] overflow-hidden absolute opacity-70 md:opacity-100 hidden md:block">
-                            <img
-                                className="mask-radial-[100%_100%] mask-radial-from-75% md:mask-x-from-50% md:mask-x-to-90% w-full h-full object-cover pointer-events-none drag-none select-none"
-                                src={imageB}
-                            />
-                        </div>
+                        <HeroRatings className="hidden md:block md:scale-65 lg:scale-75 xl:scale-100" />
                     </div>
+                    <div
+                        className="
+                            bg-amber-800
+                            top-0 left-0 w-full h-full overflow-hidden absolute 
+                            bg-[url('/assets/images/home/apocalypse.webp')]
+                            bg-cover bg-bottom
+                        "
+                    ></div>
                 </section>
 
                 <LastMoviesAdded />

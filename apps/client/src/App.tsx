@@ -1,13 +1,13 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router";
 
-import HomePage from "./features/general/pages/home";
 import NotFoundPage from "./features/general/pages/not-found";
 
 import BaseLayout from "./layouts/layout";
 import AuthLayout from "./layouts/auth/layout";
 import AdminLayout from "./layouts/admin/layout";
 
+const HomePage = lazy(() => import("./features/general/pages/home"));
 const AboutPage = lazy(() => import("./features/general/pages/about"));
 
 const ComparePage = lazy(() => import("./features/compare/pages/compare"));

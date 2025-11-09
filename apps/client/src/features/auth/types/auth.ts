@@ -1,7 +1,7 @@
 import { z } from "zod/v4";
 
 export const loginSchema = z.object({
-    email: z.email(),
+    email: z.email().nonempty(),
     password: z.string().nonempty(),
 });
 
@@ -11,7 +11,7 @@ export const signupSchema = z
         username: z.string().min(3).max(20),
         password: z
             .string()
-            .min(6)
+            .min(8)
             .max(20)
             .refine((password) => /[A-Z]/.test(password), {
                 message:
@@ -23,6 +23,10 @@ export const signupSchema = z
             })
             .refine((password) => /[0-9]/.test(password), {
                 message: "Your password must include a least 1 digit",
+            })
+            .refine((password) => /[!@#$%^&*(),.?":{}|<>]/.test(password), {
+                message:
+                    "Your password must include at least 1 special character",
             }),
         password_confirmation: z.string().nonempty(),
         gcu: z
@@ -47,11 +51,19 @@ export const updatePasswordSchema = z.object({
     current_password: z.string().nonempty(),
     password: z
         .string()
+        .min(8)
+        .max(20)
+        .refine((password) => /[A-Z]/.test(password), {
+            message: "Your password must include a least 1 uppercase character",
+        })
         .refine((password) => /[a-z]/.test(password), {
             message: "Your password must include a least 1 lowercase character",
         })
         .refine((password) => /[0-9]/.test(password), {
             message: "Your password must include a least 1 digit",
+        })
+        .refine((password) => /[!@#$%^&*(),.?":{}|<>]/.test(password), {
+            message: "Your password must include at least 1 special character",
         }),
     password_confirmation: z.string().nonempty(),
 });

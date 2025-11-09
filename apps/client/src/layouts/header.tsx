@@ -80,7 +80,7 @@ export default function Header() {
                             </NavLink>
                         ) : (
                             <NavLink to="/auth" className={linkCss}>
-                                Signin
+                                Sign-In
                             </NavLink>
                         )}
                         <NavLink to="/movies" className={linkCss}>
