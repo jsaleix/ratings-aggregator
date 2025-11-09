@@ -5,6 +5,7 @@ import { useAuthContext } from "../../../core/auth/provider";
 import LastMoviesAdded from "../../movies/components/movie-posters-section/last-movies-added";
 import LastMoviesUpdated from "../../movies/components/movie-posters-section/last-movies-updated";
 import RandomMovies from "../../movies/components/movie-posters-section/random-movies";
+import HeroRatings from "../components/hero-ratings";
 
 export default function HomePage() {
     const { isConnected } = useAuthContext();
@@ -13,14 +14,17 @@ export default function HomePage() {
         <div className="w-full">
             <div className="flex flex-col gap-0">
                 <section className="w-full flex md:flex-row items-center gap-5 justify-center bg-black h-[80vh] md:h-[50vh] z-1 overflow-hidden relative">
-                    <div className="container mx-auto flex flex-row items-center w-full relative h-full">
-                        <div className="flex flex-col w-fit z-1 items-center md:items-start gap-5 p-5 md:p-0">
+                    <div className="z-1 container mx-auto flex flex-row gap-10 items-center w-full relative h-full">
+                        <div className="flex flex-col w-fit z-1 items-center md:items-start gap-5 p-5 lg:p-0">
                             <h2 className="uppercase text-white text-4xl font-bold text-center md:text-start text-shadow-lg">
-                                Your all-in-one<br/>hub for movie ratings
+                                Your all-in-one
+                                <br />
+                                hub for movie ratings
                             </h2>
                             <p className="text-white text-2xl md:text-xl text-shadow-lg font-light md:text-start text-center">
-                                See how films score across<br/>IMDb, Metacritic, and
-                                more — instantly.
+                                See how films score across
+                                <br />
+                                IMDb, Metacritic, and more — instantly.
                             </p>
                             {!isConnected && (
                                 <Link to={"/auth"} className="">
@@ -30,6 +34,7 @@ export default function HomePage() {
                                 </Link>
                             )}
                         </div>
+                        <HeroRatings className="hidden md:block md:scale-65 lg:scale-75 xl:scale-100" />
                     </div>
                     <div
                         className="
