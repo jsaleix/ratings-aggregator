@@ -14,16 +14,17 @@ export default function HomePage() {
             <div className="flex flex-col gap-0">
                 <section className="w-full flex md:flex-row items-center gap-5 justify-center bg-black h-[80vh] md:h-[50vh] z-1 overflow-hidden relative">
                     <div className="container mx-auto flex flex-row items-center w-full relative h-full">
-                        <div className="flex flex-col w-fit mmd:w-2/4 z-1 items-center md:items-start gap-5">
-                            <h2 className="uppercase text-white text-5xl md:text-4xl font-bold text-center md:text-start text-shadow-lg">
-                                Gathering ratings across different websites
+                        <div className="flex flex-col w-fit z-1 items-center md:items-start gap-5 p-5 md:p-0">
+                            <h2 className="uppercase text-white text-4xl font-bold text-center md:text-start text-shadow-lg">
+                                Your all-in-one<br/>hub for movie ratings
                             </h2>
-                            <p className="text-white text-2xl md:text-xl text-shadow-lg">
-                                So you don't have to.
+                            <p className="text-white text-2xl md:text-xl text-shadow-lg font-light md:text-start text-center">
+                                See how films score across<br/>IMDb, Metacritic, and
+                                more — instantly.
                             </p>
                             {!isConnected && (
                                 <Link to={"/auth"} className="">
-                                    <Button variant={"primary"}>
+                                    <Button variant={"primary"} size={"large"}>
                                         Join now (for free)
                                     </Button>
                                 </Link>
