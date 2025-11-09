@@ -13,7 +13,7 @@ export default function HomePage() {
     return (
         <div className="w-full">
             <div className="flex flex-col gap-0">
-                <section className="w-full flex md:flex-row items-center gap-5 justify-center bg-black h-[80vh] md:h-[50vh] z-1 overflow-hidden relative">
+                <section className="w-full flex md:flex-row items-center gap-5 justify-center bg-black h-[80vh] md:h-[60vh] z-1 overflow-hidden relative">
                     <div className="z-1 container mx-auto flex flex-row gap-10 items-center w-full relative h-full">
                         <div className="flex flex-col w-fit z-1 items-center md:items-start gap-5 p-5 lg:p-0">
                             <h2 className="uppercase text-white text-4xl font-bold text-center md:text-start text-shadow-lg">
@@ -34,7 +34,7 @@ export default function HomePage() {
                                 </Link>
                             )}
                         </div>
-                        <HeroRatings className="hidden md:block md:scale-65 lg:scale-75 xl:scale-100" />
+                        <HeroRatings className="hidden md:block md:scale-55 lg:scale-65 2xl:scale-90 h-fit" />
                     </div>
                     <div
                         className="
