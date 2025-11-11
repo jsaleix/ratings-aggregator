@@ -4,12 +4,11 @@ import { motion, stagger } from "motion/react";
 
 import Button from "../../../shared/ui/button";
 import PageHeader from "../../../shared/ui/page-header";
-
 import { useAuthContext } from "../../../core/auth/provider";
+import LastMoviesUpdated from "../../movies/components/movie-posters-section/last-movies-updated";
 import apiRequestService from "../services/api-request.service";
 import RequestListItem from "../components/requests-list-item";
 import { mapApiRequestToMovieRequestModel } from "../types/api-request";
-import LastMoviesUpdated from "../../movies/components/movie-posters-section/last-movies-updated";
 
 const itemVariants = {
     hidden: {

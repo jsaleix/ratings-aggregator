@@ -1,9 +1,10 @@
 import { useSearchParams } from "react-router";
+
 import PageHeader from "../../../shared/ui/page-header";
-import MovieList from "../components/movie-list";
 import useSearchMovies from "../hooks/use-search-movies";
-import FiltersPart from "../components/movies-filters";
 import useMovieFilters from "../hooks/use-filters";
+import MovieList from "../components/movie-list";
+import FiltersPart from "../components/movies-filters";
 
 export default function MoviesPage() {
     let [searchParams] = useSearchParams();

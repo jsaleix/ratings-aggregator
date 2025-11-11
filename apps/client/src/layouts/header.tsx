@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router";
 import clsx from "clsx";
 
 import { useAuthContext } from "../core/auth/provider";
 import HeaderSearchMovieInput from "../shared/ui/header-search-input";
 import BurgerMenu from "../shared/ui/layout/burger";
-import { useEffect, useState } from "react";
 
 const linkCss = "font-bold hover:text-secondary duration-150 w-fit";
 

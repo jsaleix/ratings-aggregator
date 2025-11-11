@@ -7,4 +7,5 @@ export type MovieRatingApiResponseType = {
     extra: string;
     created_at: string;
     updated_at: string;
+    sourceUrl: null | string;
 };

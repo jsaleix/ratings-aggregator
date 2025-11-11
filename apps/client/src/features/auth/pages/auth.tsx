@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { motion } from "motion/react";
+
 import { useAuthContext } from "../../../core/auth/provider";
 import LoginForm from "../components/login-form";
 import SignupForm from "../components/signup-form";
-import { motion } from "motion/react";
 
 export default function AuthPage() {
     const { isConnected } = useAuthContext();
