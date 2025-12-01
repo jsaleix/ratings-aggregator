@@ -1,4 +1,4 @@
-import { RATING_SOURCERS, RATING_UNITS } from "../../../config/ratings";
+import { RATING_SOURCES, RATING_UNITS } from "../../../config/ratings";
 import { MovieType } from "../../movies/types/db";
 import { getAllocineScore } from "../providers/allocine";
 import { getIMDBScore } from "../providers/imdb";
@@ -31,13 +31,13 @@ export class RatingCollectorService {
             this.ratingService.addOrUpdate({
                 movieId,
                 value: press,
-                rating_source: RATING_SOURCERS.ALLOCINE_PRESS,
+                rating_source: RATING_SOURCES.ALLOCINE_PRESS,
                 rating_unit: RATING_UNITS.STARS,
             }),
             this.ratingService.addOrUpdate({
                 movieId,
                 value: audience,
-                rating_source: RATING_SOURCERS.ALLOCINE_AUDIENCE,
+                rating_source: RATING_SOURCES.ALLOCINE_AUDIENCE,
                 rating_unit: RATING_UNITS.STARS,
             }),
         ]);
@@ -53,7 +53,7 @@ export class RatingCollectorService {
         return this.ratingService.addOrUpdate({
             movieId,
             value: score,
-            rating_source: RATING_SOURCERS.IMDB,
+            rating_source: RATING_SOURCES.IMDB,
             rating_unit: RATING_UNITS.POINTS,
             sourceUrl: url,
         });
@@ -71,14 +71,14 @@ export class RatingCollectorService {
             this.ratingService.addOrUpdate({
                 movieId,
                 value: criticsRatings,
-                rating_source: RATING_SOURCERS.ROTTEN_TOMATOES,
+                rating_source: RATING_SOURCES.ROTTEN_TOMATOES,
                 rating_unit: RATING_UNITS.PERCENTAGE,
                 sourceUrl: url,
             }),
             this.ratingService.addOrUpdate({
                 movieId,
                 value: audienceRatings,
-                rating_source: RATING_SOURCERS.ROTTEN_TOMATOES_AUDIENCE,
+                rating_source: RATING_SOURCES.ROTTEN_TOMATOES_AUDIENCE,
                 rating_unit: RATING_UNITS.PERCENTAGE,
                 sourceUrl: url,
             }),
@@ -97,7 +97,7 @@ export class RatingCollectorService {
         return this.ratingService.addOrUpdate({
             movieId,
             value: score,
-            rating_source: RATING_SOURCERS.LETTERBOXD,
+            rating_source: RATING_SOURCES.LETTERBOXD,
             rating_unit: RATING_UNITS.STARS,
             sourceUrl: url,
         });
