@@ -4,11 +4,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { compareSync } from 'bcrypt';
+import Redis from 'ioredis';
+import { InjectRedis } from '@nestjs-modules/ioredis';
+
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
-import { compareSync } from 'bcrypt';
-import { InjectRedis } from '@nestjs-modules/ioredis';
-import Redis from 'ioredis';
 
 @Injectable()
 export class AuthService {

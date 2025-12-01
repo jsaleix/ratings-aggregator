@@ -36,5 +36,6 @@ if echo "$CHANGED_FILES" | grep -q "^apps/api/"; then
   cd apps/api
   pnpm install
   pnpm run build
+  pnpm run test
   cd "$ROOT_DIR"
 fi

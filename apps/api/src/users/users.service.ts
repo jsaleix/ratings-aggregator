@@ -3,16 +3,18 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+
+import { roles } from 'src/core/constants/auth';
+import { PrismaService } from 'src/shared/services/prisma.service';
+import { PaginateFunction, paginator } from 'src/shared/utils/pagination';
+
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { UpdatePasswordDTO } from './dto/update-password.dto';
-import { UpdateEmailDTO } from './dto/update-email';
-import { PrismaService } from 'src/shared/services/prisma.service';
-import * as bcrypt from 'bcrypt';
-import { roles } from 'src/core/constants/auth';
+
 import { AdminUpdateUserFullDTO } from './dto/admin/update-user-full.dto';
 import { AdminUpdatePasswordDTO } from './dto/admin/update-password.dto';
-import { PaginateFunction, paginator } from 'src/shared/utils/pagination';
 
 @Injectable()
 export class UsersService {
