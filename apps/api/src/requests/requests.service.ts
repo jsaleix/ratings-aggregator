@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { BullmqService } from 'src/shared/services/bullmq.service';
-import { User } from 'generated/prisma';
+import { User } from 'generated/prisma/client';
 
 @Injectable()
 export class RequestsService {

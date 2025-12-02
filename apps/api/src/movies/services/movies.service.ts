@@ -3,7 +3,7 @@ import { CreateMovieDto } from '../dto/create-movie.dto';
 import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { SearchMovieQueryDto } from '../dto/search-movie-query.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
-import { Prisma } from 'generated/prisma';
+import { Prisma } from 'generated/prisma/client';
 import { PaginatedResult } from 'src/shared/types/pagination';
 import { MovieType } from '../entities/movie.entity';
 import { FindMoviesDTO } from '../dto/find-movies.dto';

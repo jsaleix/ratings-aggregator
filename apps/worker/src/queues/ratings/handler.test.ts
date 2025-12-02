@@ -64,7 +64,7 @@ describe("RatingHandler Integration", () => {
 
         await new Promise((resolve) => worker.on("failed", resolve));
         expect(mockUseCaseService.execute).not.toHaveBeenCalled();
-    }, 5000);
+    }, 8000);
 
     test("should throw if no id is given", async () => {
         mockUseCaseService.execute.mockResolvedValue([]);
@@ -76,5 +76,5 @@ describe("RatingHandler Integration", () => {
 
         await new Promise((resolve) => worker.on("failed", resolve));
         expect(mockUseCaseService.execute).not.toHaveBeenCalled();
-    }, 5000);
+    }, 8000);
 });

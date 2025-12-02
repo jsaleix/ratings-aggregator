@@ -3,6 +3,7 @@ import { MoviesController } from './movies.controller';
 import { MoviesService } from './services/movies.service';
 import { TMDBService } from './services/tmdb.service';
 import { ConfigModule } from '@nestjs/config';
+import { PrismaService } from 'src/shared/services/prisma.service';
 
 describe('MoviesController', () => {
   let controller: MoviesController;
@@ -10,7 +11,7 @@ describe('MoviesController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MoviesController],
-      providers: [MoviesService, TMDBService],
+      providers: [MoviesService, TMDBService, PrismaService],
       imports: [ConfigModule.forRoot({})],
     }).compile();
 

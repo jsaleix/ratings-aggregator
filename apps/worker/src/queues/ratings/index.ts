@@ -1,4 +1,5 @@
 import { Worker } from "bullmq";
+import { logger } from "@sentry/node";
 
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 import { db } from "../../core/db";
@@ -10,7 +11,6 @@ import { RatingCollectorService } from "../../features/ratings/services/rating-c
 
 import { summaryQueue } from "..";
 import RatingHandler from "./handler";
-import { logger } from "@sentry/node";
 
 const movieService = new MovieService(db);
 const ratingService = new RatingService(db);
@@ -39,11 +39,6 @@ export const ratingWorker = new Worker(
 );
 
 ratingWorker.on("active", (job) => {
-    // console.log("---------------");
-    // console.log("RATING WORKER ACTIVE");
-    // const { id } = job.data.payload;
-    // console.log("Movie Id:", id);
-    // console.log("---------------");
     logger.info("Rating worker active", {
         tags: ["rating-worker", "worker"],
         payload: job.data.payload,
@@ -58,10 +53,7 @@ ratingWorker.on("completed", (job) => {
         movieId: job.data.payload.id,
     });
 
-    // console.log("---------------");
-    // console.log("RATING WORKER COMPLETED");
-    // console.log("---------------");
-
+    console.log("payload:", job.data.payload);
     const { id } = job.data.payload;
     if (!id) {
         console.log("No id from payload");
@@ -89,11 +81,6 @@ ratingWorker.on("completed", (job) => {
 });
 
 ratingWorker.on("failed", (job, error) => {
-    // console.log("---------------");
-    // console.log("RATING WORKER FAILED");
-    // console.log(`MovieID ${job?.data.payload.id}`);
-    // console.log(error.message);
-    // console.log("---------------");
     logger.error("Rating worker failed", {
         tags: ["rating-worker", "worker"],
         payload: job?.data.payload,
