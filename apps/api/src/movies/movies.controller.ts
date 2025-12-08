@@ -17,6 +17,7 @@ import { SearchMovieQueryDto } from './dto/search-movie-query.dto';
 import { FindMoviesDTO } from './dto/find-movies.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { Role } from '../auth/decorators/role.decorator';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('movies')
 export class MoviesController {
@@ -31,7 +32,7 @@ export class MoviesController {
     return await this.moviesService.search(query);
   }
 
-  @Role('premium', 'mod')
+  // @Role('premium', 'mod')
   @Get('search-with-tmdb')
   async searchWithTmdb(@Query() query: SearchMovieQueryDto) {
     return await this.tmdbService.searchByName(query);
