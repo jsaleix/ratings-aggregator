@@ -45,14 +45,14 @@ export default function Header() {
                                     </NavLink>
                                 ) : (
                                     <NavLink to="/auth" className={linkCss}>
-                                        Signin
+                                        Sign-up
                                     </NavLink>
                                 )}
                                 <NavLink to="/movies" className={linkCss}>
                                     Movies
                                 </NavLink>
                                 <NavLink className={linkCss} to="/requests">
-                                    Requests
+                                    Add a movie
                                 </NavLink>
                                 <NavLink to="/about" className={linkCss}>
                                     About
@@ -80,14 +80,14 @@ export default function Header() {
                             </NavLink>
                         ) : (
                             <NavLink to="/auth" className={linkCss}>
-                                Sign-In
+                                Sign-Up
                             </NavLink>
                         )}
                         <NavLink to="/movies" className={linkCss}>
                             Movies
                         </NavLink>
                         <NavLink className={linkCss} to="/requests">
-                            Requests
+                            Add a movie
                         </NavLink>
                         <NavLink to="/about" className={linkCss}>
                             About
