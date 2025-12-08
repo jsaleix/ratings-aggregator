@@ -3,7 +3,13 @@ set -e
 
 ROOT_DIR=$(pwd)
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-CHANGED_FILES=$(git diff --name-only origin/$CURRENT_BRANCH...HEAD)
+
+if git ls-remote --exit-code --heads origin "$CURRENT_BRANCH" > /dev/null; then
+  CHANGED_FILES=$(git diff --name-only origin/$CURRENT_BRANCH...HEAD)
+else
+  echo "ℹ️  Remote branch does not exist, diff only on HEAD"
+  CHANGED_FILES=$(git diff --name-only HEAD)
+fi
 
 # APPS/CLIENT
 
