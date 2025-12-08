@@ -6,4 +6,5 @@ export const mockUserProfile = {
     role: "user",
     username: "JohnDo",
     created_at: new Date().toDateString(),
+    verified: false,
 } satisfies UserType;
