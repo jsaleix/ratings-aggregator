@@ -1,5 +1,9 @@
+import { Link } from "react-router";
+
+import Button from "../../../../shared/ui/button";
 import PageHeader from "../../../../shared/ui/page-header";
 import useInfiniteUsers from "../../hooks/use-infinite-users";
+import clsx from "clsx";
 
 export default function UsersPage() {
     const { users } = useInfiniteUsers();
@@ -15,11 +19,45 @@ export default function UsersPage() {
                 )}
                 {users.length > 0 && (
                     <div className="flex flex-col w-full">
-                        <ul>
-                            {users.map((user) => (
-                                <li>{user.id} - {user.email}</li>
-                            ))}
-                        </ul>
+                        <table>
+                            <thead className="w-full bg-bg-medium text-left">
+                                <tr>
+                                    <th className="">Username</th>
+                                    <th className="">Email</th>
+                                    <th className="">Role</th>
+                                    <th className="">Verified</th>
+                                    <th className="">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {users.map((user, idx) => (
+                                    <tr
+                                        key={user.id}
+                                        className={clsx(
+                                            idx % 2 === 0
+                                                ? "bg-bg-medium/50"
+                                                : "bg-bg-medium"
+                                        )}
+                                    >
+                                        <td title={user.id}>{user.username}</td>
+                                        <td>{user.email}</td>
+                                        <td className="capitalize">
+                                            {user.role}
+                                        </td>
+                                        <td>{user.verified ? "✅" : "⭕️"}</td>
+                                        <td>
+                                            <Link
+                                                to={`/admin/users/${user.id}`}
+                                            >
+                                                <Button variant={"primary"}>
+                                                    More ➜
+                                                </Button>
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 )}
             </div>
