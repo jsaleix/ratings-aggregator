@@ -26,6 +26,7 @@ const ProfilePage = lazy(() => import("./features/auth/pages/profile"));
 
 const Dashboard = lazy(() => import("./features/admin/pages/dashboard"));
 const Movies = lazy(() => import("./features/admin/pages/movies"));
+const UserAdmin = lazy(() => import("./features/admin/pages/user"));
 const Users = lazy(() => import("./features/admin/pages/users"));
 const Requests = lazy(() => import("./features/admin/pages/requests"));
 
@@ -44,6 +45,10 @@ function App() {
                         <Route path="/admin" element={<AdminLayout />}>
                             <Route path="/admin" element={<Dashboard />} />
                             <Route path="/admin/users" element={<Users />} />
+                            <Route
+                                path="/admin/users/:id"
+                                element={<UserAdmin />}
+                            />
                             <Route path="/admin/movies" element={<Movies />} />
                             <Route
                                 path="/admin/requests"
