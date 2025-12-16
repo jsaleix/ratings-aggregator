@@ -4,6 +4,6 @@ export class CreateRequestDto {
   @IsNumber()
   tmdbId: number;
 
-  @IsString()
-  title: string;
+  // @IsString()
+  // title: string;
 }
