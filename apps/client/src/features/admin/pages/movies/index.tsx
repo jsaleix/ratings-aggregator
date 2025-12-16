@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Link, useSearchParams } from "react-router";
 import clsx from "clsx";
+import { formatDistanceToNow } from "date-fns";
 
 import PageHeader from "../../../../shared/ui/page-header";
 import Button from "../../../../shared/ui/button";
@@ -10,7 +11,6 @@ import useMovieFilters from "../../../movies/hooks/use-filters";
 import useSearchMovies from "../../../movies/hooks/use-search-movies";
 import { type MovieModel } from "../../../movies/types/movie";
 import MovieModal from "../../components/movies/movie-modal";
-import { formatDistanceToNow } from "date-fns";
 
 export default function MoviesPage() {
     let [searchParams] = useSearchParams();

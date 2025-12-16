@@ -17,7 +17,6 @@ import { SearchMovieQueryDto } from './dto/search-movie-query.dto';
 import { FindMoviesDTO } from './dto/find-movies.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { Role } from '../auth/decorators/role.decorator';
-import { Throttle } from '@nestjs/throttler';
 
 @Controller('movies')
 export class MoviesController {

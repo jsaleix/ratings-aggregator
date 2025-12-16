@@ -39,7 +39,7 @@ export default function MovieModal({ onClose, movie }: Props) {
         },
         onSuccess: () => {
             displayMsg("Movie successfully deleted", "success");
-            onClose();
+            closeModal();
         },
         onError: (e) => {
             displayMsg(e.message, "error");
@@ -54,7 +54,7 @@ export default function MovieModal({ onClose, movie }: Props) {
         },
         onSuccess: () => {
             displayMsg("Movie successfully added to queue!", "success");
-            onClose();
+            closeModal();
         },
         onError: (e) => {
             displayMsg(e.message, "error");
