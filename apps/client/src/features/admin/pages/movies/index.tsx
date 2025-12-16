@@ -1,20 +1,32 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Link, useSearchParams } from "react-router";
+import clsx from "clsx";
 
 import PageHeader from "../../../../shared/ui/page-header";
 import Button from "../../../../shared/ui/button";
 import Input from "../../../../shared/ui/input";
 import useMovieFilters from "../../../movies/hooks/use-filters";
 import useSearchMovies from "../../../movies/hooks/use-search-movies";
-import clsx from "clsx";
+import { type MovieModel } from "../../../movies/types/movie";
+import MovieModal from "../../components/movies/movie-modal";
+import { formatDistanceToNow } from "date-fns";
 
 export default function MoviesPage() {
     let [searchParams] = useSearchParams();
     const [query, setQuery] = useState(searchParams.get("query") ?? "");
     const [debouncedQuery] = useDebounce(query, 500);
     const { filters } = useMovieFilters();
-    const { movies, isFetched } = useSearchMovies(filters, debouncedQuery);
+    const { refetch, movies, isFetched } = useSearchMovies(
+        filters,
+        debouncedQuery
+    );
+    const [selectedMovie, setSelectedMovie] = useState<MovieModel | null>(null);
+
+    const onCloseModal = useCallback(() => {
+        setSelectedMovie(null);
+        refetch();
+    }, []);
 
     return (
         <div className="w-full max-w-screen">
@@ -39,6 +51,7 @@ export default function MoviesPage() {
                                 <tr>
                                     <th className="">Title</th>
                                     <th className="">Year</th>
+                                    <th className="">Last update</th>
                                     <th className="">Actions</th>
                                 </tr>
                             </thead>
@@ -68,14 +81,22 @@ export default function MoviesPage() {
                                             </Link>
                                         </td>
                                         <td>{movie.year}</td>
+                                        <td>
+                                            {formatDistanceToNow(
+                                                new Date(movie.updated_at),
+                                                { addSuffix: true }
+                                            )}
+                                        </td>
                                         <td className="flex gap-3">
-                                            <Link
-                                                to={`/admin/users/${movie.id}`}
+                                            <Button
+                                                size={"small"}
+                                                variant={"primary"}
+                                                onClick={() =>
+                                                    setSelectedMovie(movie)
+                                                }
                                             >
-                                                <Button variant={"primary"}>
-                                                    Actions
-                                                </Button>
-                                            </Link>
+                                                Actions
+                                            </Button>
                                         </td>
                                     </tr>
                                 ))}
@@ -84,6 +105,7 @@ export default function MoviesPage() {
                     </div>
                 )}
             </div>
+            <MovieModal movie={selectedMovie} onClose={onCloseModal} />
         </div>
     );
 }
