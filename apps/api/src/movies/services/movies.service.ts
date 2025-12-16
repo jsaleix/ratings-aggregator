@@ -31,10 +31,25 @@ export class MoviesService {
   }
 
   async remove(id: string) {
-    const movie = await this.prisma.movie.delete({ where: { id } });
-    if (!movie) {
-      throw new Error(`Movie with id ${id} not found`);
-    }
+    const { movie } = await this.findOne(id);
+    const deleteRequests = this.prisma.movie_Request.deleteMany({
+      where: { tmdbId: movie.tmdbId },
+    });
+    const deleteRatings = this.prisma.movie_Rating.deleteMany({
+      where: { movieId: id },
+    });
+    const deleteRatingSummaries = this.prisma.movie_Ratings_Summary.deleteMany({
+      where: { movieId: id },
+    });
+    const deleteMovie = this.prisma.movie.delete({ where: { id } });
+
+    await this.prisma.$transaction([
+      deleteRequests,
+      deleteRatings,
+      deleteRatingSummaries,
+      deleteMovie,
+    ]);
+
     return { message: `Movie with id ${id} deleted successfully` };
   }
 
