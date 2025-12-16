@@ -35,7 +35,7 @@ export default function RequestPremiumForm({ label, action }: Props) {
 
         const requestData: CreateRequestType = {
             tmdbId: movieSelected.id,
-            title: movieSelected.title,
+            // title: movieSelected.title,
         };
 
         if (action) {

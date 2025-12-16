@@ -36,6 +36,7 @@ export default function useSearchMovies(filters: FiltersType, query: string) {
     }, [filters]);
 
     return {
+        refetch,
         movies,
         isFetching,
         isFetched,

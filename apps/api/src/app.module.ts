@@ -18,6 +18,11 @@ import { CompareModule } from './compare/compare.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      load: [configuration],
+      isGlobal: true,
+    }),
+    RedisModule.forRoot({ type: 'single', url: process.env.REDIS_URL }),
     ThrottlerModule.forRoot({
       throttlers: [
         {
@@ -25,11 +30,6 @@ import { CompareModule } from './compare/compare.module';
           limit: 80,
         },
       ],
-    }),
-    RedisModule.forRoot({ type: "single", url: process.env.REDIS_URL  }),
-    ConfigModule.forRoot({
-      load: [configuration],
-      isGlobal: true,
     }),
     MoviesModule,
     RatingsModule,

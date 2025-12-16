@@ -1,6 +1,7 @@
 import { Job, Worker } from "bullmq";
 
 import { db } from "../../core/db";
+import { logger } from "@sentry/node";
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 
 import AIService from "../../features/summary/services/ai.service";
@@ -8,7 +9,6 @@ import { GenerateMovieSummaryUseCase } from "../../features/summary/use-cases/ge
 import { DBService as SummaryDBService } from "../../features/summary/services/db.service";
 import SummaryHandler, { SummaryJob } from "./handler";
 import { MovieRatingSummaryType } from "../../features/summary/types/db";
-import { logger } from "@sentry/node";
 import MovieService from "../../features/movies/services/movies.service";
 
 const aiService = new AIService();
@@ -42,10 +42,6 @@ summaryWorker.on("active", async (job: Job<SummaryJob>) => {
         payload: job.data.payload,
         movieId: job.data.payload.id,
     });
-    // console.log("---------------");
-    // console.log("SUMMARY WORKER ACTIVE");
-    // console.log(`TYPE ${job?.data.type} | ID ${job?.data.payload.id}`);
-    // console.log("---------------");
 });
 
 summaryWorker.on("failed", (job, error) => {
@@ -55,11 +51,6 @@ summaryWorker.on("failed", (job, error) => {
         error: error.message,
         movieId: job?.data.payload.id,
     });
-    // console.log("---------------");
-    // console.log("SUMMARY WORKER FAILED");
-    // console.log(`TYPE ${job?.data.type} | ID ${job?.data.payload.id}`);
-    // console.log(error.message);
-    // console.log("---------------");
 });
 
 summaryWorker.on(
@@ -74,11 +65,5 @@ summaryWorker.on(
         movieService.updateMovie(job.data.payload.id, {
             updated_at: new Date().toISOString(),
         });
-        // console.log("---------------");
-        // console.log("SUMMARY WORKER COMPLETED");
-        // console.log(`ID ${job?.data.payload.id}`);
-        // if (summary) console.log(summary.id);
-        // else console.log("Something wrong happened: no summary returned");
-        // console.log("---------------");
     }
 );

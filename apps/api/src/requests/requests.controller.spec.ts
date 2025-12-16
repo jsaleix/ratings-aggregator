@@ -1,20 +1,35 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RequestsController } from './requests.controller';
 import { RequestsService } from './requests.service';
+import { DynamicConfigService } from 'src/dynamic-config/dynamic-config.service';
+import { BullmqService } from 'src/shared/services/bullmq.service';
+import { PrismaService } from 'src/shared/services/prisma.service';
+import { getRedisConnectionToken } from '@nestjs-modules/ioredis';
+import Redis from 'ioredis';
 
 describe('RequestsController', () => {
   let controller: RequestsController;
+  let redisMock = {} as unknown as Redis;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RequestsController],
-      providers: [RequestsService],
+      providers: [
+        RequestsService,
+        PrismaService,
+        DynamicConfigService,
+        {
+          provide: BullmqService,
+          useValue: jest.fn(),
+        },
+        { provide: getRedisConnectionToken(), useValue: redisMock },
+      ],
     }).compile();
 
     controller = module.get<RequestsController>(RequestsController);
   });
 
-  it('should be defined', () => {
+  it('should be defined', async () => {
     expect(controller).toBeDefined();
   });
 });

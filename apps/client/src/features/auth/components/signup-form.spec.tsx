@@ -16,14 +16,23 @@ describe("Features/Auth/SignupForm", () => {
     });
 
     test("renders fields and Join button (disabled initially)", async () => {
-        vi.doMock("react-router", () => ({ Link: (props: any) => React.createElement("a", { ...props, href: props.to }, props.children) }));
+        vi.doMock("react-router", () => ({
+            Link: (props: any) =>
+                React.createElement(
+                    "a",
+                    { ...props, href: props.to },
+                    props.children
+                ),
+        }));
         const { default: SignupForm } = await import("./signup-form");
         render(<SignupForm />);
 
         const email = screen.getByPlaceholderText(/email/i);
         const username = screen.getByPlaceholderText(/username/i);
         const password = screen.getByPlaceholderText(/password$/i);
-        const passwordConfirm = screen.getByPlaceholderText(/password confirmation/i);
+        const passwordConfirm = screen.getByPlaceholderText(
+            /password confirmation/i
+        );
         const checkbox = screen.getByRole("checkbox");
         const button = screen.getByRole("button", { name: /join/i });
 
@@ -43,16 +52,29 @@ describe("Features/Auth/SignupForm", () => {
         vi.doMock("../services/user.service", () => ({
             default: { signup: mockSignup },
         }));
-        vi.doMock("react-router", () => ({ Link: (props: any) => React.createElement("a", { ...props, href: props.to }, props.children) }));
+        vi.doMock("react-router", () => ({
+            Link: (props: any) =>
+                React.createElement(
+                    "a",
+                    { ...props, href: props.to },
+                    props.children
+                ),
+        }));
 
         const { default: SignupForm } = await import("./signup-form");
 
         const { container } = render(<SignupForm />);
 
         const email = screen.getByPlaceholderText(/email/i) as HTMLInputElement;
-        const username = screen.getByPlaceholderText(/username/i) as HTMLInputElement;
-        const password = screen.getByPlaceholderText(/password$/i) as HTMLInputElement;
-        const passwordConfirm = screen.getByPlaceholderText(/password confirmation/i) as HTMLInputElement;
+        const username = screen.getByPlaceholderText(
+            /username/i
+        ) as HTMLInputElement;
+        const password = screen.getByPlaceholderText(
+            /password$/i
+        ) as HTMLInputElement;
+        const passwordConfirm = screen.getByPlaceholderText(
+            /password confirmation/i
+        ) as HTMLInputElement;
         const checkbox = screen.getByRole("checkbox") as HTMLInputElement;
 
         // Fill inputs with values likely to pass validation
@@ -85,16 +107,31 @@ describe("Features/Auth/SignupForm", () => {
 
     test("rejects password without uppercase letter", async () => {
         const mockSignup = vi.fn(() => Promise.resolve(true));
-    vi.doMock("../services/user.service", () => ({ default: { signup: mockSignup } }));
-    vi.doMock("react-router", () => ({ Link: (props: any) => React.createElement("a", { ...props, href: props.to }, props.children) }));
+        vi.doMock("../services/user.service", () => ({
+            default: { signup: mockSignup },
+        }));
+        vi.doMock("react-router", () => ({
+            Link: (props: any) =>
+                React.createElement(
+                    "a",
+                    { ...props, href: props.to },
+                    props.children
+                ),
+        }));
 
-    const { default: SignupForm } = await import("./signup-form");
+        const { default: SignupForm } = await import("./signup-form");
         const { container } = render(<SignupForm />);
 
         const email = screen.getByPlaceholderText(/email/i) as HTMLInputElement;
-        const username = screen.getByPlaceholderText(/username/i) as HTMLInputElement;
-        const password = screen.getByPlaceholderText(/password$/i) as HTMLInputElement;
-        const passwordConfirm = screen.getByPlaceholderText(/password confirmation/i) as HTMLInputElement;
+        const username = screen.getByPlaceholderText(
+            /username/i
+        ) as HTMLInputElement;
+        const password = screen.getByPlaceholderText(
+            /password$/i
+        ) as HTMLInputElement;
+        const passwordConfirm = screen.getByPlaceholderText(
+            /password confirmation/i
+        ) as HTMLInputElement;
         const checkbox = screen.getByRole("checkbox") as HTMLInputElement;
 
         fireEvent.change(email, { target: { value: "user2@example.com" } });
@@ -114,16 +151,31 @@ describe("Features/Auth/SignupForm", () => {
 
     test("rejects password without lowercase letter", async () => {
         const mockSignup = vi.fn(() => Promise.resolve(true));
-    vi.doMock("../services/user.service", () => ({ default: { signup: mockSignup } }));
-    vi.doMock("react-router", () => ({ Link: (props: any) => React.createElement("a", { ...props, href: props.to }, props.children) }));
+        vi.doMock("../services/user.service", () => ({
+            default: { signup: mockSignup },
+        }));
+        vi.doMock("react-router", () => ({
+            Link: (props: any) =>
+                React.createElement(
+                    "a",
+                    { ...props, href: props.to },
+                    props.children
+                ),
+        }));
 
-    const { default: SignupForm } = await import("./signup-form");
+        const { default: SignupForm } = await import("./signup-form");
         const { container } = render(<SignupForm />);
 
         const email = screen.getByPlaceholderText(/email/i) as HTMLInputElement;
-        const username = screen.getByPlaceholderText(/username/i) as HTMLInputElement;
-        const password = screen.getByPlaceholderText(/password$/i) as HTMLInputElement;
-        const passwordConfirm = screen.getByPlaceholderText(/password confirmation/i) as HTMLInputElement;
+        const username = screen.getByPlaceholderText(
+            /username/i
+        ) as HTMLInputElement;
+        const password = screen.getByPlaceholderText(
+            /password$/i
+        ) as HTMLInputElement;
+        const passwordConfirm = screen.getByPlaceholderText(
+            /password confirmation/i
+        ) as HTMLInputElement;
         const checkbox = screen.getByRole("checkbox") as HTMLInputElement;
 
         fireEvent.change(email, { target: { value: "user3@example.com" } });
@@ -143,16 +195,31 @@ describe("Features/Auth/SignupForm", () => {
 
     test("rejects password without special character", async () => {
         const mockSignup = vi.fn(() => Promise.resolve(true));
-    vi.doMock("../services/user.service", () => ({ default: { signup: mockSignup } }));
-    vi.doMock("react-router", () => ({ Link: (props: any) => React.createElement("a", { ...props, href: props.to }, props.children) }));
+        vi.doMock("../services/user.service", () => ({
+            default: { signup: mockSignup },
+        }));
+        vi.doMock("react-router", () => ({
+            Link: (props: any) =>
+                React.createElement(
+                    "a",
+                    { ...props, href: props.to },
+                    props.children
+                ),
+        }));
 
-    const { default: SignupForm } = await import("./signup-form");
+        const { default: SignupForm } = await import("./signup-form");
         const { container } = render(<SignupForm />);
 
         const email = screen.getByPlaceholderText(/email/i) as HTMLInputElement;
-        const username = screen.getByPlaceholderText(/username/i) as HTMLInputElement;
-        const password = screen.getByPlaceholderText(/password$/i) as HTMLInputElement;
-        const passwordConfirm = screen.getByPlaceholderText(/password confirmation/i) as HTMLInputElement;
+        const username = screen.getByPlaceholderText(
+            /username/i
+        ) as HTMLInputElement;
+        const password = screen.getByPlaceholderText(
+            /password$/i
+        ) as HTMLInputElement;
+        const passwordConfirm = screen.getByPlaceholderText(
+            /password confirmation/i
+        ) as HTMLInputElement;
         const checkbox = screen.getByRole("checkbox") as HTMLInputElement;
 
         fireEvent.change(email, { target: { value: "user4@example.com" } });
@@ -172,16 +239,31 @@ describe("Features/Auth/SignupForm", () => {
 
     test("rejects password without digit", async () => {
         const mockSignup = vi.fn(() => Promise.resolve(true));
-    vi.doMock("../services/user.service", () => ({ default: { signup: mockSignup } }));
-    vi.doMock("react-router", () => ({ Link: (props: any) => React.createElement("a", { ...props, href: props.to }, props.children) }));
+        vi.doMock("../services/user.service", () => ({
+            default: { signup: mockSignup },
+        }));
+        vi.doMock("react-router", () => ({
+            Link: (props: any) =>
+                React.createElement(
+                    "a",
+                    { ...props, href: props.to },
+                    props.children
+                ),
+        }));
 
-    const { default: SignupForm } = await import("./signup-form");
+        const { default: SignupForm } = await import("./signup-form");
         const { container } = render(<SignupForm />);
 
         const email = screen.getByPlaceholderText(/email/i) as HTMLInputElement;
-        const username = screen.getByPlaceholderText(/username/i) as HTMLInputElement;
-        const password = screen.getByPlaceholderText(/password$/i) as HTMLInputElement;
-        const passwordConfirm = screen.getByPlaceholderText(/password confirmation/i) as HTMLInputElement;
+        const username = screen.getByPlaceholderText(
+            /username/i
+        ) as HTMLInputElement;
+        const password = screen.getByPlaceholderText(
+            /password$/i
+        ) as HTMLInputElement;
+        const passwordConfirm = screen.getByPlaceholderText(
+            /password confirmation/i
+        ) as HTMLInputElement;
         const checkbox = screen.getByRole("checkbox") as HTMLInputElement;
 
         fireEvent.change(email, { target: { value: "user5@example.com" } });
@@ -201,16 +283,31 @@ describe("Features/Auth/SignupForm", () => {
 
     test("rejects password shorter than 8 characters", async () => {
         const mockSignup = vi.fn(() => Promise.resolve(true));
-        vi.doMock("../services/user.service", () => ({ default: { signup: mockSignup } }));
-        vi.doMock("react-router", () => ({ Link: (props: any) => React.createElement("a", { ...props, href: props.to }, props.children) }));
+        vi.doMock("../services/user.service", () => ({
+            default: { signup: mockSignup },
+        }));
+        vi.doMock("react-router", () => ({
+            Link: (props: any) =>
+                React.createElement(
+                    "a",
+                    { ...props, href: props.to },
+                    props.children
+                ),
+        }));
 
         const { default: SignupForm } = await import("./signup-form");
         const { container } = render(<SignupForm />);
 
         const email = screen.getByPlaceholderText(/email/i) as HTMLInputElement;
-        const username = screen.getByPlaceholderText(/username/i) as HTMLInputElement;
-        const password = screen.getByPlaceholderText(/password$/i) as HTMLInputElement;
-        const passwordConfirm = screen.getByPlaceholderText(/password confirmation/i) as HTMLInputElement;
+        const username = screen.getByPlaceholderText(
+            /username/i
+        ) as HTMLInputElement;
+        const password = screen.getByPlaceholderText(
+            /password$/i
+        ) as HTMLInputElement;
+        const passwordConfirm = screen.getByPlaceholderText(
+            /password confirmation/i
+        ) as HTMLInputElement;
         const checkbox = screen.getByRole("checkbox") as HTMLInputElement;
 
         fireEvent.change(email, { target: { value: "short@example.com" } });

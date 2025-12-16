@@ -7,8 +7,8 @@
         "start": "node out/index",
         "dev": "ts-node src/index.ts",
         "build": "tsc",
-        "test": "jest",
-        "test:watch": "jest --watch"
+        "test": "jest -- src/",
+        "test:watch": "jest --watch -- src/"
     },
     "keywords": [],
     "author": "",

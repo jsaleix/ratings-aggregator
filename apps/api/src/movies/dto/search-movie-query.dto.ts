@@ -3,7 +3,7 @@ import { FindMoviesDTO } from './find-movies.dto';
 
 export class SearchMovieQueryDto extends FindMoviesDTO {
   @IsString()
-  @IsNotEmpty()
+  // @IsNotEmpty()
   title: string;
 
   @IsNumber()

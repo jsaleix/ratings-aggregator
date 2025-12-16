@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router";
 import clsx from "clsx";
 
 import { useAuthContext } from "../core/auth/provider";
 import HeaderSearchMovieInput from "../shared/ui/header-search-input";
 import BurgerMenu from "../shared/ui/layout/burger";
-import { useEffect, useState } from "react";
 
 const linkCss = "font-bold hover:text-secondary duration-150 w-fit";
 
@@ -45,14 +45,14 @@ export default function Header() {
                                     </NavLink>
                                 ) : (
                                     <NavLink to="/auth" className={linkCss}>
-                                        Signin
+                                        Sign-up
                                     </NavLink>
                                 )}
                                 <NavLink to="/movies" className={linkCss}>
                                     Movies
                                 </NavLink>
                                 <NavLink className={linkCss} to="/requests">
-                                    Requests
+                                    Add a movie
                                 </NavLink>
                                 <NavLink to="/about" className={linkCss}>
                                     About
@@ -80,14 +80,14 @@ export default function Header() {
                             </NavLink>
                         ) : (
                             <NavLink to="/auth" className={linkCss}>
-                                Sign-In
+                                Sign-Up
                             </NavLink>
                         )}
                         <NavLink to="/movies" className={linkCss}>
                             Movies
                         </NavLink>
                         <NavLink className={linkCss} to="/requests">
-                            Requests
+                            Add a movie
                         </NavLink>
                         <NavLink to="/about" className={linkCss}>
                             About

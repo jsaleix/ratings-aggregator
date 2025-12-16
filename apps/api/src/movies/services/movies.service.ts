@@ -3,7 +3,7 @@ import { CreateMovieDto } from '../dto/create-movie.dto';
 import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { SearchMovieQueryDto } from '../dto/search-movie-query.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
-import { Prisma } from 'generated/prisma';
+import { Prisma } from 'generated/prisma/client';
 import { PaginatedResult } from 'src/shared/types/pagination';
 import { MovieType } from '../entities/movie.entity';
 import { FindMoviesDTO } from '../dto/find-movies.dto';
@@ -31,17 +31,34 @@ export class MoviesService {
   }
 
   async remove(id: string) {
-    const movie = await this.prisma.movie.delete({ where: { id } });
-    if (!movie) {
-      throw new Error(`Movie with id ${id} not found`);
-    }
+    const { movie } = await this.findOne(id);
+    const deleteRequests = this.prisma.movie_Request.deleteMany({
+      where: { tmdbId: movie.tmdbId },
+    });
+    const deleteRatings = this.prisma.movie_Rating.deleteMany({
+      where: { movieId: id },
+    });
+    const deleteRatingSummaries = this.prisma.movie_Ratings_Summary.deleteMany({
+      where: { movieId: id },
+    });
+    const deleteMovie = this.prisma.movie.delete({ where: { id } });
+
+    await this.prisma.$transaction([
+      deleteRequests,
+      deleteRatings,
+      deleteRatingSummaries,
+      deleteMovie,
+    ]);
+
     return { message: `Movie with id ${id} deleted successfully` };
   }
 
   async getRandomMovies() {
     const moviesCount = await this.prisma.movie.count();
+    const skip =
+      moviesCount > 10 ? Math.floor(Math.random() * (moviesCount - 10)) : 0;
     const movies = await this.prisma.movie.findMany({
-      skip: Math.floor(Math.random() * (moviesCount - 10)),
+      skip,
       take: 15,
     });
     return movies;

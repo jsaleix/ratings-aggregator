@@ -1,10 +1,10 @@
 import z from 'zod/v4';
 
-const redisSchema = z.object({
-  redis_host: z.string(),
-  redis_port: z.string().transform((v) => +v),
-  redis_password: z.string().optional(),
-});
+// const redisSchema = z.object({
+//   redis_host: z.string(),
+//   redis_port: z.string().transform((v) => +v),
+//   redis_password: z.string().optional(),
+// });
 
 const tmdbSchema = z.object({
   tmdb_token: z.string(),
@@ -14,7 +14,7 @@ const jwtSchema = z.object({
   jwt_secret: z.string(),
 });
 
-export type EnvType = z.infer<typeof redisSchema> & z.infer<typeof tmdbSchema> & z.infer<typeof jwtSchema>;
+export type EnvType = z.infer<typeof tmdbSchema> & z.infer<typeof jwtSchema>;
 
 export default () => {
   const tmdbConfig = tmdbSchema.parse({

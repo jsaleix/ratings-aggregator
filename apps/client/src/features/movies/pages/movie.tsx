@@ -32,6 +32,7 @@ export default function MoviePage() {
         initialData: null,
         refetchOnWindowFocus: false,
     });
+    
     const { data: ratings } = useQuery({
         queryKey: ["getMovieRatings", id],
         queryFn: async () => {

@@ -1,16 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
+import { useCallback } from "react";
+
 import { useAuthContext } from "../../../core/auth/provider";
 import Divider from "../../../shared/ui/divider";
 import PageHeader from "../../../shared/ui/page-header";
 import { notify, displayMsg } from "../../../shared/utils/toast";
 
+import profileService from "../services/profile.service";
+import type { UpdatePasswordType, UpdateProfileType } from "../types/auth";
 import DeletePart from "../components/profile/delete-part";
 import LogoutPart from "../components/profile/logout-part";
 import PasswordForm from "../components/profile/password-form";
 import ProfileForm from "../components/profile/profile-form";
-import profileService from "../services/profile.service";
-import { useCallback } from "react";
-import type { UpdatePasswordType, UpdateProfileType } from "../types/auth";
 
 export default function ProfilePage() {
     const { logout } = useAuthContext();

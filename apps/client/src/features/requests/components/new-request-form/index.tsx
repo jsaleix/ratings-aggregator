@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { useForm, useStore } from "@tanstack/react-form";
+
 import Button from "../../../../shared/ui/button";
 import Input from "../../../../shared/ui/input";
 import GetTMDBIdModal from "../modals/tmdb-id";
-import { useForm, useStore } from "@tanstack/react-form";
 import {
     createRequestSchema,
     type CreateRequestType,
@@ -20,7 +21,7 @@ export default function RequestForm({ label, action }: Props) {
     const form = useForm({
         defaultValues: {
             tmdbId: -1,
-            title: "",
+            // title: "",
         },
         onSubmit: async ({ value }) => {
             if (action) action(value);
@@ -73,7 +74,7 @@ export default function RequestForm({ label, action }: Props) {
                     </a>
                 </div>
 
-                <form.Field name="title">
+                {/* <form.Field name="title">
                     {(field) => (
                         <>
                             <Input
@@ -91,7 +92,7 @@ export default function RequestForm({ label, action }: Props) {
                             )}
                         </>
                     )}
-                </form.Field>
+                </form.Field> */}
                 <Button
                     disabled={!(formState.isValid && formState.isTouched)}
                     variant={"primary"}

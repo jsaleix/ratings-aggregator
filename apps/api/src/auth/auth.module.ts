@@ -11,12 +11,15 @@ import { RolesGuard } from './guards/role.guard';
 
 @Module({
   imports: [
-    UsersModule,
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '50400s' }, // 14h
+    JwtModule.registerAsync({
+      useFactory: (config: ConfigService) => ({
+        global: true,
+        secret: config.get('JWT_SECRET'),
+        signOptions: { expiresIn: '14h' },
+      }),
+      inject: [ConfigService],
     }),
+    UsersModule,
   ],
   controllers: [AuthController],
   providers: [

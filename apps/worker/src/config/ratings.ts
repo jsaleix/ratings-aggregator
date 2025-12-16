@@ -1,4 +1,4 @@
-export const RATING_SOURCERS = {
+export const RATING_SOURCES = {
     ROTTEN_TOMATOES: "rotten_tomatoes",
     ROTTEN_TOMATOES_AUDIENCE: "rotten_tomatoes_audience",
     LETTERBOXD: "letterboxd",
