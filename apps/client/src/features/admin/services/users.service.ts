@@ -1,7 +1,7 @@
 import { API_ENDPOINT } from "../../../core/config/api";
+import type { GetOneFullResponse } from "../types/users.api";
 import { authHeaders } from "../../../shared/api/headers";
 import type { PaginatedResult } from "../../../shared/types/pagination";
-import type { UserType } from "../../auth/types/user";
 
 type GetAllUsersParams = {
     order?: "asc" | "desc";
@@ -25,7 +25,21 @@ class ApiUsersService {
         if (!res.ok) {
             throw new Error(`Error fetching users: ${res.statusText}`);
         }
-        return (await res.json()) as PaginatedResult<UserType>;
+        return (await res.json()) as PaginatedResult<GetOneFullResponse>;
+    }
+
+    async getOneFull(id: string) {
+        const url = new URL(`/users/${id}/full`, API_ENDPOINT);
+        const res = await fetch(url, {
+            method: "GET",
+            headers: {
+                ...authHeaders(),
+            },
+        });
+        if (!res.ok) {
+            throw new Error(`Error fetching user: ${res.statusText}`);
+        }
+        return (await res.json()) as GetOneFullResponse;
     }
 }
 

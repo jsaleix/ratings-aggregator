@@ -4,6 +4,7 @@ export type UserType = {
     username: string;
     email: string;
     created_at: string;
+    verified: boolean;
 };
 
 export type SignupReturnType = UserType;

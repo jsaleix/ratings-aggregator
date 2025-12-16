@@ -31,7 +31,7 @@ export class MoviesController {
     return await this.moviesService.search(query);
   }
 
-  @Role('premium', 'mod')
+  // @Role('premium', 'mod')
   @Get('search-with-tmdb')
   async searchWithTmdb(@Query() query: SearchMovieQueryDto) {
     return await this.tmdbService.searchByName(query);

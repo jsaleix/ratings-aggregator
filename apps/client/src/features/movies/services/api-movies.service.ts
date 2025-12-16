@@ -106,6 +106,19 @@ class ApiMoviesService {
         }
         return await res.json();
     }
+
+    async delete(id: string) {
+        const url = new URL(`/movies/${id}`, API_ENDPOINT);
+        const res = await fetch(url, {
+            method: "DELETE",
+        });
+        if (!res.ok) {
+            throw new Error(
+                `Error deleting movie with id ${id}: ${res.statusText}`
+            );
+        }
+        return true;
+    }
 }
 
 export default new ApiMoviesService();

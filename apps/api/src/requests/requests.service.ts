@@ -11,10 +11,11 @@ export class RequestsService {
     private bullmqService: BullmqService,
   ) {}
 
-  async create(createRequestDto: CreateRequestDto, user: User) {
+  async create({ tmdbId }: CreateRequestDto, user: User) {
     const request = await this.prisma.movie_Request.create({
       data: {
-        ...createRequestDto,
+        title: '',
+        tmdbId,
         userId: user.id,
       },
     });
