@@ -18,7 +18,7 @@ class ApiRatingsService {
     }
 
     async delete(id: string) {
-        const url = new URL(`/ratings/movie/${id}`, API_ENDPOINT);
+        const url = new URL(`/ratings/${id}`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "DELETE",
         });

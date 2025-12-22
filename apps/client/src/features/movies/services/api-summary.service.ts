@@ -18,7 +18,7 @@ class ApiSummaryService {
     }
 
     async refresh(id: string) {
-        const url = new URL(`/summary/movie/${id}/refresh`, API_ENDPOINT);
+        const url = new URL(`/summary/${id}/refresh`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "POST",
             headers: { ...authHeaders() },
@@ -32,7 +32,7 @@ class ApiSummaryService {
     }
 
     async delete(id: string) {
-        const url = new URL(`/summary/movie/${id}`, API_ENDPOINT);
+        const url = new URL(`/summary/${id}`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "DELETE",
         });
