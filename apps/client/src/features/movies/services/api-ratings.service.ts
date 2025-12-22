@@ -16,6 +16,19 @@ class ApiRatingsService {
         }
         return (await res.json()) as MovieRatingModel[];
     }
+
+    async delete(id: string) {
+        const url = new URL(`/ratings/movie/${id}`, API_ENDPOINT);
+        const res = await fetch(url, {
+            method: "DELETE",
+        });
+        if (!res.ok) {
+            throw new Error(
+                `Error deleting rating with id ${id}: ${res.statusText}`
+            );
+        }
+        return true;
+    }
 }
 
 export default new ApiRatingsService();

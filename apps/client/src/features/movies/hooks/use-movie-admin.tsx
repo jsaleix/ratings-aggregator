@@ -3,6 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import { ROLES } from "../../../core/auth/constants";
 import { useAuthContext } from "../../../core/auth/provider";
 import { displayMsg } from "../../../shared/utils/toast";
+import apiSummaryService from "../services/api-summary.service";
+import apiRatingsService from "../services/api-ratings.service";
 
 export default function useMovieAdmin() {
     const { role } = useAuthContext();
@@ -13,20 +15,7 @@ export default function useMovieAdmin() {
             if (!enabled) throw new Error("Unauthorized");
             if (!window.confirm("Are you sure?"))
                 throw new Error("Action canceled");
-            console.log(id);
-        },
-        onSuccess: () => {},
-        onError: (e) => {
-            displayMsg(e.message, "error");
-        },
-    });
-
-    const { mutate: deleteRatingMutation } = useMutation({
-        mutationFn: async (id: string) => {
-            if (!enabled) throw new Error("Unauthorized");
-            if (!window.confirm("Are you sure?"))
-                throw new Error("Action canceled");
-            console.log(id);
+            return apiSummaryService.delete(id);
         },
         onSuccess: () => {},
         onError: (e) => {
@@ -39,7 +28,20 @@ export default function useMovieAdmin() {
             if (!enabled) throw new Error("Unauthorized");
             if (!window.confirm("Are you sure?"))
                 throw new Error("Action canceled");
-            console.log(id);
+            return apiSummaryService.refresh(id);
+        },
+        onSuccess: () => {},
+        onError: (e) => {
+            displayMsg(e.message, "error");
+        },
+    });
+
+    const { mutate: deleteRatingMutation } = useMutation({
+        mutationFn: async (id: string) => {
+            if (!enabled) throw new Error("Unauthorized");
+            if (!window.confirm("Are you sure?"))
+                throw new Error("Action canceled");
+            return apiRatingsService.delete(id);
         },
         onSuccess: () => {},
         onError: (e) => {
