@@ -23,8 +23,12 @@ import useMovieAdmin from "../hooks/use-movie-admin";
 export default function MoviePage() {
     const { isConnected } = useAuthContext();
     let { id } = useParams();
-    const { enabled, deleteRatingMutation, deleteSummaryMutation } =
-        useMovieAdmin();
+    const {
+        enabled,
+        deleteRatingMutation,
+        deleteSummaryMutation,
+        refreshSummaryMutation,
+    } = useMovieAdmin();
 
     const { data: movie, isFetching: isMovieFetching } = useQuery({
         queryKey: ["getMovie", id],
@@ -170,6 +174,7 @@ export default function MoviePage() {
                                 summary={ratingsSummary}
                                 adminOptions={enabled}
                                 deleteAction={deleteSummaryMutation}
+                                refreshAction={refreshSummaryMutation}
                             />
                         </>
                     ) : (

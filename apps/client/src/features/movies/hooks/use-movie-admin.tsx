@@ -10,7 +10,7 @@ export default function useMovieAdmin() {
 
     const { mutate: deleteSummaryMutation } = useMutation({
         mutationFn: async (id: string) => {
-            if (enabled) throw new Error("Unauthorized");
+            if (!enabled) throw new Error("Unauthorized");
             if (!window.confirm("Are you sure?"))
                 throw new Error("Action canceled");
             console.log(id);
@@ -23,7 +23,7 @@ export default function useMovieAdmin() {
 
     const { mutate: deleteRatingMutation } = useMutation({
         mutationFn: async (id: string) => {
-            if (enabled) throw new Error("Unauthorized");
+            if (!enabled) throw new Error("Unauthorized");
             if (!window.confirm("Are you sure?"))
                 throw new Error("Action canceled");
             console.log(id);
@@ -34,5 +34,23 @@ export default function useMovieAdmin() {
         },
     });
 
-    return { enabled, deleteRatingMutation, deleteSummaryMutation };
+    const { mutate: refreshSummaryMutation } = useMutation({
+        mutationFn: async (id: string) => {
+            if (!enabled) throw new Error("Unauthorized");
+            if (!window.confirm("Are you sure?"))
+                throw new Error("Action canceled");
+            console.log(id);
+        },
+        onSuccess: () => {},
+        onError: (e) => {
+            displayMsg(e.message, "error");
+        },
+    });
+
+    return {
+        enabled,
+        deleteRatingMutation,
+        deleteSummaryMutation,
+        refreshSummaryMutation,
+    };
 }

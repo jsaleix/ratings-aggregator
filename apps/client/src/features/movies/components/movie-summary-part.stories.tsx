@@ -17,5 +17,6 @@ export const MovieSummaryPart: Story = {
         summary: RatingsSummaryMockData,
         adminOptions: true,
         deleteAction: fn(),
+        refreshAction: fn(),
     },
 };
