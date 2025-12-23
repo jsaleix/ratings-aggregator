@@ -1,5 +1,4 @@
 import { Worker } from "bullmq";
-import { logger } from "@sentry/node";
 
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 import { db } from "../../core/db";
@@ -11,6 +10,7 @@ import { RatingCollectorService } from "../../features/ratings/services/rating-c
 
 import { summaryQueue } from "..";
 import RatingHandler from "./handler";
+import { logger } from "../../shared/logger";
 
 const movieService = new MovieService(db);
 const ratingService = new RatingService(db);

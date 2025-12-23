@@ -1,7 +1,6 @@
 import { Job, Worker } from "bullmq";
 
 import { db } from "../../core/db";
-import { logger } from "@sentry/node";
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 
 import AIService from "../../features/summary/services/ai.service";
@@ -10,6 +9,7 @@ import { DBService as SummaryDBService } from "../../features/summary/services/d
 import SummaryHandler, { SummaryJob } from "./handler";
 import { MovieRatingSummaryType } from "../../features/summary/types/db";
 import MovieService from "../../features/movies/services/movies.service";
+import { logger } from "../../shared/logger";
 
 const aiService = new AIService();
 const movieService = new MovieService(db);
@@ -29,9 +29,9 @@ export const summaryWorker = new Worker(
         concurrency: 1,
         autorun: false,
         limiter: {
-            // Add a delay of 5 minutes between jobs
+            // Add a delay of 2 minutes between jobs
             max: 1,
-            duration: 3 * 60 * 1000,
+            duration: 2 * 60 * 1000,
         },
     }
 );
