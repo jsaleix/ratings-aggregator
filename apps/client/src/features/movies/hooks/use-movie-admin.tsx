@@ -24,11 +24,11 @@ export default function useMovieAdmin() {
     });
 
     const { mutate: refreshSummaryMutation } = useMutation({
-        mutationFn: async (id: string) => {
+        mutationFn: async (movieId: string) => {
             if (!enabled) throw new Error("Unauthorized");
             if (!window.confirm("Are you sure?"))
                 throw new Error("Action canceled");
-            return apiSummaryService.refresh(id);
+            return apiSummaryService.refresh(movieId);
         },
         onSuccess: () => {},
         onError: (e) => {

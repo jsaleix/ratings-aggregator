@@ -1,13 +1,13 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotImplementedException,
-} from '@nestjs/common';
+import { HttpCode, Injectable, NotImplementedException } from '@nestjs/common';
+import { BullmqService } from 'src/shared/services/bullmq.service';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
 @Injectable()
 export class SummaryService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private bullmqService: BullmqService,
+  ) {}
 
   async findOneByMovieId(id: string) {
     return await this.prisma.movie_Ratings_Summary.findFirst({
@@ -25,7 +25,8 @@ export class SummaryService {
     return res;
   }
 
-  async refresh(_: string) {
-    throw new NotImplementedException();
+  async refresh(movieId: string) {
+    this.bullmqService.generateSummary(movieId);
+    return { success: true };
   }
 }

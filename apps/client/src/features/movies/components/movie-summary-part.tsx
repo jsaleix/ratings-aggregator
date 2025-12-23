@@ -9,7 +9,7 @@ interface Props {
     summary: RatingsSummaryModel | undefined;
     adminOptions: boolean;
     deleteAction: (id: string) => void;
-    refreshAction: (id: string) => void;
+    refreshAction: (movieId: string) => void;
 }
 
 export default function MovieSummaryPart({
@@ -53,7 +53,7 @@ export default function MovieSummaryPart({
                     <Button
                         className="w-fit flex items-center gap-3"
                         variant={"primary"}
-                        onClick={() => refreshAction(summary.id)}
+                        onClick={() => refreshAction(summary.movieId)}
                     >
                         Refresh <ArrowIcon className="fill-white" />
                     </Button>

@@ -31,7 +31,7 @@ export const summaryWorker = new Worker(
         limiter: {
             // Add a delay of 5 minutes between jobs
             max: 1,
-            duration: 5 * 60 * 1000,
+            duration: 3 * 60 * 1000,
         },
     }
 );
