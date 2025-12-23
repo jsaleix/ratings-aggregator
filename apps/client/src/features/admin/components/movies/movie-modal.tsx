@@ -6,7 +6,7 @@ import type { MovieModel } from "../../../movies/types/movie";
 import Button from "../../../../shared/ui/button";
 import { displayMsg } from "../../../../shared/utils/toast";
 import apiRequestService from "../../../requests/services/api-request.service";
-import apiMoviesService from "../../../movies/services/api-movies.service";
+import useMovie from "../../../movies/hooks/use-movie";
 
 interface Props {
     movie: MovieModel | null;
@@ -30,21 +30,14 @@ const divVariants = {
 
 export default function MovieModal({ onClose, movie }: Props) {
     const modalRef = useRef<HTMLDialogElement>(null);
-    const { mutate: deleteMovieMutation } = useMutation({
-        mutationFn: async () => {
-            if (!movie) throw new Error("No movie provided");
-            if (!window.confirm("Are you sure?"))
-                throw new Error("Action canceled");
-            return apiMoviesService.delete(movie.id);
-        },
-        onSuccess: () => {
-            displayMsg("Movie successfully deleted", "success");
-            closeModal();
-        },
-        onError: (e) => {
-            displayMsg(e.message, "error");
-        },
-    });
+
+    const closeModal = useCallback(() => {
+        if (onClose) onClose();
+        modalRef.current!.close();
+    }, []);
+
+    const { deleteMovieMutation } = useMovie(movie?.id, closeModal);
+
     const { mutate: sendToReloadQueue } = useMutation({
         mutationFn: async () => {
             if (!movie) throw new Error("No movie provided");
@@ -60,11 +53,6 @@ export default function MovieModal({ onClose, movie }: Props) {
             displayMsg(e.message, "error");
         },
     });
-
-    const closeModal = useCallback(() => {
-        if (onClose) onClose();
-        modalRef.current!.close();
-    }, []);
 
     useEffect(() => {
         if (movie) modalRef.current?.showModal();

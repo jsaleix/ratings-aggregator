@@ -73,7 +73,7 @@ ratingWorker.on("completed", (job) => {
                 attempts: 5,
                 backoff: {
                     type: "fixed",
-                    delay: 5 * 60 * 1000,
+                    delay: 3 * 60 * 1000,
                 },
             }
         );

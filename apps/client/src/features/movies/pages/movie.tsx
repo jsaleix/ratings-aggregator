@@ -1,16 +1,12 @@
 import { useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router";
-import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 
 import { BASE_POSTER_URL } from "../../../core/config/misc";
 import { useAuthContext } from "../../../core/auth/provider";
 import { setPageTitle } from "../../../shared/utils/page";
 import Button from "../../../shared/ui/button";
-
-import apiMoviesService from "../services/api-movies.service";
-import apiRatingsService from "../services/api-ratings.service";
-import apiSummaryService from "../services/api-summary.service";
+import { ROLES } from "../../../core/auth/constants";
 
 import MoviePageSkeleton from "../components/movie-page-skeleton";
 import LastMoviesAdded from "../components/movie-posters-section/last-movies-added";
@@ -18,49 +14,21 @@ import LastMoviesUpdated from "../components/movie-posters-section/last-movies-u
 import CompareBtn from "../components/compare-btn";
 import RatingListPart from "../components/rating-list-part";
 import MovieSummaryPart from "../components/movie-summary-part";
-import useMovieAdmin from "../hooks/use-movie-admin";
+
+import useMovieRatings from "../hooks/use-movie-ratings";
+import useMovieSummary from "../hooks/use-movie-summary";
+import useMovie from "../hooks/use-movie";
 
 export default function MoviePage() {
-    const { isConnected } = useAuthContext();
+    const { isConnected, role } = useAuthContext();
+    const hasAdminRights =
+        !!role && (ROLES.ADMIN === role || ROLES.MOD === role);
     let { id } = useParams();
-    const {
-        enabled,
-        deleteRatingMutation,
-        deleteSummaryMutation,
-        refreshSummaryMutation,
-    } = useMovieAdmin();
-
-    const { data: movie, isFetching: isMovieFetching } = useQuery({
-        queryKey: ["getMovie", id],
-        queryFn: async () => {
-            if (!id) throw new Error("missing id");
-            return apiMoviesService.getById(id);
-        },
-        initialData: null,
-        refetchOnWindowFocus: false,
-    });
-
-    const { data: ratings } = useQuery({
-        queryKey: ["getMovieRatings", id],
-        queryFn: async () => {
-            if (!isConnected) throw new Error("Not authenticated");
-            if (!id) throw new Error("missing id");
-            return apiRatingsService.getMovieRatings(id);
-        },
-        initialData: [],
-        refetchOnWindowFocus: false,
-    });
-
-    const { data: ratingsSummary } = useQuery({
-        queryKey: ["getMovieRatingsSummary", id],
-        queryFn: async () => {
-            if (!isConnected) throw new Error("Not authenticated");
-            if (!id) throw new Error("missing id");
-            return apiSummaryService.getMovieRatingSummary(id);
-        },
-        initialData: undefined,
-        refetchOnWindowFocus: false,
-    });
+    const { movie, isMovieFetching } = useMovie(id);
+    
+    const { ratings, deleteRatingMutation } = useMovieRatings(id);
+    const { summary, deleteSummaryMutation, refreshSummaryMutation } =
+        useMovieSummary(id);
 
     const lastUpdatedStr = useMemo(() => {
         if (!movie) return "";
@@ -167,12 +135,12 @@ export default function MoviePage() {
                         <>
                             <RatingListPart
                                 ratings={ratings}
-                                adminOptions={enabled}
+                                adminOptions={hasAdminRights}
                                 deleteAction={deleteRatingMutation}
                             />
                             <MovieSummaryPart
-                                summary={ratingsSummary}
-                                adminOptions={enabled}
+                                summary={summary}
+                                adminOptions={hasAdminRights}
                                 deleteAction={deleteSummaryMutation}
                                 refreshAction={refreshSummaryMutation}
                             />
