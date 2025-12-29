@@ -11,6 +11,6 @@ export class AdminUpdateUserFullDTO {
   email: string;
 
   @IsString()
-  @IsIn(['admin', 'user'])
+  @IsIn(['admin', 'user', 'mod', 'premium'])
   role: RoleType;
 }

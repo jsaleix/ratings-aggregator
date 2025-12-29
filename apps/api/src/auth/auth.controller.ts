@@ -22,7 +22,7 @@ export class AuthController {
     return await this.userService.create(data);
   }
 
-  @Throttle({ default: { limit: 3, ttl: 60000 } })
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Public()
   @Post('login')
   @HttpCode(200)

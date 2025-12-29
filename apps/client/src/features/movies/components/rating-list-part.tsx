@@ -2,9 +2,12 @@ import { motion, stagger } from "motion/react";
 
 import type { MovieRatingModel } from "../types/movie-rating";
 import MovieRatingItem from "./movie-rating-item";
+import Button from "../../../shared/ui/button";
 
 interface Props {
     ratings: MovieRatingModel[];
+    adminOptions: boolean;
+    deleteAction: (id: string) => void;
 }
 
 const itemVariants = {
@@ -38,7 +41,11 @@ const wrapperVariants = {
     },
 };
 
-export default function RatingListPart({ ratings }: Props) {
+export default function RatingListPart({
+    ratings,
+    adminOptions,
+    deleteAction,
+}: Props) {
     return (
         <div className="flex flex-col">
             {ratings.length === 0 && <p>No rating</p>}
@@ -52,8 +59,21 @@ export default function RatingListPart({ ratings }: Props) {
                     {ratings
                         ?.filter((rating) => rating.value !== "N/A")
                         .map((rating) => (
-                            <motion.li variants={itemVariants} key={rating.id}>
+                            <motion.li
+                                variants={itemVariants}
+                                key={rating.id}
+                                className="flex items-center gap-3"
+                            >
                                 <MovieRatingItem rating={rating} />
+                                {adminOptions && (
+                                    <Button
+                                        className="select-none"
+                                        variant={"danger"}
+                                        onClick={() => deleteAction(rating.id)}
+                                    >
+                                        X
+                                    </Button>
+                                )}
                             </motion.li>
                         ))}
                 </motion.ul>

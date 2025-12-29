@@ -9,11 +9,12 @@ import {
 import type { UserType } from "../../features/auth/types/user";
 import userService from "../../features/auth/services/user.service";
 import { displayMsg } from "../../shared/utils/toast";
+import type { RoleType } from "./constants";
 
 type AuthContextType = {
     user: undefined | null | UserType;
     isConnected: boolean;
-    role: string | undefined;
+    role: RoleType | undefined;
     login: (email: string, password: string) => Promise<any>;
     logout: () => void;
 };

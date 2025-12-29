@@ -4,6 +4,7 @@ import { MoviesService } from 'src/movies/services/movies.service';
 import { SummaryService } from 'src/summary/summary.service';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { RatingsService } from 'src/ratings/ratings.service';
+import { BullmqService } from 'src/shared/services/bullmq.service';
 
 describe('CompareService', () => {
   let service: CompareService;
@@ -16,6 +17,10 @@ describe('CompareService', () => {
         RatingsService,
         SummaryService,
         PrismaService,
+                {
+          provide: BullmqService,
+          useValue: jest.fn(),
+        },
       ],
     }).compile();
 

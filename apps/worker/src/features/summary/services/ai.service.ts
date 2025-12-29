@@ -1,5 +1,5 @@
-import { logger } from "@sentry/node";
 import { AI_CONFIG } from "../../../config/ai";
+import { logger } from "../../../shared/logger";
 import TooManyRequestsError from "../errors/too-many-requests";
 import { AIResponseType, AISummaryResponseType } from "../types/ai";
 
@@ -49,6 +49,7 @@ class AIService {
             payload: responseData,
             tags: ["summary", "aiService"],
             request: data,
+            response: [responseData.choices[0], responseData.choices[1]],
         });
         const rawContent = responseData.choices[0].message.content;
         const result = JSON.parse(rawContent) as AISummaryResponseType;

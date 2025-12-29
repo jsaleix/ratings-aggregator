@@ -122,4 +122,9 @@ export class MoviesService {
     );
     // return await this.prisma.movie.findMany({ where });
   }
+
+  async getCount() {
+    const total = await this.prisma.movie.count();
+    return { total };
+  }
 }

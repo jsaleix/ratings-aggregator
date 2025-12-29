@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
-import { logger } from "@sentry/node";
+import { logger } from "../../../shared/logger";
 // import { writeFileSync } from "fs";
 
 const userAgent =
