@@ -3,8 +3,9 @@ import { useForm, useStore } from "@tanstack/react-form";
 import { useAuthContext } from "../../../../core/auth/provider";
 import Button from "../../../../shared/ui/button";
 import Input from "../../../../shared/ui/input";
-import ProfilePart from "./field";
 import { updateProfileSchema, type UpdateProfileType } from "../../types/auth";
+import ProfilePart from "./field";
+
 interface Props {
     updateAction: (value: UpdateProfileType) => Promise<boolean>;
 }

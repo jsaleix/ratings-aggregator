@@ -2,6 +2,7 @@ import { API_ENDPOINT } from "../../../core/config/api";
 import type { GetOneFullResponse } from "../types/users.api";
 import { authHeaders } from "../../../shared/api/headers";
 import type { PaginatedResult } from "../../../shared/types/pagination";
+import type { AdminUpdateProfileType } from "../../auth/types/admin";
 
 type GetAllUsersParams = {
     order?: "asc" | "desc";
@@ -38,6 +39,22 @@ class ApiUsersService {
         });
         if (!res.ok) {
             throw new Error(`Error fetching user: ${res.statusText}`);
+        }
+        return (await res.json()) as GetOneFullResponse;
+    }
+
+    async updateOneFull(id: string, data: AdminUpdateProfileType) {
+        const url = new URL(`/users/admin/${id}`, API_ENDPOINT);
+        const res = await fetch(url, {
+            method: "PATCH",
+            headers: {
+                ...authHeaders(),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+        if (!res.ok) {
+            throw new Error(`Error updating user: ${res.statusText}`);
         }
         return (await res.json()) as GetOneFullResponse;
     }
