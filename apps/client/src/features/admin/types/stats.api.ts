@@ -1,5 +1,8 @@
 export type GetAllStatsResponse = {
-    users: number;
-    movies: number;
-    requests: number;
+    users: {
+        total: number;
+        active: number;
+    };
+    movies: { total: number };
+    requests: { total: number };
 };

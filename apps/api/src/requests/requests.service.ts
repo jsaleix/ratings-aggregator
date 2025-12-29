@@ -67,4 +67,9 @@ export class RequestsService {
       },
     });
   }
+
+  async getCount() {
+    const total = await this.prisma.movie_Request.count();
+    return { total };
+  }
 }

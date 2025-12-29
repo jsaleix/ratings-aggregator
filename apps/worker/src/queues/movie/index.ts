@@ -1,5 +1,4 @@
 import { Job, Queue, Worker } from "bullmq";
-import { logger } from "@sentry/node";
 
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 import { db } from "../../core/db";
@@ -10,6 +9,7 @@ import { MovieType } from "../../features/movies/types/db";
 import { AddMovieByTMDBIdUseCase } from "../../features/movies/use-cases/add-movie-by-tmdb-id";
 import { ratingQueue } from "..";
 import MovieHandler, { MovieJob } from "./handler";
+import { logger } from "../../shared/logger";
 
 const tmdbService = new TMDBService();
 const movieService = new MovieService(db);

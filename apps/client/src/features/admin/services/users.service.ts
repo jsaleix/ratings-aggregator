@@ -2,6 +2,7 @@ import { API_ENDPOINT } from "../../../core/config/api";
 import type { GetOneFullResponse } from "../types/users.api";
 import { authHeaders } from "../../../shared/api/headers";
 import type { PaginatedResult } from "../../../shared/types/pagination";
+import type { AdminUpdateProfileType } from "../../auth/types/admin";
 
 type GetAllUsersParams = {
     order?: "asc" | "desc";
@@ -11,7 +12,7 @@ type GetAllUsersParams = {
 
 class ApiUsersService {
     async getAll({ page, order, orderBy }: GetAllUsersParams) {
-        const url = new URL("/users", API_ENDPOINT);
+        const url = new URL("/users/admin", API_ENDPOINT);
         if (page) url.searchParams.append("page", page.toString());
         if (orderBy) url.searchParams.append("orderBy", orderBy);
         if (order) url.searchParams.append("order", order);
@@ -29,7 +30,7 @@ class ApiUsersService {
     }
 
     async getOneFull(id: string) {
-        const url = new URL(`/users/${id}/full`, API_ENDPOINT);
+        const url = new URL(`/users/admin/${id}`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "GET",
             headers: {
@@ -38,6 +39,22 @@ class ApiUsersService {
         });
         if (!res.ok) {
             throw new Error(`Error fetching user: ${res.statusText}`);
+        }
+        return (await res.json()) as GetOneFullResponse;
+    }
+
+    async updateOneFull(id: string, data: AdminUpdateProfileType) {
+        const url = new URL(`/users/admin/${id}`, API_ENDPOINT);
+        const res = await fetch(url, {
+            method: "PATCH",
+            headers: {
+                ...authHeaders(),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+        if (!res.ok) {
+            throw new Error(`Error updating user: ${res.statusText}`);
         }
         return (await res.json()) as GetOneFullResponse;
     }

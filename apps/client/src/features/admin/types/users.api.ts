@@ -7,6 +7,6 @@ export type GetOneFullResponse = {
     email: string;
     created_at: string;
     updated_at: string;
-    deleted_at: string
+    deleted_at: string;
     verified: boolean;
 };

@@ -7,9 +7,17 @@ import { InjectRedis } from '@nestjs-modules/ioredis';
 @Injectable()
 export class BullmqService {
   private movieQueue: Queue;
+  private summaryQueue: Queue;
 
   constructor(@InjectRedis() private readonly redis: Redis) {
     this.movieQueue = new Queue(QUEUES.movie, {
+      connection: this.redis,
+      defaultJobOptions: {
+        removeOnComplete: true,
+        removeOnFail: true,
+      },
+    });
+    this.summaryQueue = new Queue(QUEUES.summary, {
       connection: this.redis,
       defaultJobOptions: {
         removeOnComplete: true,
@@ -22,6 +30,13 @@ export class BullmqService {
     await this.movieQueue.add('add-movie', {
       type: 'add-movie-with-ratings:tmdbId',
       payload: { tmdbId, requestId },
+    });
+  }
+
+  async generateSummary(movieId: string) {
+    await this.summaryQueue.add('generate-summary', {
+      type: 'movie',
+      payload: { id: movieId },
     });
   }
 }

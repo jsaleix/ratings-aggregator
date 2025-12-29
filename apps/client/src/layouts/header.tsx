@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { useAuthContext } from "../core/auth/provider";
 import HeaderSearchMovieInput from "../shared/ui/header-search-input";
 import BurgerMenu from "../shared/ui/layout/burger";
+import { ROLES } from "../core/auth/constants";
 
 const linkCss = "font-bold hover:text-secondary duration-150 w-fit";
 
@@ -57,7 +58,7 @@ export default function Header() {
                                 <NavLink to="/about" className={linkCss}>
                                     About
                                 </NavLink>
-                                {role === "admin" && (
+                                {role === ROLES.ADMIN && (
                                     <NavLink
                                         to="/admin"
                                         className={clsx(
@@ -92,7 +93,7 @@ export default function Header() {
                         <NavLink to="/about" className={linkCss}>
                             About
                         </NavLink>
-                        {role === "admin" && (
+                        {role === ROLES.ADMIN && (
                             <NavLink
                                 to="/admin"
                                 className={clsx(linkCss, "text-green-400")}
