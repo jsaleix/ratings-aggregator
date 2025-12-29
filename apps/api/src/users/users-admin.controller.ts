@@ -1,4 +1,12 @@
-import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Post,
+} from '@nestjs/common';
 
 import { UsersService } from './users.service';
 import { Role } from 'src/auth/decorators/role.decorator';
@@ -45,5 +53,10 @@ export class UsersAdminController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
+  }
+
+  @Post('/ban')
+  banUser(@Param('id') id: string) {
+    return this.usersService.banUser(id);
   }
 }

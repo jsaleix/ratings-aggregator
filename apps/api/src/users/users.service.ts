@@ -198,4 +198,13 @@ export class UsersService {
   async adminGetUserWithUsername(username: string) {
     return await this.prismaService.user.findFirst({ where: { username } });
   }
+
+  async banUser(id: string) {
+    const user = await this.prismaService.user.findUnique({ where: { id } });
+    if (!user) throw new NotFoundException();
+    return await this.prismaService.user.update({
+      data: { verified: false },
+      where: { id },
+    });
+  }
 }
