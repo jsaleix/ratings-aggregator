@@ -207,4 +207,12 @@ export class UsersService {
       where: { id },
     });
   }
+
+  async getCount() {
+    const activeUsers = await this.prismaService.user.count({
+      where: { verified: true },
+    });
+    const total = await this.prismaService.user.count();
+    return { activeUsers, total };
+  }
 }
