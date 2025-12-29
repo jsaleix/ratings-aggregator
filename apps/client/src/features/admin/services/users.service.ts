@@ -11,7 +11,7 @@ type GetAllUsersParams = {
 
 class ApiUsersService {
     async getAll({ page, order, orderBy }: GetAllUsersParams) {
-        const url = new URL("/users", API_ENDPOINT);
+        const url = new URL("/users/admin", API_ENDPOINT);
         if (page) url.searchParams.append("page", page.toString());
         if (orderBy) url.searchParams.append("orderBy", orderBy);
         if (order) url.searchParams.append("order", order);
@@ -29,7 +29,7 @@ class ApiUsersService {
     }
 
     async getOneFull(id: string) {
-        const url = new URL(`/users/${id}/full`, API_ENDPOINT);
+        const url = new URL(`/users/admin/${id}`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "GET",
             headers: {
