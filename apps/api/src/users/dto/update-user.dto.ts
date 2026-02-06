@@ -6,6 +6,7 @@ export class UpdateUserDTO {
   username: string;
 
   @IsString()
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 }

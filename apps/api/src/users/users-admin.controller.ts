@@ -29,11 +29,6 @@ export class UsersAdminController {
     return this.usersService.findOneFull(id);
   }
 
-  @Get(':id')
-  findOnePublic(@Param('id') id: string) {
-    return this.usersService.findOnePublic(id);
-  }
-
   @Patch(':id')
   update(
     @Param('id') id: string,
