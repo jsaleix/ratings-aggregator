@@ -46,14 +46,20 @@ export class AuthService {
   }
 
   async logout(token: string) {
-    const decoded = this.jwtService.decode(token);
-    const expiration = decoded.exp * 1000;
+    try {
+      const decoded = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET,
+      });
+      const expiration = decoded.exp * 1000;
 
-    const current = Date.now();
-    const ttl = expiration - current;
+      const current = Date.now();
+      const ttl = expiration - current;
 
-    if (ttl > 0) {
-      await this.redis.set(token, 'jwt:blacklisted', 'PX', ttl);
+      if (ttl > 0) {
+        await this.redis.set(token, 'jwt:blacklisted', 'PX', ttl);
+      }
+    } catch {
+      throw new UnauthorizedException('Invalid token');
     }
   }
 }
