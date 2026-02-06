@@ -34,12 +34,12 @@ export class AuthService {
       role: user.role,
     };
 
-    const expiresAt = Date.now() + 3600 * 14000; // 14 hours
+    const expiresAt = Date.now() + 48 * 60 * 60 * 1000; // 48 hours
 
     return {
       token: await this.jwtService.signAsync(payload, {
-        // expiresIn: '14h',
-        // secret: process.env.JWT_SECRET,
+        expiresIn: '48h',
+        secret: process.env.JWT_SECRET,
       }),
       expiresAt,
     };
