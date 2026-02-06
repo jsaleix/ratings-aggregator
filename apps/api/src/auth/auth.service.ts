@@ -10,6 +10,7 @@ import Redis from 'ioredis';
 
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
     private jwtService: JwtService,
     private userService: UsersService,
     @InjectRedis() private readonly redis: Redis,
+    private configService: ConfigService,
   ) {}
 
   async login(data: LoginDto) {
@@ -39,7 +41,7 @@ export class AuthService {
     return {
       token: await this.jwtService.signAsync(payload, {
         expiresIn: '48h',
-        secret: process.env.JWT_SECRET,
+        secret: this.configService.get<string>('JWT_SECRET'),
       }),
       expiresAt,
     };
@@ -48,7 +50,7 @@ export class AuthService {
   async logout(token: string) {
     try {
       const decoded = this.jwtService.verify(token, {
-        secret: process.env.JWT_SECRET,
+        secret: this.configService.get<string>('JWT_SECRET'),
       });
       const expiration = decoded.exp * 1000;
 

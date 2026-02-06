@@ -7,6 +7,7 @@ import { UsersService } from 'src/users/users.service';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { ConfigService } from '@nestjs/config';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -19,6 +20,7 @@ describe('AuthController', () => {
         AuthService,
         UsersService,
         PrismaService,
+        ConfigService,
         {
           provide: getRedisConnectionToken(),
           useValue: redisMock,

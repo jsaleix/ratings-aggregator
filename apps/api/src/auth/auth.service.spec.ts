@@ -6,6 +6,7 @@ import Redis from 'ioredis';
 import { UsersService } from 'src/users/users.service';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { AuthService } from './auth.service';
+import { ConfigService } from '@nestjs/config';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -17,6 +18,7 @@ describe('AuthService', () => {
         AuthService,
         UsersService,
         PrismaService,
+        ConfigService,
         {
           provide: getRedisConnectionToken(),
           useValue: redisMock,
