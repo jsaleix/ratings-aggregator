@@ -4,9 +4,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRedis } from '@nestjs-modules/ioredis';
 import { compareSync } from 'bcrypt';
 import Redis from 'ioredis';
-import { InjectRedis } from '@nestjs-modules/ioredis';
 
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';

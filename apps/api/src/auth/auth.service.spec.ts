@@ -1,12 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRedisConnectionToken, RedisModule } from '@nestjs-modules/ioredis';
+import { getRedisConnectionToken } from '@nestjs-modules/ioredis';
 import { JwtModule } from '@nestjs/jwt';
+import Redis from 'ioredis';
 
 import { UsersService } from 'src/users/users.service';
 import { PrismaService } from 'src/shared/services/prisma.service';
-
 import { AuthService } from './auth.service';
-import Redis from 'ioredis';
 
 describe('AuthService', () => {
   let service: AuthService;
