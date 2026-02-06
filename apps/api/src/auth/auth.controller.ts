@@ -33,8 +33,8 @@ export class AuthController {
     const { token, expiresAt } = await this.authService.login(data);
     res.cookie('access_token', token, {
       httpOnly: true,
-      secure: false,
-      expires: expiresAt ? new Date(expiresAt) : undefined,
+      secure: process.env.NODE_ENV === 'production',
+      expires: new Date(expiresAt),
     });
     return { success: true };
   }
