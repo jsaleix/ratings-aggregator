@@ -21,5 +21,5 @@ export default () => {
     NODE_ENV: process.env.NODE_ENV,
   });
 
-  return { ...env } as EnvType;
+  return env as EnvType;
 };
