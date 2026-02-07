@@ -1,18 +1,21 @@
 import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
+import { Request, Response } from 'express';
 
 import { UsersService } from 'src/users/users.service';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
-import { Request, Response } from 'express';
+import { ConfigService } from '@nestjs/config';
+import { EnvType } from 'src/core/configuration';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UsersService,
+    private configService: ConfigService<EnvType>,
   ) {}
 
   @Throttle({ default: { limit: 5, ttl: 120000 } })
@@ -33,8 +36,8 @@ export class AuthController {
     const { token, expiresAt } = await this.authService.login(data);
     res.cookie('access_token', token, {
       httpOnly: true,
-      secure: false,
-      expires: expiresAt ? new Date(expiresAt) : undefined,
+      secure: this.configService.get('NODE_ENV') === 'production',
+      expires: new Date(expiresAt),
     });
     return { success: true };
   }
