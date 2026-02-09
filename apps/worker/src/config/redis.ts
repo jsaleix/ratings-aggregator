@@ -1,7 +1,7 @@
 import z from "zod/v4";
 import { config } from "dotenv";
 
-config();
+config({ quiet: true });
 
 const redisConfigSchema = z.object({
     host: z.string(),
