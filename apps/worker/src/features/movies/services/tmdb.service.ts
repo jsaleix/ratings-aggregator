@@ -1,4 +1,3 @@
-import { Prisma } from "../../../../generated/prisma";
 import { TMDB_TOKEN } from "../../../config/tmdb";
 import { MovieCreateInput } from "../types/db";
 import { TMDBGetMovieType } from "../types/tmdb";

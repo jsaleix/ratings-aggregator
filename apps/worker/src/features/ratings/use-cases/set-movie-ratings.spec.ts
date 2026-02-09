@@ -1,11 +1,11 @@
-import MovieService from "../../movies/services/movies.service";
+import { MovieRepositoryI } from "../../movies/interfaces/repositories";
 import { MovieType } from "../../movies/types/db";
 import { RatingCollectorService } from "../services/rating-collector.service";
 import { RatingType } from "../types/db";
 import { SetMovieRatings } from "./set-movie-ratings";
 
 describe("UseCase SetMovieRatings", () => {
-    let movieService: jest.Mocked<MovieService>;
+    let movieRepository: jest.Mocked<MovieRepositoryI>;
     let ratingCollector: jest.Mocked<RatingCollectorService>;
     let useCase: SetMovieRatings;
 
@@ -102,7 +102,7 @@ describe("UseCase SetMovieRatings", () => {
     } satisfies RatingType;
 
     beforeEach(() => {
-        movieService = {
+        movieRepository = {
             getMovieBy: jest.fn(),
         } as any;
 
@@ -113,24 +113,24 @@ describe("UseCase SetMovieRatings", () => {
             collectLetterboxd: jest.fn(),
         } as any;
 
-        useCase = new SetMovieRatings(movieService, ratingCollector);
+        useCase = new SetMovieRatings(movieRepository, ratingCollector);
     });
 
     it("should return combined ratings from all collectors", async () => {
-        movieService.getMovieBy.mockResolvedValue(mockMovie);
+        movieRepository.getMovieBy.mockResolvedValue(mockMovie);
 
         ratingCollector.collectAllocine.mockResolvedValue(mockRatingsAllocine);
         ratingCollector.collectIMDB.mockResolvedValue(mockRatingIMDB);
         ratingCollector.collectRotten.mockResolvedValue(mockRatingsRotten);
         ratingCollector.collectLetterboxd.mockResolvedValue(
-            mockRatingLetterboxd
+            mockRatingLetterboxd,
         );
 
         const results = await useCase.execute(mockMovie.id);
 
         expect(results).toHaveLength(6);
 
-        expect(movieService.getMovieBy).toHaveBeenCalledWith({
+        expect(movieRepository.getMovieBy).toHaveBeenCalledWith({
             id: mockMovie.id,
         });
 
@@ -140,15 +140,15 @@ describe("UseCase SetMovieRatings", () => {
 
         const allIds = results.map((r) => r.id);
         expect(allIds).toEqual(
-            expect.arrayContaining(["r1", "r2", "r3", "r4", "r5", "r6"])
+            expect.arrayContaining(["r1", "r2", "r3", "r4", "r5", "r6"]),
         );
     });
 
     it("should throw if movie not found", async () => {
-        movieService.getMovieBy.mockResolvedValue(null);
+        movieRepository.getMovieBy.mockResolvedValue(null);
 
         await expect(useCase.execute("non-existing-id")).rejects.toThrow(
-            "Movie with ID non-existing-id not found"
+            "Movie with ID non-existing-id not found",
         );
     });
 });

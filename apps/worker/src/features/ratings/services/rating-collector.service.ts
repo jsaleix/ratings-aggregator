@@ -4,7 +4,7 @@ import { getAllocineScore } from "../providers/allocine";
 import { getIMDBScore } from "../providers/imdb";
 import { getLetterBoxdScore } from "../providers/letterboxd";
 import { getRottenTomatoesScores } from "../providers/rotten";
-import RatingService from "./rating.service";
+import RatingService from "../repositories/prisma-rating.repository";
 
 export class RatingCollectorService {
     constructor(private ratingService: RatingService) {}
