@@ -1,0 +1,65 @@
+import { Job } from "bullmq";
+
+import { GenerateMovieSummaryUseCase } from "../../features/summary/use-cases/generate-summary";
+import SummaryHandler, { SummaryJob } from "./handler";
+import { MovieRatingSummaryType } from "../../features/summary/types/db";
+import { RatingType } from "../../features/ratings/types/db";
+
+describe("SummaryHandler Unit", () => {
+    let handler: SummaryHandler;
+    let mockUseCase: jest.Mocked<GenerateMovieSummaryUseCase>;
+
+    beforeEach(() => {
+        mockUseCase = {
+            execute: jest.fn(),
+        } as unknown as jest.Mocked<GenerateMovieSummaryUseCase>;
+
+        handler = new SummaryHandler(mockUseCase);
+    });
+
+    test("should call useCase.execute with id for movie", async () => {
+        mockUseCase.execute.mockResolvedValue(
+            {} as unknown as MovieRatingSummaryType,
+        );
+
+        const jobMock = {
+            data: { type: "movie", payload: { id: "42" } },
+        } as Job<SummaryJob>;
+
+        const result = await handler.handle(jobMock);
+
+        expect(mockUseCase.execute).toHaveBeenCalledWith("42");
+        expect(result).toEqual({});
+    });
+
+    test("should throw if id is missing", async () => {
+        const jobMock = {
+            data: { type: "movie", payload: { id: "" } },
+        } as Job<SummaryJob>;
+
+        await expect(handler.handle(jobMock)).rejects.toThrow("Missing id");
+    });
+
+    test("should throw for series type", async () => {
+        const jobMock = {
+            data: { type: "series", payload: { id: "42" } },
+        } as Job<SummaryJob>;
+
+        await expect(handler.handle(jobMock)).rejects.toThrow(
+            "Generating series ratings summary is not implemented yet",
+        );
+    });
+
+    test("should throw for unknown type", async () => {
+        const jobMock = {
+            data: {
+                type: "anime" as SummaryJob["type"],
+                payload: { id: "42" },
+            },
+        } as Job<SummaryJob>;
+
+        await expect(handler.handle(jobMock)).rejects.toThrow(
+            "Unhandled job type: anime",
+        );
+    });
+});
