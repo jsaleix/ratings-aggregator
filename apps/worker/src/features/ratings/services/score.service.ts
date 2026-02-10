@@ -1,4 +1,4 @@
-import { RatingType } from "../../ratings/types/db";
+import { RatingType } from "../types/db";
 import { RATING_UNITS } from "../../../config/ratings";
 
 export type CalcScoreRatingItem = Pick<RatingType, "value" | "rating_unit">;
@@ -21,9 +21,9 @@ export class ScoreService {
             case RATING_UNITS.PERCENTAGE:
                 return value;
             case RATING_UNITS.POINTS:
-                return value * 10;
+                return (value/10) * 100;
             case RATING_UNITS.STARS:
-                return value * 20;
+                return (value/5) * 100;
             default:
                 return undefined;
         }
