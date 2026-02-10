@@ -45,7 +45,7 @@ ratingWorker.on("active", (job) => {
     });
 });
 
-ratingWorker.on("completed", (job) => {
+ratingWorker.on("completed", async (job) => {
     logger.info("Rating worker completed", {
         tags: ["rating-worker", "worker"],
         payload: job.data.payload,
@@ -60,7 +60,7 @@ ratingWorker.on("completed", (job) => {
         movieRepository.updateMovie(id, {
             updated_at: new Date().toISOString(),
         });
-        summaryQueue.add(
+        await summaryQueue.add(
             "generate-summary",
             {
                 payload: { id },

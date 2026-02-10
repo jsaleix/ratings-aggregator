@@ -54,14 +54,14 @@ summaryWorker.on("failed", (job, error) => {
 
 summaryWorker.on(
     "completed",
-    (job, summary: MovieRatingSummaryType | undefined) => {
+    async (job, summary: MovieRatingSummaryType | undefined) => {
         logger.info("Summary worker completed", {
             tags: ["summary-worker", "worker"],
             payload: job.data.payload,
             summary,
             movieId: job.data.payload.id,
         });
-        movieService.updateMovie(job.data.payload.id, {
+        await movieService.updateMovie(job.data.payload.id, {
             updated_at: new Date().toISOString(),
         });
     },

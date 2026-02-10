@@ -19,7 +19,7 @@ describe("MovieHandler BullMQ Integration", () => {
         movieQueue = new Queue<MovieJob>(queueName, { connection });
 
         const handler = new MovieHandler(
-            mockUseCaseService as unknown as AddMovieByTMDBIdUseCase
+            mockUseCaseService as unknown as AddMovieByTMDBIdUseCase,
         );
 
         worker = new Worker<MovieJob>(
@@ -27,7 +27,7 @@ describe("MovieHandler BullMQ Integration", () => {
             async (job: Job<MovieJob>) => {
                 return await handler.handle(job);
             },
-            { connection }
+            { connection },
         );
     });
 
@@ -51,7 +51,7 @@ describe("MovieHandler BullMQ Integration", () => {
         });
 
         await new Promise<void>((resolve) => {
-            worker.on("completed", (job: Job<MovieJob>) => {
+            worker.once("completed", (job: Job<MovieJob>) => {
                 resolve();
             });
         });
@@ -69,7 +69,7 @@ describe("MovieHandler BullMQ Integration", () => {
         });
 
         await new Promise<void>((resolve) => {
-            worker.on("failed", () => {
+            worker.once("failed", () => {
                 resolve();
             });
         });
