@@ -9,6 +9,7 @@ export class GenerateMovieSummaryUseCase {
     constructor(
         private readonly aiService: AIService,
         private readonly summaryRepository: SummaryRepositoryI,
+        private readonly scoreService: ScoreService
     ) {}
 
     public static generateUserPrompt(ratings: RatingType[]) {
@@ -34,7 +35,7 @@ export class GenerateMovieSummaryUseCase {
         const ratings =
             await this.summaryRepository.getRatingsByMovieId(movieId);
         if (ratings.length < 1) throw new Error("Not enough ratings (min.1)");
-        const score = ScoreService.calcScore(ratings).toString();
+        const score = this.scoreService.calcScore(ratings).toString();
         const userPrompt =
             GenerateMovieSummaryUseCase.generateUserPrompt(ratings);
         const systemPrompt = GenerateMovieSummaryUseCase.getSystemPrompt();

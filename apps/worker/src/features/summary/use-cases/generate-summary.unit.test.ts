@@ -1,3 +1,4 @@
+import { ScoreService } from "../../ratings/services/score.service";
 import { RatingType } from "../../ratings/types/db";
 import { SummaryRepositoryI } from "../interfaces/repositories";
 import AIService from "../services/ai.service";
@@ -5,6 +6,7 @@ import { GenerateMovieSummaryUseCase } from "./generate-summary";
 
 describe("UseCase GenerateSummary", () => {
     let aiService: jest.Mocked<AIService>;
+    let scoreService: jest.Mocked<ScoreService>;
     let summaryRepository: jest.Mocked<SummaryRepositoryI>;
     let useCase: GenerateMovieSummaryUseCase;
 
@@ -43,7 +45,16 @@ describe("UseCase GenerateSummary", () => {
             saveSummary: jest.fn(),
         } as any;
 
-        useCase = new GenerateMovieSummaryUseCase(aiService, summaryRepository);
+        scoreService = {
+            calcScore: jest.fn(),
+            getScore: jest.fn(),
+        };
+
+        useCase = new GenerateMovieSummaryUseCase(
+            aiService,
+            summaryRepository,
+            scoreService,
+        );
     });
 
     it("should save the summary in db", async () => {
@@ -52,13 +63,14 @@ describe("UseCase GenerateSummary", () => {
             content: "Summary",
             score: "A",
         });
+        scoreService.calcScore.mockReturnValue(100);
 
         await useCase.execute("movie-1");
 
         expect(summaryRepository.saveSummary).toHaveBeenCalledWith({
             movieId: "movie-1",
             content: "Summary",
-            score: "A",
+            score: "100",
         });
     });
 
