@@ -7,7 +7,7 @@ import { logger } from "./shared/logger";
 import { db } from "./core/db";
 
 try {
-    console.log("Worker up");
+    console.log("Worker up!");
     movieWorker.run();
     ratingWorker.run();
     summaryWorker.run();

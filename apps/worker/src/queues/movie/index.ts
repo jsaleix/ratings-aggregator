@@ -1,10 +1,9 @@
-import { Job, Queue, Worker } from "bullmq";
+import { Job, Worker } from "bullmq";
 
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
-import { db } from "../../core/db";
-import MovieService from "../../features/movies/services/movies.service";
+import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
 import TMDBService from "../../features/movies/services/tmdb.service";
-import MovieRequestService from "../../features/requests/services/request";
+import PrismaMovieRequestRepository from "../../features/requests/repositories/prisma-request.repository";
 import { MovieType } from "../../features/movies/types/db";
 import { AddMovieByTMDBIdUseCase } from "../../features/movies/use-cases/add-movie-by-tmdb-id";
 import { ratingQueue } from "..";
@@ -12,12 +11,12 @@ import MovieHandler, { MovieJob } from "./handler";
 import { logger } from "../../shared/logger";
 
 const tmdbService = new TMDBService();
-const movieService = new MovieService(db);
-const movieRatingService = new MovieRequestService(db);
+const movieRepository = new PrismaMovieRepository();
+const movieRequestRepository = new PrismaMovieRequestRepository();
 
 const addMovieByTMDBIdUseCase = new AddMovieByTMDBIdUseCase(
     tmdbService,
-    movieService
+    movieRepository,
 );
 const movieHandler = new MovieHandler(addMovieByTMDBIdUseCase);
 
@@ -28,7 +27,7 @@ export const movieWorker = new Worker(
         connection: RedisMqConnection,
         concurrency: 1,
         autorun: false,
-    }
+    },
 );
 
 movieWorker.on("active", async (job: Job<MovieJob>) => {
@@ -37,7 +36,7 @@ movieWorker.on("active", async (job: Job<MovieJob>) => {
         tags: ["movie-worker", "worker"],
         payload: job.data.payload,
     });
-    await movieRatingService.updateRequestState(payload.requestId, true);
+    await movieRequestRepository.updateRequestState(payload.requestId, true);
 });
 
 movieWorker.on(
@@ -56,7 +55,7 @@ movieWorker.on(
             removeOnComplete: true,
             removeOnFail: true,
         });
-    }
+    },
 );
 
 movieWorker.on("failed", (job, error) => {

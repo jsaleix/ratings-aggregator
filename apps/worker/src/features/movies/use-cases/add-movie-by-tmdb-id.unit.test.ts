@@ -1,5 +1,5 @@
 import { prismaMock } from "../../../tests/singleton";
-import MovieService from "../services/movies.service";
+import MockMovieRepository from "../repositories/mock-movie.repository";
 import TMDBService from "../services/tmdb.service";
 import { MovieCreateInput } from "../types/db";
 import { TMDBGetMovieType } from "../types/tmdb";
@@ -25,14 +25,14 @@ const existingMovie = {
 
 describe("Use-cases/AddMovieByTMDBId", () => {
     let tmdbService: TMDBService;
-    let movieService: MovieService;
+    let movieService: MockMovieRepository;
     let useCase: AddMovieByTMDBIdUseCase;
 
     beforeEach(() => {
         jest.clearAllMocks();
 
         tmdbService = jest.mocked(new TMDBService());
-        movieService = new MovieService(prismaMock);
+        movieService = new MockMovieRepository(prismaMock);
         useCase = new AddMovieByTMDBIdUseCase(tmdbService, movieService);
     });
 

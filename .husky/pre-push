@@ -30,6 +30,7 @@ if echo "$CHANGED_FILES" | grep -q "^apps/worker/"; then
   echo "📦 Modification found in apps/worker"
   cd apps/worker
   pnpm install
+  pnpm run test:unit
   #pnpm run test // Will fail locally without redis
   pnpm run build
   cd "$ROOT_DIR"

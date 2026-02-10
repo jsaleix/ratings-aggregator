@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 
-config();
+config({ quiet: true });
 
 if (!process.env.OPEN_ROUTER_API_KEY)
     throw new Error("Missing process.env.OPEN_ROUTER_API_KEY");

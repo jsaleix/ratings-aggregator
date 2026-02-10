@@ -1,22 +1,21 @@
 import { Job, Worker } from "bullmq";
 
-import { db } from "../../core/db";
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 
 import AIService from "../../features/summary/services/ai.service";
 import { GenerateMovieSummaryUseCase } from "../../features/summary/use-cases/generate-summary";
-import { DBService as SummaryDBService } from "../../features/summary/services/db.service";
 import SummaryHandler, { SummaryJob } from "./handler";
 import { MovieRatingSummaryType } from "../../features/summary/types/db";
-import MovieService from "../../features/movies/services/movies.service";
 import { logger } from "../../shared/logger";
+import { PrismaSummaryRepository } from "../../features/summary/repositories/prisma-summary.repository";
+import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
 
 const aiService = new AIService();
-const movieService = new MovieService(db);
-const summaryDbService = new SummaryDBService(db);
+const movieService = new PrismaMovieRepository();
+const summaryDbService = new PrismaSummaryRepository();
 const generateMovieSummaryUseCase = new GenerateMovieSummaryUseCase(
     aiService,
-    summaryDbService
+    summaryDbService,
 );
 
 const summaryHandler = new SummaryHandler(generateMovieSummaryUseCase);
@@ -33,7 +32,7 @@ export const summaryWorker = new Worker(
             max: 1,
             duration: 2 * 60 * 1000,
         },
-    }
+    },
 );
 
 summaryWorker.on("active", async (job: Job<SummaryJob>) => {
@@ -55,15 +54,15 @@ summaryWorker.on("failed", (job, error) => {
 
 summaryWorker.on(
     "completed",
-    (job, summary: MovieRatingSummaryType | undefined) => {
+    async (job, summary: MovieRatingSummaryType | undefined) => {
         logger.info("Summary worker completed", {
             tags: ["summary-worker", "worker"],
             payload: job.data.payload,
             summary,
             movieId: job.data.payload.id,
         });
-        movieService.updateMovie(job.data.payload.id, {
+        await movieService.updateMovie(job.data.payload.id, {
             updated_at: new Date().toISOString(),
         });
-    }
+    },
 );

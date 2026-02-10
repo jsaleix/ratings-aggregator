@@ -1,11 +1,11 @@
 import { RatingType } from "../../ratings/types/db";
+import { SummaryRepositoryI } from "../interfaces/repositories";
 import AIService from "../services/ai.service";
-import { DBService } from "../services/db.service";
 import { GenerateMovieSummaryUseCase } from "./generate-summary";
 
 describe("UseCase GenerateSummary", () => {
     let aiService: jest.Mocked<AIService>;
-    let dbService: jest.Mocked<DBService>;
+    let summaryRepository: jest.Mocked<SummaryRepositoryI>;
     let useCase: GenerateMovieSummaryUseCase;
 
     const ratings = [
@@ -38,16 +38,16 @@ describe("UseCase GenerateSummary", () => {
             sendRequest: jest.fn(),
         } as any;
 
-        dbService = {
+        summaryRepository = {
             getRatingsByMovieId: jest.fn(),
             saveSummary: jest.fn(),
         } as any;
 
-        useCase = new GenerateMovieSummaryUseCase(aiService, dbService);
+        useCase = new GenerateMovieSummaryUseCase(aiService, summaryRepository);
     });
 
     it("should save the summary in db", async () => {
-        dbService.getRatingsByMovieId.mockResolvedValue(ratings);
+        summaryRepository.getRatingsByMovieId.mockResolvedValue(ratings);
         aiService.sendRequest.mockResolvedValue({
             content: "Summary",
             score: "A",
@@ -55,7 +55,7 @@ describe("UseCase GenerateSummary", () => {
 
         await useCase.execute("movie-1");
 
-        expect(dbService.saveSummary).toHaveBeenCalledWith({
+        expect(summaryRepository.saveSummary).toHaveBeenCalledWith({
             movieId: "movie-1",
             content: "Summary",
             score: "A",
@@ -63,9 +63,9 @@ describe("UseCase GenerateSummary", () => {
     });
 
     it("should throw if there is not enough ratings", async () => {
-        dbService.getRatingsByMovieId.mockResolvedValue([]);
+        summaryRepository.getRatingsByMovieId.mockResolvedValue([]);
         await expect(useCase.execute("movie-1")).rejects.toThrow(
-            "Not enough ratings (min.1)"
+            "Not enough ratings (min.1)",
         );
     });
 });

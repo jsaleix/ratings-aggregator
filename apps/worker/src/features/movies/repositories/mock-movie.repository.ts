@@ -1,7 +1,8 @@
 import { Prisma, PrismaClient } from "../../../../generated/prisma";
+import { MovieRepositoryI } from "../interfaces/repositories";
 import { MovieCreateInput, MovieType } from "../types/db";
 
-class MovieService {
+class MockMovieRepository implements MovieRepositoryI {
     constructor(private db: PrismaClient) {}
 
     async createMovie(data: MovieCreateInput) {
@@ -32,4 +33,4 @@ class MovieService {
     }
 }
 
-export default MovieService;
+export default MockMovieRepository;

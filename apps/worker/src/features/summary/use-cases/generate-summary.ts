@@ -1,11 +1,11 @@
 import { RatingType } from "../../ratings/types/db";
+import { SummaryRepositoryI } from "../interfaces/repositories";
 import AIService from "../services/ai.service";
-import { DBService } from "../services/db.service";
 
 export class GenerateMovieSummaryUseCase {
     constructor(
         private readonly aiService: AIService,
-        private readonly dbService: DBService
+        private readonly summaryRepository: SummaryRepositoryI,
     ) {}
 
     public static generateUserPrompt(ratings: RatingType[]) {
@@ -16,7 +16,7 @@ export class GenerateMovieSummaryUseCase {
                     (rating) => `'${rating.rating_source}': {
         value: '${rating.value}',
         unit: '${rating.rating_unit}',
-    }`
+    }`,
                 )
                 .join(",\n") +
             "}"
@@ -28,7 +28,8 @@ export class GenerateMovieSummaryUseCase {
     }
 
     async execute(movieId: string) {
-        const ratings = await this.dbService.getRatingsByMovieId(movieId);
+        const ratings =
+            await this.summaryRepository.getRatingsByMovieId(movieId);
         if (ratings.length < 1) throw new Error("Not enough ratings (min.1)");
 
         const userPrompt =
@@ -39,6 +40,10 @@ export class GenerateMovieSummaryUseCase {
             system: systemPrompt,
         });
 
-        return await this.dbService.saveSummary({ movieId, content, score });
+        return await this.summaryRepository.saveSummary({
+            movieId,
+            content,
+            score,
+        });
     }
 }

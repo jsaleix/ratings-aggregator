@@ -3,7 +3,7 @@ import { Queue, Worker, Job } from "bullmq";
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 import { GenerateMovieSummaryUseCase } from "../../features/summary/use-cases/generate-summary";
 
-import MovieHandler from "./handler";
+import SummaryHandler from "./handler";
 
 const connection = RedisMqConnection;
 const queueName = QUEUES.summary;
@@ -18,7 +18,7 @@ describe("SummaryHandler Integration", () => {
     beforeAll(() => {
         summaryQueue = new Queue(queueName, { connection });
 
-        const handler = new MovieHandler(
+        const handler = new SummaryHandler(
             mockUseCaseService as unknown as GenerateMovieSummaryUseCase
         );
 
@@ -42,39 +42,51 @@ describe("SummaryHandler Integration", () => {
         mockUseCaseService.execute.mockClear();
     });
 
-    test("should handle generateMovieSummary ", async () => {
+    test("should handle generateMovieSummary", async () => {
         mockUseCaseService.execute.mockResolvedValue([]);
+
+        const completed = new Promise<void>((resolve) => {
+            worker.once("completed", () => resolve());
+        });
 
         await summaryQueue.add("generate-movie-summary-test-1", {
             type: "movie",
-            payload: { id: 42 },
+            payload: { id: "42" },
         });
 
-        await new Promise((resolve) => worker.on("completed", resolve));
-        expect(mockUseCaseService.execute).toHaveBeenCalledWith(42);
+        await completed;
+        expect(mockUseCaseService.execute).toHaveBeenCalledWith("42");
     }, 5000);
 
-    test("should throw if wrong type", async () => {
+    test("should fail if wrong type", async () => {
         mockUseCaseService.execute.mockResolvedValue([]);
+
+        const failed = new Promise<void>((resolve) => {
+            worker.once("failed", () => resolve());
+        });
 
         await summaryQueue.add("generate-movie-summary-test-2", {
             type: "anime",
-            payload: { id: 47 },
+            payload: { id: "47" },
         });
 
-        await new Promise((resolve) => worker.on("failed", resolve));
+        await failed;
         expect(mockUseCaseService.execute).not.toHaveBeenCalled();
     }, 5000);
 
-    test("should throw if no id is given", async () => {
+    test("should fail if no id is given", async () => {
         mockUseCaseService.execute.mockResolvedValue([]);
+
+        const failed = new Promise<void>((resolve) => {
+            worker.once("failed", () => resolve());
+        });
 
         await summaryQueue.add("generate-movie-summary-test-3", {
             type: "movie",
-            payload: { id: undefined },
+            payload: { id: "" },
         });
 
-        await new Promise((resolve) => worker.on("failed", resolve));
+        await failed;
         expect(mockUseCaseService.execute).not.toHaveBeenCalled();
     }, 5000);
 });
