@@ -1,3 +1,6 @@
+import { logger } from "../../../shared/logger";
+
+import { ScoreService } from "../../ratings/services/score.service";
 import { RatingType } from "../../ratings/types/db";
 import { SummaryRepositoryI } from "../interfaces/repositories";
 import AIService from "../services/ai.service";
@@ -31,18 +34,26 @@ export class GenerateMovieSummaryUseCase {
         const ratings =
             await this.summaryRepository.getRatingsByMovieId(movieId);
         if (ratings.length < 1) throw new Error("Not enough ratings (min.1)");
-
+        const score = ScoreService.calcScore(ratings).toString();
         const userPrompt =
             GenerateMovieSummaryUseCase.generateUserPrompt(ratings);
         const systemPrompt = GenerateMovieSummaryUseCase.getSystemPrompt();
-        const { content, score } = await this.aiService.sendRequest({
-            user: userPrompt,
-            system: systemPrompt,
-        });
+        const response = await this.aiService
+            .sendRequest({
+                user: userPrompt,
+                system: systemPrompt,
+            })
+            .catch((error) => {
+                logger.error("aiService sendRequest error", {
+                    error,
+                    movieId: "",
+                });
+                return undefined;
+            });
 
         return await this.summaryRepository.saveSummary({
             movieId,
-            content,
+            content: response?.content ?? "",
             score,
         });
     }
