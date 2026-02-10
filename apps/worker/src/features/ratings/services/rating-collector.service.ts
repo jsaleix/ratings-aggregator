@@ -1,13 +1,13 @@
 import { RATING_SOURCES, RATING_UNITS } from "../../../config/ratings";
 import { MovieType } from "../../movies/types/db";
+import { RatingRepositoryI } from "../interfaces/repositories";
 import { getAllocineScore } from "../providers/allocine";
 import { getIMDBScore } from "../providers/imdb";
 import { getLetterBoxdScore } from "../providers/letterboxd";
 import { getRottenTomatoesScores } from "../providers/rotten";
-import RatingService from "../repositories/prisma-rating.repository";
 
 export class RatingCollectorService {
-    constructor(private ratingService: RatingService) {}
+    constructor(private ratingRepository: RatingRepositoryI) {}
 
     async collectAllocine(movie: MovieType) {
         const { title, id: movieId, year, language, original_title } = movie;
@@ -17,7 +17,7 @@ export class RatingCollectorService {
             values = await getAllocineScore(original_title, year);
             if (!values)
                 throw new Error(
-                    `Allociné ratings for ${original_title} not found`
+                    `Allociné ratings for ${original_title} not found`,
                 );
         } else {
             values = await getAllocineScore(title, year);
@@ -28,13 +28,13 @@ export class RatingCollectorService {
         const { press, audience } = values;
 
         return Promise.all([
-            this.ratingService.addOrUpdate({
+            this.ratingRepository.addOrUpdate({
                 movieId,
                 value: press,
                 rating_source: RATING_SOURCES.ALLOCINE_PRESS,
                 rating_unit: RATING_UNITS.STARS,
             }),
-            this.ratingService.addOrUpdate({
+            this.ratingRepository.addOrUpdate({
                 movieId,
                 value: audience,
                 rating_source: RATING_SOURCES.ALLOCINE_AUDIENCE,
@@ -50,7 +50,7 @@ export class RatingCollectorService {
 
         const { score, url } = value;
 
-        return this.ratingService.addOrUpdate({
+        return this.ratingRepository.addOrUpdate({
             movieId,
             value: score,
             rating_source: RATING_SOURCES.IMDB,
@@ -68,14 +68,14 @@ export class RatingCollectorService {
         const { criticsRatings, audienceRatings, url } = values;
 
         return Promise.all([
-            this.ratingService.addOrUpdate({
+            this.ratingRepository.addOrUpdate({
                 movieId,
                 value: criticsRatings,
                 rating_source: RATING_SOURCES.ROTTEN_TOMATOES,
                 rating_unit: RATING_UNITS.PERCENTAGE,
                 sourceUrl: url,
             }),
-            this.ratingService.addOrUpdate({
+            this.ratingRepository.addOrUpdate({
                 movieId,
                 value: audienceRatings,
                 rating_source: RATING_SOURCES.ROTTEN_TOMATOES_AUDIENCE,
@@ -94,7 +94,7 @@ export class RatingCollectorService {
 
         const { score, url } = value;
 
-        return this.ratingService.addOrUpdate({
+        return this.ratingRepository.addOrUpdate({
             movieId,
             value: score,
             rating_source: RATING_SOURCES.LETTERBOXD,
