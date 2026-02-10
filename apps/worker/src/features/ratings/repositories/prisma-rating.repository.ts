@@ -1,18 +1,13 @@
-import { PrismaClient, RatingUnit } from "../../../../generated/prisma";
+import { PrismaClient } from "../../../../generated/prisma";
+import { db } from "../../../core/db";
+import { RatingRepositoryI } from "../interfaces/repositories";
 import { RatingType } from "../types/db";
+import { RatingAttributesType } from "../types/rating";
 
-type RatingAttributesType = {
-    movieId: string;
-    value: string;
-    rating_source: string;
-    rating_unit: RatingUnit;
-    sourceUrl?: string;
-};
-
-class RatingService {
+class PrismaRatingRepository implements RatingRepositoryI {
     db: PrismaClient;
 
-    constructor(db: PrismaClient) {
+    constructor() {
         this.db = db;
     }
 
@@ -51,4 +46,4 @@ class RatingService {
     }
 }
 
-export default RatingService;
+export default PrismaRatingRepository;

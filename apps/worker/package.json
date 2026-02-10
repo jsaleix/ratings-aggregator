@@ -8,6 +8,8 @@
         "dev": "ts-node src/index.ts",
         "build": "tsc",
         "test": "jest -- src/",
+        "test:unit": "jest --testPathPatterns=src/.*\\.unit\\.test\\.ts$",
+        "test:integration": "jest --testPathPatterns=src/.*\\.integration\\.test\\.ts$",
         "test:watch": "jest --watch -- src/"
     },
     "keywords": [],

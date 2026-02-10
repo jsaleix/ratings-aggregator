@@ -1,14 +1,14 @@
-import MovieService from "../../movies/services/movies.service";
+import { MovieRepositoryI } from "../../movies/interfaces/repositories";
 import { RatingCollectorService } from "../services/rating-collector.service";
 
 export class SetMovieRatings {
     constructor(
-        private movieService: MovieService,
-        private ratingCollector: RatingCollectorService
+        private movieRepository: MovieRepositoryI,
+        private ratingCollector: RatingCollectorService,
     ) {}
 
     async execute(movieId: string) {
-        const movie = await this.movieService.getMovieBy({ id: movieId });
+        const movie = await this.movieRepository.getMovieBy({ id: movieId });
         if (!movie) {
             throw new Error(`Movie with ID ${movieId} not found`);
         }

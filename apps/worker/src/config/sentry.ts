@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 
-config();
+config({ quiet: true });
 
 export const SENTRY_CONFIG = {
     dsn: (process.env.SENTRY_DSN as string) ?? undefined,
