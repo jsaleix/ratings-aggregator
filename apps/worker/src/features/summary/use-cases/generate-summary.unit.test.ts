@@ -48,7 +48,7 @@ describe("UseCase GenerateSummary", () => {
         scoreService = {
             calcScore: jest.fn(),
             getScore: jest.fn(),
-        };
+        } as any;
 
         useCase = new GenerateMovieSummaryUseCase(
             aiService,

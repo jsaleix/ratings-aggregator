@@ -2,7 +2,7 @@ import { ScoreService, type CalcScoreRatingItem } from "./score.service";
 
 describe("scoreService", () => {
     let scoreService: ScoreService;
-    
+
     beforeAll(() => {
         scoreService = new ScoreService();
     });
@@ -98,6 +98,20 @@ describe("scoreService", () => {
                 rating_unit: "RoTtEnTomAtoES_FictIOnAl",
             };
             expect(scoreService.getScore(rating)).toBe(undefined);
+        });
+        it("Should return a value between 0 and 100", () => {
+            const rating = {
+                value: "-1",
+                rating_unit: "percentage",
+            } satisfies CalcScoreRatingItem;
+            expect(scoreService.getScore(rating)).toBe(0);
+        });
+        it("Should return a value between 0 and 100", () => {
+            const rating = {
+                value: "101",
+                rating_unit: "percentage",
+            } satisfies CalcScoreRatingItem;
+            expect(scoreService.getScore(rating)).toBe(100);
         });
     });
     describe("calcScore", () => {
