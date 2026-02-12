@@ -70,7 +70,7 @@ describe("UseCase GenerateSummary", () => {
         expect(summaryRepository.saveSummary).toHaveBeenCalledWith({
             movieId: "movie-1",
             content: "Summary",
-            score: "100",
+            scoreValue: 100,
         });
     });
 
