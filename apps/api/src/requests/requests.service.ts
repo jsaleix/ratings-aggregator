@@ -28,8 +28,11 @@ export class RequestsService {
     return request;
   }
 
-  async findAll(processed: boolean) {
-    return this.prisma.movie_Request.findMany({ where: { processed } });
+  async findAllPublic(processed: boolean) {
+    return this.prisma.movie_Request.findMany({
+      where: { processed },
+      omit: { userId: true },
+    });
   }
 
   async findOne(id: string) {

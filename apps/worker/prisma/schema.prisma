@@ -49,13 +49,25 @@ model Movie_Rating {
   id            String     @id @default(uuid())
   movieId       String     @map("movie_id")
   Movie         Movie      @relation(fields: [movieId], references: [id])
-  rating_source String
   value         String
-  rating_unit   RatingUnit
   extra         String     @default("")
   source_url     String?
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
+  rating_source String
+  rating_unit   RatingUnit
+  ratingSourceId String
+  Rating_Source Rating_Source @relation(fields: [ratingSourceId], references: [id])
+}
+
+model Rating_Source {
+  id          String    @id @default(uuid())
+  code        String    @unique
+  name        String
+  rating_unit RatingUnit
+  url String
+  country_code String
+  Movie_Rating Movie_Rating[]
 }
 
 model Movie_Request {

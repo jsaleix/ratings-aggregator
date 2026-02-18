@@ -10,15 +10,19 @@ export class BullmqService {
   private summaryQueue: Queue;
 
   constructor(@InjectRedis() private readonly redis: Redis) {
+    const { host, port, password, db } = this.redis.options;
+
+    const connection = { host, port, password, db };
+
     this.movieQueue = new Queue(QUEUES.movie, {
-      connection: this.redis,
+      connection,
       defaultJobOptions: {
         removeOnComplete: true,
         removeOnFail: true,
       },
     });
     this.summaryQueue = new Queue(QUEUES.summary, {
-      connection: this.redis,
+      connection,
       defaultJobOptions: {
         removeOnComplete: true,
         removeOnFail: true,
