@@ -12,16 +12,16 @@ export class PrismaSummaryRepository implements SummaryRepositoryI {
     async saveSummary({
         movieId,
         content,
-        score,
+        scoreValue,
     }: {
         movieId: string;
         content: string;
-        score: string;
+        scoreValue: number;
     }) {
         return await this.db.movie_Ratings_Summary.upsert({
             where: { movieId },
-            update: { content, score },
-            create: { movieId, content, score },
+            update: { content, score_value: scoreValue },
+            create: { movieId, content, score_value: scoreValue },
         });
     }
 

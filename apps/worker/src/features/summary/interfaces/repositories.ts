@@ -5,11 +5,11 @@ export interface SummaryRepositoryI {
     saveSummary({
         movieId,
         content,
-        score,
+        scoreValue,
     }: {
         movieId: string;
         content: string;
-        score: string;
+        scoreValue: number;
     }): Promise<MovieRatingSummaryType>;
 
     getRatingsByMovieId(movieId: string): Promise<RatingType[]>;

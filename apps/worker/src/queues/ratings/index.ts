@@ -1,15 +1,15 @@
 import { Worker } from "bullmq";
 
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
+import { logger } from "../../shared/logger";
 
+import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
 import PrismaRatingRepository from "../../features/ratings/repositories/prisma-rating.repository";
 import { SetMovieRatings } from "../../features/ratings/use-cases/set-movie-ratings";
 import { RatingCollectorService } from "../../features/ratings/services/rating-collector.service";
 
 import { summaryQueue } from "..";
 import RatingHandler from "./handler";
-import { logger } from "../../shared/logger";
-import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
 
 const movieRepository = new PrismaMovieRepository();
 const ratingService = new PrismaRatingRepository();
@@ -19,7 +19,6 @@ const setMovieRatingsUseCase = new SetMovieRatings(
     movieRepository,
     ratingCollector,
 );
-
 const ratingHandler = new RatingHandler(setMovieRatingsUseCase);
 
 export const ratingWorker = new Worker(
@@ -52,31 +51,28 @@ ratingWorker.on("completed", async (job) => {
         movieId: job.data.payload.id,
     });
 
-    console.log("payload:", job.data.payload);
     const { id } = job.data.payload;
-    if (!id) {
-        console.log("No id from payload");
-    } else {
-        movieRepository.updateMovie(id, {
-            updated_at: new Date().toISOString(),
-        });
-        await summaryQueue.add(
-            "generate-summary",
-            {
-                payload: { id },
-                type: "movie",
-                removeOnComplete: true,
-                removeOnFail: true,
+    if (!id) throw new Error("No id found in payload");
+
+    await movieRepository.updateMovie(id, {
+        updated_at: new Date().toISOString(),
+    });
+    await summaryQueue.add(
+        "generate-summary",
+        {
+            payload: { id },
+            type: "movie",
+            removeOnComplete: true,
+            removeOnFail: true,
+        },
+        {
+            attempts: 5,
+            backoff: {
+                type: "fixed",
+                delay: 3 * 60 * 1000,
             },
-            {
-                attempts: 5,
-                backoff: {
-                    type: "fixed",
-                    delay: 3 * 60 * 1000,
-                },
-            },
-        );
-    }
+        },
+    );
 });
 
 ratingWorker.on("failed", (job, error) => {
