@@ -18,8 +18,8 @@ datasource db {
 model Movie {
   id                    String                  @id @default(uuid())
   title                 String
-  tmdbId                Int                     @unique
-  tagLine               String
+  tmdbId                Int                     @unique @map("tmdb_id")
+  tagLine               String  @map("tag_line")
   summary               String
   runtime               Int
   release_date          DateTime
@@ -31,7 +31,7 @@ model Movie {
   Movie_Rating          Movie_Rating[]
   Movie_Ratings_Summary Movie_Ratings_Summary[]
   original_title        String
-  imdbId                String
+  imdbId                String  @map("imdb_id")
   language              String
 }
 
@@ -40,7 +40,7 @@ model Movie_Ratings_Summary {
   content    String   @default("N/A")
   score      String   @default("N/A")
   score_value Int @default(0)
-  movieId    String   @unique
+  movieId    String   @unique @map("movie_id")
   Movie      Movie    @relation(fields: [movieId], references: [id])
   created_at DateTime @default(now()) @db.Timestamp(6)
   updated_at DateTime @updatedAt
@@ -48,22 +48,22 @@ model Movie_Ratings_Summary {
 
 model Movie_Rating {
   id            String     @id @default(uuid())
-  movieId       String
+  movieId       String     @map("movie_id")
   Movie         Movie      @relation(fields: [movieId], references: [id])
   rating_source String
   value         String
   rating_unit   RatingUnit
   extra         String     @default("")
-  sourceUrl     String?
+  sourceUrl     String?    @map("source_url")
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
 }
 
 model Movie_Request {
   id         String   @id @default(uuid())
-  tmdbId     Int
+  tmdbId     Int  @map("tmdb_id")
   title      String
-  userId     String
+  userId     String @map("user_id")
   User       User     @relation(fields: [userId], references: [id])
   created_at DateTime @default(now())
   processed  Boolean  @default(false)
