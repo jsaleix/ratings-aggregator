@@ -7,5 +7,5 @@ export interface MovieRatingModel {
     extra: string;
     created_at: string;
     updated_at: string;
-    sourceUrl: null | string;
+    source_url: null | string;
 }

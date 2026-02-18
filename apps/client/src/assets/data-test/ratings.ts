@@ -9,5 +9,5 @@ export const RatingMockData = {
     extra: "",
     created_at: "2025-07-20T14:04:10.225Z",
     updated_at: "2025-07-20T14:04:10.225Z",
-    sourceUrl: null,
+    source_url: null,
 } satisfies MovieRatingModel;

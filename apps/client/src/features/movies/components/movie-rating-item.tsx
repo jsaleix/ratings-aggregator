@@ -73,8 +73,8 @@ export default function MovieRatingItem({ rating }: Props) {
                         {rating.rating_source.replaceAll("_", " ")}
                     </h3>
 
-                    {rating.sourceUrl && (
-                        <a href={rating.sourceUrl} target="_blank">
+                    {rating.source_url && (
+                        <a href={rating.source_url} target="_blank">
                             <svg
                                 width="15"
                                 height="15"

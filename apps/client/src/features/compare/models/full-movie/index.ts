@@ -1,5 +1,6 @@
 import type { MovieModel } from "../../../movies/types/movie";
 import type { MovieRatingModel } from "../../../movies/types/movie-rating";
+import { mapMovieApiToModel } from "../../../movies/types/movie.api";
 import type { RatingsSummaryModel } from "../../../movies/types/ratings-summary";
 import type { FullMovieApiResponse } from "../../types/api";
 
@@ -10,5 +11,6 @@ export interface FullMovieModel {
 }
 
 export function mapApiResponseToModel(data: FullMovieApiResponse) {
-    return data as FullMovieModel;
+    const { data: movie, ...rest } = data;
+    return { ...rest, data: mapMovieApiToModel(movie) } as FullMovieModel;
 }
