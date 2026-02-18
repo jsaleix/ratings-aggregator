@@ -13,7 +13,7 @@ export class CreateMovieDto {
   language: string;
 
   @IsString()
-  tagLine: string;
+  tag_line: string;
 
   @IsString()
   summary: string;
@@ -35,8 +35,8 @@ export class CreateMovieDto {
   poster_path: string;
 
   @IsNumber()
-  tmdbId: number;
+  tmdb_id: number;
 
   @IsString()
-  imdbId: string;
+  imdb_id: string;
 }
