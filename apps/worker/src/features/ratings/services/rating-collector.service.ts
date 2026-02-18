@@ -44,8 +44,8 @@ export class RatingCollectorService {
     }
 
     async collectIMDB(movie: MovieType) {
-        const { title, id: movieId, year, imdbId } = movie;
-        const value = await getIMDBScore(title, year, imdbId);
+        const { title, id: movieId, year, imdb_id } = movie;
+        const value = await getIMDBScore(title, year, imdb_id);
         if (!value) throw new Error(`IMDB rating for ${title} not found`);
 
         const { score, url } = value;
@@ -55,7 +55,7 @@ export class RatingCollectorService {
             value: score,
             rating_source: RATING_SOURCES.IMDB,
             rating_unit: RATING_UNITS.POINTS,
-            sourceUrl: url,
+            source_url: url,
         });
     }
 
@@ -73,14 +73,14 @@ export class RatingCollectorService {
                 value: criticsRatings,
                 rating_source: RATING_SOURCES.ROTTEN_TOMATOES,
                 rating_unit: RATING_UNITS.PERCENTAGE,
-                sourceUrl: url,
+                source_url: url,
             }),
             this.ratingRepository.addOrUpdate({
                 movieId,
                 value: audienceRatings,
                 rating_source: RATING_SOURCES.ROTTEN_TOMATOES_AUDIENCE,
                 rating_unit: RATING_UNITS.PERCENTAGE,
-                sourceUrl: url,
+                source_url: url,
             }),
         ]);
     }
@@ -99,7 +99,7 @@ export class RatingCollectorService {
             value: score,
             rating_source: RATING_SOURCES.LETTERBOXD,
             rating_unit: RATING_UNITS.STARS,
-            sourceUrl: url,
+            source_url: url,
         });
     }
 }

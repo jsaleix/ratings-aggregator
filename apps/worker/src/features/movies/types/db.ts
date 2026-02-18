@@ -13,8 +13,8 @@ const movieModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
         original_title: true,
         language: true,
         created_at: true,
-        tmdbId: true,
-        tagLine: true,
+        tmdb_id: true,
+        tag_line: true,
         summary: true,
         runtime: true,
         release_date: true,
@@ -22,7 +22,7 @@ const movieModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
         budget: true,
         poster_path: true,
         updated_at: true,
-        imdbId: true,
+        imdb_id: true,
     },
 });
 

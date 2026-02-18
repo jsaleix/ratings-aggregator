@@ -7,8 +7,8 @@ import { AddMovieByTMDBIdUseCase } from "./add-movie-by-tmdb-id";
 
 const existingMovie = {
     id: "1",
-    tmdbId: 12345,
-    imdbId: "tt12345",
+    tmdb_id: 12345,
+    imdb_id: "tt12345",
     title: "Test Movie",
     original_title: "Test Movie",
     language: "en",
@@ -18,7 +18,7 @@ const existingMovie = {
     poster_path: "",
     year: 2020,
     budget: 1000000,
-    tagLine: "A test movie tagline",
+    tag_line: "A test movie tagline",
     created_at: new Date(),
     updated_at: new Date(),
 } satisfies MovieCreateInput;
@@ -50,6 +50,7 @@ describe("Use-cases/AddMovieByTMDBId", () => {
 
         it("should add a new movie by ID", async () => {
             const tmdbId = 67890;
+            // Mocks TMDB ID return value
             const mockMovieResponse = {
                 adult: false,
                 id: tmdbId,
@@ -64,11 +65,14 @@ describe("Use-cases/AddMovieByTMDBId", () => {
                 imdb_id: "tt123",
             } satisfies TMDBGetMovieType;
 
+            // Mocks getMovieById return value
             tmdbService.getMovieById = jest
                 .fn()
                 .mockResolvedValue(mockMovieResponse);
+
+            // Mocks mapApiResponseToModel return value
             tmdbService.mapApiResponseToModel = jest.fn().mockReturnValue({
-                tmdbId: tmdbId,
+                tmdb_id: tmdbId,
                 title: mockMovieResponse.title,
                 original_title: mockMovieResponse.original_title,
                 summary: mockMovieResponse.overview,
@@ -77,11 +81,12 @@ describe("Use-cases/AddMovieByTMDBId", () => {
                 poster_path: "",
                 year: 2021,
                 budget: 0,
-                tagLine: "",
+                tag_line: "",
                 language: mockMovieResponse.original_language,
-                imdbId: mockMovieResponse.imdb_id,
+                imdb_id: mockMovieResponse.imdb_id,
             } satisfies MovieCreateInput);
 
+            // Mocks repository upsert return value
             prismaMock.movie.upsert.mockResolvedValue({
                 ...existingMovie,
                 title: mockMovieResponse.title,
@@ -91,7 +96,7 @@ describe("Use-cases/AddMovieByTMDBId", () => {
 
             const result = await useCase.execute(tmdbId);
             const payload = {
-                tmdbId: tmdbId,
+                tmdb_id: tmdbId,
                 title: mockMovieResponse.title,
                 original_title: mockMovieResponse.original_title,
                 summary: mockMovieResponse.overview,
@@ -100,14 +105,14 @@ describe("Use-cases/AddMovieByTMDBId", () => {
                 poster_path: "",
                 year: 2021,
                 budget: 0,
-                tagLine: "",
+                tag_line: "",
                 language: mockMovieResponse.original_language,
-                imdbId: mockMovieResponse.imdb_id,
+                imdb_id: mockMovieResponse.imdb_id,
             };
             expect(prismaMock.movie.upsert).toHaveBeenCalledWith({
                 create: payload,
                 update: payload,
-                where: { tmdbId: payload.tmdbId },
+                where: { tmdb_id: payload.tmdb_id },
             });
 
             expect(result).toHaveProperty("id");

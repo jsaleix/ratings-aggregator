@@ -10,7 +10,7 @@ const ratingModel = Prisma.validator<Prisma.Movie_RatingDefaultArgs>()({
         extra: true,
         created_at: true,
         updated_at: true,
-        sourceUrl: true
+        source_url: true
     },
 });
 
@@ -21,7 +21,7 @@ const ratingWithMovieModel = Prisma.validator<Prisma.Movie_RatingDefaultArgs>()(
                 select: {
                     id: true,
                     title: true,
-                    tmdbId: true,
+                    tmdb_id: true,
                 },
             },
         },

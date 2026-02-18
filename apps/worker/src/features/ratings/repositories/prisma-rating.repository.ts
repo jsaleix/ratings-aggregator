@@ -12,7 +12,7 @@ class PrismaRatingRepository implements RatingRepositoryI {
     }
 
     async addOrUpdate(data: RatingAttributesType) {
-        const { movieId, value, rating_source, rating_unit, sourceUrl } = data;
+        const { movieId, value, rating_source, rating_unit, source_url } = data;
         const exists = await this.db.movie_Rating.findFirst({
             where: {
                 movieId,
@@ -22,7 +22,7 @@ class PrismaRatingRepository implements RatingRepositoryI {
         if (exists) {
             return await this.db.movie_Rating.update({
                 where: { id: exists.id },
-                data: { value, sourceUrl: sourceUrl ?? null },
+                data: { value, source_url: source_url ?? null },
             });
         } else {
             return await this.db.movie_Rating.create({
@@ -31,7 +31,7 @@ class PrismaRatingRepository implements RatingRepositoryI {
                     value,
                     rating_source,
                     rating_unit,
-                    sourceUrl: sourceUrl ?? null,
+                    source_url: source_url ?? null,
                 },
             });
         }
