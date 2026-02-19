@@ -1,34 +1,19 @@
 import { PrismaClient } from "../../../../generated/prisma";
 import { RatingRepositoryI } from "../interfaces/repositories";
 import { RatingType } from "../types/db";
-import { RatingAttributesType } from "../types/rating";
+import { CreateRatingAttributesType } from "../types/rating";
 
 class MockRatingRepository implements RatingRepositoryI {
     constructor(private db: PrismaClient) {}
 
-    async addOrUpdate(data: RatingAttributesType) {
+    async addOrUpdate(data: CreateRatingAttributesType) {
         const { movieId, value, rating_source_id, source_url } = data;
-        const exists = await this.db.movie_Rating.findFirst({
-            where: {
-                movieId,
-                rating_source_id,
-            },
+
+        return await this.db.movie_Rating.upsert({
+            where: { id: movieId, rating_source_id },
+            create: { movieId, rating_source_id, value, source_url },
+            update: { value, source_url },
         });
-        if (exists) {
-            return await this.db.movie_Rating.update({
-                where: { id: exists.id },
-                data: { value, source_url: source_url ?? null },
-            });
-        } else {
-            return await this.db.movie_Rating.create({
-                data: {
-                    movieId,
-                    value,
-                    source_url: source_url ?? null,
-                    rating_source_id,
-                },
-            });
-        }
     }
 
     async getRatingsByMovieId(movieId: string): Promise<Array<RatingType>> {

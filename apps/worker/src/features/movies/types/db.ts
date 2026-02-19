@@ -1,6 +1,6 @@
 import { Prisma } from "../../../../generated/prisma";
 
-const movieWithPostsModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
+const movieWithRatingsModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
     include: {
         Movie_Rating: true,
     },
@@ -28,6 +28,6 @@ const movieModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
 
 export type MovieType = Prisma.MovieGetPayload<typeof movieModel>;
 export type MovieWithRatingsType = Prisma.MovieGetPayload<
-    typeof movieWithPostsModel
+    typeof movieWithRatingsModel
 >;
 export type MovieCreateInput = Prisma.MovieCreateInput;

@@ -66,6 +66,18 @@ class ApiMoviesService {
         return mapMovieApiToModel(data);
     }
 
+    async getBySlug(slug: string) {
+        const url = new URL(`/movies/slug/${slug}`, API_ENDPOINT);
+        const res = await fetch(url, {
+            method: "GET",
+        });
+        if (!res.ok) {
+            throw new Error(`Error fetching movie: ${slug}: ${res.statusText}`);
+        }
+        const data = (await res.json())["movie"] as MovieApiResponseType;
+        return mapMovieApiToModel(data);
+    }
+
     async search(
         params: SearchMovieParams,
     ): Promise<PaginatedResult<MovieModel>> {

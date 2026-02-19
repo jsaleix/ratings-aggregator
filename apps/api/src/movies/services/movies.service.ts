@@ -26,6 +26,12 @@ export class MoviesService {
     return { movie };
   }
 
+  async findOneBySlug(slug: string) {
+    const movie = await this.prisma.movie.findUnique({ where: { slug } });
+    if (!movie) throw new NotFoundException(`movie ${slug} not found`);
+    return { movie };
+  }
+
   update(id: string, updateMovieDto: UpdateMovieDto) {
     return `This action updates a #${id} movie`;
   }

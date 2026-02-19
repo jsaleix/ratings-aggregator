@@ -1,6 +1,7 @@
 import { Job, Worker } from "bullmq";
 
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
+import { logger } from "../../shared/logger";
 import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
 import TMDBService from "../../features/movies/services/tmdb.service";
 import PrismaMovieRequestRepository from "../../features/requests/repositories/prisma-request.repository";
@@ -8,7 +9,6 @@ import { MovieType } from "../../features/movies/types/db";
 import { AddMovieByTMDBIdUseCase } from "../../features/movies/use-cases/add-movie-by-tmdb-id";
 import { ratingQueue } from "..";
 import MovieHandler, { MovieJob } from "./handler";
-import { logger } from "../../shared/logger";
 
 const tmdbService = new TMDBService();
 const movieRepository = new PrismaMovieRepository();

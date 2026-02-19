@@ -32,7 +32,7 @@ export class BullmqService {
 
   async addRequestToQueue(requestId: string, tmdbId: number) {
     await this.movieQueue.add('add-movie', {
-      type: 'add-movie-with-ratings:tmdbId',
+      type: 'add-movie',
       payload: { tmdbId, requestId },
     });
   }

@@ -1,4 +1,4 @@
-export type RatingAttributesType = {
+export type CreateRatingAttributesType = {
     movieId: string;
     value: string;
     source_url?: string;

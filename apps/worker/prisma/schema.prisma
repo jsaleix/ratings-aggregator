@@ -17,7 +17,7 @@ datasource db {
 model Movie {
   id                    String                  @id @default(uuid())
   title                 String
-  tmdb_id                Int                     @unique
+  tmdb_id               Int                     @unique
   tag_line              String  
   summary               String
   runtime               Int
@@ -27,11 +27,12 @@ model Movie {
   poster_path           String
   created_at            DateTime                @default(now()) @db.Timestamp(6)
   updated_at            DateTime                @updatedAt
+  original_title        String
+  imdb_id               String
+  language              String
+  slug                  String? @unique
   Movie_Rating          Movie_Rating[]
   Movie_Ratings_Summary Movie_Ratings_Summary[]
-  original_title        String
-  imdb_id                String
-  language              String
 }
 
 model Movie_Ratings_Summary {

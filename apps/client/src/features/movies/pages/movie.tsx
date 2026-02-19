@@ -17,18 +17,18 @@ import MovieSummaryPart from "../components/movie-summary-part";
 
 import useMovieRatings from "../hooks/use-movie-ratings";
 import useMovieSummary from "../hooks/use-movie-summary";
-import useMovie from "../hooks/use-movie";
+import useMovieBySlug from "../hooks/use-movie-by-slug";
 
 export default function MoviePage() {
     const { isConnected, role } = useAuthContext();
     const hasAdminRights =
         !!role && (ROLES.ADMIN === role || ROLES.MOD === role);
-    let { id } = useParams();
-    const { movie, isMovieFetching } = useMovie(id);
-    
-    const { ratings, deleteRatingMutation } = useMovieRatings(id);
+    let { slug } = useParams();
+
+    const { movie, isMovieFetching } = useMovieBySlug(slug);
+    const { ratings, deleteRatingMutation } = useMovieRatings(movie?.id);
     const { summary, deleteSummaryMutation, refreshSummaryMutation } =
-        useMovieSummary(id);
+        useMovieSummary(movie?.id);
 
     const lastUpdatedStr = useMemo(() => {
         if (!movie) return "";
@@ -39,7 +39,7 @@ export default function MoviePage() {
 
     const posterUrl = useMemo(
         () => (movie ? BASE_POSTER_URL + movie.poster_path : ""),
-        [movie]
+        [movie],
     );
 
     useEffect(() => {
@@ -100,7 +100,7 @@ export default function MoviePage() {
                                     Release date:{" "}
                                     <span className="text-white">
                                         {new Date(
-                                            movie.release_date
+                                            movie.release_date,
                                         ).toLocaleDateString()}
                                     </span>
                                 </p>
@@ -119,7 +119,7 @@ export default function MoviePage() {
                                     {movie.tmdbId}
                                 </code>
                             </p>
-                            <CompareBtn movieId={id!} />
+                            <CompareBtn movieId={movie.id} />
                         </div>
                     </div>
                 </header>

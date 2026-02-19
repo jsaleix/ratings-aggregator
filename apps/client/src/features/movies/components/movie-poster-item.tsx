@@ -24,7 +24,7 @@ export default function MoviePosterItem({ movie }: Props) {
 
     return (
         <Link
-            to={`/movies/${movie.id}`}
+            to={`/movies/${movie.slug}`}
             className="relative block hover:opacity-90 duration-150 rounded-md overflow-hidden w-55"
         >
             <div className="w-55 overflow-hidden object-contain shadow-xl">
