@@ -46,18 +46,18 @@ model Movie_Ratings_Summary {
 }
 
 model Movie_Rating {
-  id            String     @id @default(uuid())
-  movieId       String     @map("movie_id")
-  Movie         Movie      @relation(fields: [movieId], references: [id])
-  value         String
-  extra         String     @default("")
-  source_url     String?
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  rating_source String
-  rating_unit   RatingUnit
-  ratingSourceId String
-  Rating_Source Rating_Source @relation(fields: [ratingSourceId], references: [id])
+  id              String     @id @default(uuid())
+  movieId         String     @map("movie_id")
+  Movie           Movie      @relation(fields: [movieId], references: [id])
+  value           String
+  extra           String     @default("")
+  source_url      String?
+  created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
+  rating_source   String?
+  rating_unit     RatingUnit?
+  rating_source_id  String?
+  Rating_Source   Rating_Source? @relation(fields: [rating_source_id], references: [id])
 }
 
 model Rating_Source {

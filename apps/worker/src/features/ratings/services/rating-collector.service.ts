@@ -1,13 +1,42 @@
 import { RATING_SOURCES, RATING_UNITS } from "../../../config/ratings";
 import { MovieType } from "../../movies/types/db";
-import { RatingRepositoryI } from "../interfaces/repositories";
+import {
+    RatingRepositoryI,
+    RatingSourceRepositoryI,
+} from "../interfaces/repositories";
 import { getAllocineScore } from "../providers/allocine";
 import { getIMDBScore } from "../providers/imdb";
 import { getLetterBoxdScore } from "../providers/letterboxd";
 import { getRottenTomatoesScores } from "../providers/rotten";
 
 export class RatingCollectorService {
-    constructor(private ratingRepository: RatingRepositoryI) {}
+    private ratingSourceCache: Map<string, string> | null = null;
+    private ratingSourceCacheExpiry: number | null = null;
+    private readonly CACHE_TTL_MS = 60 * 60 * 1000; // 1h
+
+    constructor(
+        private ratingRepository: RatingRepositoryI,
+        private ratingSourceRepository: RatingSourceRepositoryI,
+    ) {}
+
+    private async getRatingSourceId(code: string): Promise<string> {
+        const now = Date.now();
+        if (
+            !this.ratingSourceCache ||
+            !this.ratingSourceCacheExpiry ||
+            now > this.ratingSourceCacheExpiry
+        ) {
+            const sources = await this.ratingSourceRepository.findAll();
+            this.ratingSourceCache = new Map(
+                sources.map((s) => [s.code, s.id]),
+            );
+            this.ratingSourceCacheExpiry = now + this.CACHE_TTL_MS;
+        }
+        console.log(this.ratingSourceCache);
+        const id = this.ratingSourceCache.get(code);
+        if (!id) throw new Error(`Rating source "${code}" not found`);
+        return id;
+    }
 
     async collectAllocine(movie: MovieType) {
         const { title, id: movieId, year, language, original_title } = movie;
@@ -31,14 +60,18 @@ export class RatingCollectorService {
             this.ratingRepository.addOrUpdate({
                 movieId,
                 value: press,
-                rating_source: RATING_SOURCES.ALLOCINE_PRESS,
-                rating_unit: RATING_UNITS.STARS,
+                rating_source_id: await this.getRatingSourceId(
+                    RATING_SOURCES.ALLOCINE_PRESS,
+                ),
+                // rating_source: RATING_SOURCES.ALLOCINE_PRESS,
+                // rating_unit: RATING_UNITS.STARS,
             }),
             this.ratingRepository.addOrUpdate({
                 movieId,
                 value: audience,
-                rating_source: RATING_SOURCES.ALLOCINE_AUDIENCE,
-                rating_unit: RATING_UNITS.STARS,
+                rating_source_id: await this.getRatingSourceId(
+                    RATING_SOURCES.ALLOCINE_AUDIENCE,
+                ),
             }),
         ]);
     }
@@ -53,9 +86,10 @@ export class RatingCollectorService {
         return this.ratingRepository.addOrUpdate({
             movieId,
             value: score,
-            rating_source: RATING_SOURCES.IMDB,
-            rating_unit: RATING_UNITS.POINTS,
+            // rating_source: RATING_SOURCES.IMDB,
+            // rating_unit: RATING_UNITS.POINTS,
             source_url: url,
+            rating_source_id: await this.getRatingSourceId(RATING_SOURCES.IMDB),
         });
     }
 
@@ -71,16 +105,22 @@ export class RatingCollectorService {
             this.ratingRepository.addOrUpdate({
                 movieId,
                 value: criticsRatings,
-                rating_source: RATING_SOURCES.ROTTEN_TOMATOES,
-                rating_unit: RATING_UNITS.PERCENTAGE,
+                // rating_source: RATING_SOURCES.ROTTEN_TOMATOES,
+                // rating_unit: RATING_UNITS.PERCENTAGE,
                 source_url: url,
+                rating_source_id: await this.getRatingSourceId(
+                    RATING_SOURCES.ROTTEN_TOMATOES,
+                ),
             }),
             this.ratingRepository.addOrUpdate({
                 movieId,
                 value: audienceRatings,
-                rating_source: RATING_SOURCES.ROTTEN_TOMATOES_AUDIENCE,
-                rating_unit: RATING_UNITS.PERCENTAGE,
+                // rating_source: RATING_SOURCES.ROTTEN_TOMATOES_AUDIENCE,
+                // rating_unit: RATING_UNITS.PERCENTAGE,
                 source_url: url,
+                rating_source_id: await this.getRatingSourceId(
+                    RATING_SOURCES.ROTTEN_TOMATOES_AUDIENCE,
+                ),
             }),
         ]);
     }
@@ -97,9 +137,12 @@ export class RatingCollectorService {
         return this.ratingRepository.addOrUpdate({
             movieId,
             value: score,
-            rating_source: RATING_SOURCES.LETTERBOXD,
-            rating_unit: RATING_UNITS.STARS,
+            // rating_source: RATING_SOURCES.LETTERBOXD,
+            // rating_unit: RATING_UNITS.STARS,
             source_url: url,
+            rating_source_id: await this.getRatingSourceId(
+                RATING_SOURCES.LETTERBOXD,
+            ),
         });
     }
 }

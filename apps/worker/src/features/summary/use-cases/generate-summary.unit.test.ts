@@ -1,5 +1,5 @@
 import { ScoreService } from "../../ratings/services/score.service";
-import { RatingType } from "../../ratings/types/db";
+import { FullRatingType } from "../../ratings/types/db";
 import { SummaryRepositoryI } from "../interfaces/repositories";
 import AIService from "../services/ai.service";
 import { GenerateMovieSummaryUseCase } from "./generate-summary";
@@ -13,27 +13,39 @@ describe("UseCase GenerateSummary", () => {
     const ratings = [
         {
             id: "r1",
-            rating_source: "Allociné",
             value: "7",
-            rating_unit: "stars",
             source_url: null,
             extra: "",
             movieId: "movie-1",
             created_at: new Date(),
             updated_at: new Date(),
+            Rating_Source: {
+                id: "1",
+                rating_unit: "stars",
+                code: "Allociné",
+                name: "Allociné",
+                url: "https://allocine.fr",
+                country_code: "FR",
+            },
         },
         {
             id: "r2",
-            rating_source: "Allociné Audience",
             value: "8",
-            rating_unit: "stars",
             source_url: null,
             extra: "",
             movieId: "movie-1",
             created_at: new Date(),
             updated_at: new Date(),
+            Rating_Source: {
+                id: "1",
+                rating_unit: "stars",
+                code: "Allociné_audience",
+                name: "Allociné (Audience)",
+                url: "https://allocine.fr",
+                country_code: "FR",
+            },
         },
-    ] satisfies RatingType[];
+    ] satisfies FullRatingType[];
 
     beforeEach(() => {
         aiService = {

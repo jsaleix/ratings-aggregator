@@ -5,6 +5,7 @@ import { logger } from "../../shared/logger";
 
 import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
 import PrismaRatingRepository from "../../features/ratings/repositories/prisma-rating.repository";
+import { PrismaRatingSourceRepository } from "../../features/ratings/repositories/prisma-rating-source.repository";
 import { SetMovieRatings } from "../../features/ratings/use-cases/set-movie-ratings";
 import { RatingCollectorService } from "../../features/ratings/services/rating-collector.service";
 
@@ -12,8 +13,12 @@ import { summaryQueue } from "..";
 import RatingHandler from "./handler";
 
 const movieRepository = new PrismaMovieRepository();
-const ratingService = new PrismaRatingRepository();
-const ratingCollector = new RatingCollectorService(ratingService);
+const ratingSourceRepository = new PrismaRatingSourceRepository();
+const ratingRepository = new PrismaRatingRepository();
+const ratingCollector = new RatingCollectorService(
+    ratingRepository,
+    ratingSourceRepository,
+);
 
 const setMovieRatingsUseCase = new SetMovieRatings(
     movieRepository,

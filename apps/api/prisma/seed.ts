@@ -96,14 +96,13 @@ async function tmpMapExistingData() {
     select: { id: true, rating_source: true, rating_source_id: true },
   });
 
-  // Mettre à jour seulement ceux qui ont une correspondance
   const updates = ratings
-    .filter((r) => !r.rating_source_id && sourceMap.has(r.rating_source))
+    .filter((r) => !r.rating_source_id && sourceMap.has(r.rating_source as string))
     .map((r) =>
       prisma.movie_Rating.update({
         where: { id: r.id },
         data: {
-          rating_source_id: sourceMap.get(r.rating_source)!,
+          rating_source_id: sourceMap.get(r.rating_source as string)!,
         },
       }),
     );
