@@ -1,4 +1,3 @@
-import slugify from "slugify";
 import { prismaMock } from "../../../tests/singleton";
 import MockMovieRepository from "../repositories/mock-movie.repository";
 import TMDBService from "../services/tmdb.service";

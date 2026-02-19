@@ -1,7 +1,7 @@
 import { logger } from "../../../shared/logger";
 
 import { ScoreService } from "../../ratings/services/score.service";
-import { FullRatingType, RatingType } from "../../ratings/types/db";
+import { FullRatingType } from "../../ratings/types/db";
 import { SummaryRepositoryI } from "../interfaces/repositories";
 import AIService from "../services/ai.service";
 

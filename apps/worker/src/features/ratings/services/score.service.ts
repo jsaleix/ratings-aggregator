@@ -1,7 +1,4 @@
-import { FullRatingType, RatingType } from "../types/db";
 import { RATING_UNITS } from "../../../config/ratings";
-
-// export type CalcScoreRatingItem = Pick<FullRatingType, "value">;
 
 export type CalcScoreRatingItem = {
     value: string;
