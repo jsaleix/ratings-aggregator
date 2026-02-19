@@ -46,7 +46,7 @@ class TMDBService {
 
     mapApiResponseToModel(tmdbMovie: TMDBGetMovieType): MovieCreateInput {
         let {
-            id: tmdbId,
+            id: tmdb_id,
             title,
             tagline,
             overview: summary,
@@ -65,21 +65,21 @@ class TMDBService {
 
         const release_date = new Date(rawReleaseDate).toISOString();
 
-        if (!tmdbId || !title || !summary || !poster_path || !release_date) {
+        if (!tmdb_id || !title || !summary || !poster_path || !release_date) {
             throw new Error("Missing required movie data");
         }
 
         return {
-            tmdbId,
+            tmdb_id,
             title,
-            tagLine: tagline || "",
+            tag_line: tagline || "",
             summary,
             budget: budget || -1,
             year,
             poster_path,
             release_date: new Date(release_date),
             runtime: runtime ? +runtime : -1,
-            imdbId: imdb_id,
+            imdb_id,
             original_title,
             language: original_language,
         } satisfies MovieCreateInput;

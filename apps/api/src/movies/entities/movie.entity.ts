@@ -1,29 +1,18 @@
-import { Prisma } from "generated/prisma/client";
+import { Prisma } from 'generated/prisma/client';
 
-const movieWithRatingsModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
-  include: {
-    Movie_Rating: true,
-  },
-});
+const movieModel: Prisma.MovieSelect = {
+  id: true,
+  title: true,
+  created_at: true,
+  tmdb_id: true,
+  tag_line: true,
+  summary: true,
+  runtime: true,
+  release_date: true,
+  year: true,
+  budget: true,
+  poster_path: true,
+};
 
-const movieModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
-  select: {
-    id: true,
-    title: true,
-    created_at: true,
-    tmdbId: true,
-    tagLine: true,
-    summary: true,
-    runtime: true,
-    release_date: true,
-    year: true,
-    budget: true,
-    poster_path: true,
-  },
-});
-
-export type MovieType = Prisma.MovieGetPayload<typeof movieModel>;
-export type MovieWithRatingsType = Prisma.MovieGetPayload<
-  typeof movieWithRatingsModel
->;
+export type MovieType = typeof movieModel;
 export type MovieCreateInput = Prisma.MovieCreateInput;

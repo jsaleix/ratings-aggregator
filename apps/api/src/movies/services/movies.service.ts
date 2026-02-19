@@ -33,7 +33,7 @@ export class MoviesService {
   async remove(id: string) {
     const { movie } = await this.findOne(id);
     const deleteRequests = this.prisma.movie_Request.deleteMany({
-      where: { tmdbId: movie.tmdbId },
+      where: { tmdb_id: movie.tmdb_id },
     });
     const deleteRatings = this.prisma.movie_Rating.deleteMany({
       where: { movieId: id },

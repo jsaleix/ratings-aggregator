@@ -2,6 +2,10 @@ import { API_ENDPOINT } from "../../../core/config/api";
 import type { PaginatedResult } from "../../../shared/types/pagination";
 import type { TMDBGetMovieType } from "../../requests/types/tmdb";
 import type { MovieModel } from "../types/movie";
+import {
+    mapMovieApiToModel,
+    type MovieApiResponseType,
+} from "../types/movie.api";
 
 type SearchMovieParams = {
     title: string;
@@ -55,14 +59,15 @@ class ApiMoviesService {
         });
         if (!res.ok) {
             throw new Error(
-                `Error fetching movie with id ${id}: ${res.statusText}`
+                `Error fetching movie with id ${id}: ${res.statusText}`,
             );
         }
-        return (await res.json())["movie"] as MovieModel;
+        const data = (await res.json())["movie"] as MovieApiResponseType;
+        return mapMovieApiToModel(data);
     }
 
     async search(
-        params: SearchMovieParams
+        params: SearchMovieParams,
     ): Promise<PaginatedResult<MovieModel>> {
         const { title, page, order, orderBy } = params;
         const url = new URL("/movies/search", API_ENDPOINT);
@@ -78,7 +83,12 @@ class ApiMoviesService {
         if (!res.ok) {
             throw new Error(`Error searching movies: ${res.statusText}`);
         }
-        return (await res.json()) as PaginatedResult<MovieModel>;
+        const { data, pagination } =
+            (await res.json()) as PaginatedResult<MovieApiResponseType>;
+        return {
+            data: data.map((d) => mapMovieApiToModel(d)),
+            pagination,
+        } as PaginatedResult<MovieModel>;
     }
 
     async searchByTMDBID(title: string): Promise<Array<TMDBGetMovieType>> {
@@ -114,7 +124,7 @@ class ApiMoviesService {
         });
         if (!res.ok) {
             throw new Error(
-                `Error deleting movie with id ${id}: ${res.statusText}`
+                `Error deleting movie with id ${id}: ${res.statusText}`,
             );
         }
         return true;

@@ -9,7 +9,7 @@ export default function MovieSummaryItem({ data }: Props) {
         <div className="w-full xl:w-2/4 h-fit bg-bg-medium p-5 rounded-xl shadow-md flex flex-col gap-1">
             <div className="flex flex-col items-center md:flex-row md:items-start gap-5">
                 <span className="font-bold text-8xl select-none">
-                    {data.score}
+                    {data.score_value}%
                 </span>
                 <div>
                     <p className="text-white">{data.content}</p>

@@ -47,8 +47,8 @@ export class RequestsController {
 
   @Public()
   @Get()
-  async findAll() {
-    return this.requestsService.findAll(false);
+  async findAllPublic() {
+    return this.requestsService.findAllPublic(false);
   }
 
   @Role('admin')

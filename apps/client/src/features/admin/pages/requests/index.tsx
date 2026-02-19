@@ -54,11 +54,11 @@ export default function RequestsPage() {
                                         </td>
                                         <td className="">
                                             <p className="text-white text-bold">
-                                                #{request.tmdbId}
+                                                #{request.tmdb_id}
                                             </p>
                                             <a
                                                 href={new URL(
-                                                    request.tmdbId.toString(),
+                                                    request.tmdb_id.toString(),
                                                     "https://www.themoviedb.org/movie/"
                                                 ).toString()}
                                                 target="_blank"

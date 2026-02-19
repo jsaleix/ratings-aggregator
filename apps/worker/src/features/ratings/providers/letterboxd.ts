@@ -2,6 +2,9 @@ import puppeteer from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
 import { logger } from "../../../shared/logger";
 
+const userAgent =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36";
+
 export const getLetterBoxdScore = async (name: string, year: number) => {
     const browser = await puppeteer.launch({
         headless: "shell",
@@ -10,27 +13,36 @@ export const getLetterBoxdScore = async (name: string, year: number) => {
     });
     name = name.toLowerCase();
     const page = await browser.newPage();
+    await page.setUserAgent(userAgent);
 
     try {
         const searchUrl = `https://letterboxd.com/search/films/${encodeURIComponent(
-            `${name} ${year}`
+            `${name} ${year}`,
         )}`;
+
         await page.goto(searchUrl, { waitUntil: "domcontentloaded" });
+
+        // const screenshotPath = `./debug-letterboxd-${Date.now()}.png`;
+        // await page.screenshot({
+        //     path: screenshotPath as `${string}.png`,
+        //     fullPage: true,
+        // });
+        // console.log(`📸 Screenshot saved in : ${screenshotPath}`);
 
         const mediaRowSelector = "#search-table-body > ul > li";
         await page.waitForSelector(mediaRowSelector, { timeout: 10000 });
 
         const movieUrl = await page.evaluate((targetYear) => {
             const rows = Array.from(
-                document.querySelectorAll("#search-table-body > ul > li")
+                document.querySelectorAll("#search-table-body > ul > li"),
             );
 
             for (const row of rows) {
                 const name = row.querySelector(
-                    "article > div.body > h2 > span > a"
+                    "article > div.body > h2 > span > a",
                 );
                 const releaseYear = row.querySelector(
-                    "article > div.body > h2 > span > small > a"
+                    "article > div.body > h2 > span > small > a",
                 );
                 if (
                     name &&
@@ -48,7 +60,7 @@ export const getLetterBoxdScore = async (name: string, year: number) => {
 
         const fullMovieUrl = new URL(
             movieUrl,
-            "https://letterboxd.com/"
+            "https://letterboxd.com/",
         ).toString();
         console.log(`🔗 Redirection vers : ${fullMovieUrl}`);
 
@@ -62,7 +74,7 @@ export const getLetterBoxdScore = async (name: string, year: number) => {
 
         let score = await page.$eval(
             selector,
-            (el) => el.textContent?.trim() || "N/A"
+            (el) => el.textContent?.trim() || "N/A",
         );
 
         console.log(`score: ${score}`);

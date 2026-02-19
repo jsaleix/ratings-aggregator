@@ -12,7 +12,7 @@ function ScoreItem({ rating }: { rating: MovieRatingModel }) {
             </h2>
         );
 
-    switch (rating.rating_unit) {
+    switch (rating.Rating_Source.rating_unit) {
         case "percentage":
             const [val] = rating.value.split("%");
             return (
@@ -70,11 +70,11 @@ export default function MovieRatingItem({ rating }: Props) {
             <div className="flex flex-col">
                 <div className="flex items-center gap-2">
                     <h3 className="capitalize text-xl text-white">
-                        {rating.rating_source.replaceAll("_", " ")}
+                        {rating.Rating_Source.name}
                     </h3>
 
-                    {rating.sourceUrl && (
-                        <a href={rating.sourceUrl} target="_blank">
+                    {rating.source_url && (
+                        <a href={rating.source_url} target="_blank">
                             <svg
                                 width="15"
                                 height="15"

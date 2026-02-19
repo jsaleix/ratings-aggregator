@@ -1,6 +1,6 @@
 export interface MovieRequestModel {
     id: string;
-    tmdbId: number;
+    tmdb_id: number;
     title: string;
     created_at: string;
 }

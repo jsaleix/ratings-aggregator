@@ -1,4 +1,4 @@
-import type { MovieRatingApiResponseType } from "../../movies/types/movie-rating.api";
+import type { MovieRatingModel } from "../../movies/types/movie-rating";
 import type { MovieApiResponseType } from "../../movies/types/movie.api";
 import type { RatingsSummaryApiResponseType } from "../../movies/types/ratings-summary.api";
 
@@ -7,19 +7,19 @@ export type CompareMoviesApiResponse = {
         {
             data: MovieApiResponseType;
             ratings: {
-                common: MovieRatingApiResponseType[];
-                unique: MovieRatingApiResponseType[];
+                common: MovieRatingModel[];
+                unique: MovieRatingModel[];
             };
             summary: RatingsSummaryApiResponseType | null;
         },
         {
             data: MovieApiResponseType;
             ratings: {
-                common: MovieRatingApiResponseType[];
-                unique: MovieRatingApiResponseType[];
+                common: MovieRatingModel[];
+                unique: MovieRatingModel[];
             };
             summary: RatingsSummaryApiResponseType | null;
-        }
+        },
     ];
     meta: {
         common: string[];
@@ -28,6 +28,6 @@ export type CompareMoviesApiResponse = {
 
 export type FullMovieApiResponse = {
     data: MovieApiResponseType;
-    ratings: MovieRatingApiResponseType[];
+    ratings: MovieRatingModel[];
     summary: RatingsSummaryApiResponseType | null;
 };

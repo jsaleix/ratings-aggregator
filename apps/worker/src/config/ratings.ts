@@ -9,6 +9,6 @@ export const RATING_SOURCES = {
 
 export const RATING_UNITS = {
     PERCENTAGE: "percentage",
-    STARS: "stars",
-    POINTS: "points",
+    STARS: "stars", // Out of 5
+    POINTS: "points", // Out of 10
 } as const;

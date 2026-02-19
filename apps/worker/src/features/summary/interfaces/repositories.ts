@@ -1,16 +1,16 @@
-import { RatingType } from "../../ratings/types/db";
+import { FullRatingType, RatingType } from "../../ratings/types/db";
 import { MovieRatingSummaryType } from "../types/db";
 
 export interface SummaryRepositoryI {
     saveSummary({
         movieId,
         content,
-        score,
+        scoreValue,
     }: {
         movieId: string;
         content: string;
-        score: string;
+        scoreValue: number;
     }): Promise<MovieRatingSummaryType>;
 
-    getRatingsByMovieId(movieId: string): Promise<RatingType[]>;
+    getRatingsByMovieId(movieId: string): Promise<FullRatingType[]>;
 }

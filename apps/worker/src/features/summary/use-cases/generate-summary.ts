@@ -1,4 +1,7 @@
-import { RatingType } from "../../ratings/types/db";
+import { logger } from "../../../shared/logger";
+
+import { ScoreService } from "../../ratings/services/score.service";
+import { FullRatingType, RatingType } from "../../ratings/types/db";
 import { SummaryRepositoryI } from "../interfaces/repositories";
 import AIService from "../services/ai.service";
 
@@ -6,16 +9,17 @@ export class GenerateMovieSummaryUseCase {
     constructor(
         private readonly aiService: AIService,
         private readonly summaryRepository: SummaryRepositoryI,
+        private readonly scoreService: ScoreService,
     ) {}
 
-    public static generateUserPrompt(ratings: RatingType[]) {
+    public static generateUserPrompt(ratings: FullRatingType[]) {
         return (
             "{" +
             ratings
                 .map(
-                    (rating) => `'${rating.rating_source}': {
+                    (rating) => `'${rating.Rating_Source?.name}': {
         value: '${rating.value}',
-        unit: '${rating.rating_unit}',
+        unit: '${rating.Rating_Source?.rating_unit}',
     }`,
                 )
                 .join(",\n") +
@@ -31,19 +35,27 @@ export class GenerateMovieSummaryUseCase {
         const ratings =
             await this.summaryRepository.getRatingsByMovieId(movieId);
         if (ratings.length < 1) throw new Error("Not enough ratings (min.1)");
-
+        const score = this.scoreService.calcScore(ratings);
         const userPrompt =
             GenerateMovieSummaryUseCase.generateUserPrompt(ratings);
         const systemPrompt = GenerateMovieSummaryUseCase.getSystemPrompt();
-        const { content, score } = await this.aiService.sendRequest({
-            user: userPrompt,
-            system: systemPrompt,
-        });
+        const response = await this.aiService
+            .sendRequest({
+                user: userPrompt,
+                system: systemPrompt,
+            })
+            .catch((error) => {
+                logger.error("aiService sendRequest error", {
+                    error,
+                    movieId: "",
+                });
+                return undefined;
+            });
 
         return await this.summaryRepository.saveSummary({
             movieId,
-            content,
-            score,
+            content: response?.content ?? "",
+            scoreValue: score,
         });
     }
 }

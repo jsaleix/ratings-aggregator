@@ -11,7 +11,7 @@ class MockMovieRepository implements MovieRepositoryI {
 
     async createOrUpdate(data: MovieCreateInput) {
         return await this.db.movie.upsert({
-            where: { tmdbId: data.tmdbId },
+            where: { tmdb_id: data.tmdb_id },
             create: data,
             update: data,
         });

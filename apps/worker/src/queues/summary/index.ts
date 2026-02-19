@@ -9,13 +9,16 @@ import { MovieRatingSummaryType } from "../../features/summary/types/db";
 import { logger } from "../../shared/logger";
 import { PrismaSummaryRepository } from "../../features/summary/repositories/prisma-summary.repository";
 import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
+import { ScoreService } from "../../features/ratings/services/score.service";
 
 const aiService = new AIService();
+const scoreService = new ScoreService();
 const movieService = new PrismaMovieRepository();
 const summaryDbService = new PrismaSummaryRepository();
 const generateMovieSummaryUseCase = new GenerateMovieSummaryUseCase(
     aiService,
     summaryDbService,
+    scoreService,
 );
 
 const summaryHandler = new SummaryHandler(generateMovieSummaryUseCase);
