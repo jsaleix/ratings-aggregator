@@ -54,10 +54,8 @@ model Movie_Rating {
   source_url      String?
   created_at      DateTime   @default(now())
   updated_at      DateTime   @updatedAt
-  rating_source   String?
-  rating_unit     RatingUnit?
-  rating_source_id  String?
-  Rating_Source   Rating_Source? @relation(fields: [rating_source_id], references: [id])
+  rating_source_id  String
+  Rating_Source   Rating_Source @relation(fields: [rating_source_id], references: [id])
 }
 
 model Rating_Source {

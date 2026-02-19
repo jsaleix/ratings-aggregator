@@ -14,6 +14,10 @@ class PrismaMovieRequestRepository implements MovieRequestRepositoryI {
         requestId: string,
         value: boolean,
     ): Promise<MovieRequestModel> {
+        const request = await this.db.movie_Request.findUnique({
+            where: { id: requestId },
+        });
+        if (!request) throw new Error("Request not found");
         return await this.db.movie_Request.update({
             where: { id: requestId },
             data: {

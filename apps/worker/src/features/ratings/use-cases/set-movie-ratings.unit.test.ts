@@ -30,9 +30,7 @@ describe("UseCase SetMovieRatings", () => {
     const mockRatingsAllocine = [
         {
             id: "r1",
-            rating_source: "Allociné",
             value: "7",
-            rating_unit: "stars",
             source_url: null,
             extra: "",
             movieId: "movie-1",
@@ -41,9 +39,7 @@ describe("UseCase SetMovieRatings", () => {
         },
         {
             id: "r2",
-            rating_source: "Allociné Audience",
             value: "8",
-            rating_unit: "stars",
             source_url: null,
             extra: "",
             movieId: "movie-1",
@@ -55,9 +51,7 @@ describe("UseCase SetMovieRatings", () => {
     const mockRatingsRotten = [
         {
             id: "r3",
-            rating_source: "Rotten Tomatoes",
             value: "85",
-            rating_unit: "percentage",
             source_url: null,
             extra: "",
             movieId: "movie-1",
@@ -66,9 +60,7 @@ describe("UseCase SetMovieRatings", () => {
         },
         {
             id: "r4",
-            rating_source: "Rotten Tomatoes Audience",
             value: "90",
-            rating_unit: "percentage",
             source_url: null,
             extra: "",
             movieId: "movie-1",
@@ -79,9 +71,7 @@ describe("UseCase SetMovieRatings", () => {
 
     const mockRatingIMDB = {
         id: "r5",
-        rating_source: "IMDB",
         value: "7.5",
-        rating_unit: "points",
         source_url: "https://imdb.com/title/tt1234567",
         extra: "",
         movieId: "movie-1",
@@ -91,9 +81,7 @@ describe("UseCase SetMovieRatings", () => {
 
     const mockRatingLetterboxd = {
         id: "r6",
-        rating_source: "letterboxd",
         value: "4.5",
-        rating_unit: "stars",
         source_url: "https://letterboxd.com/film/superman-2025",
         extra: "",
         movieId: "movie-1",

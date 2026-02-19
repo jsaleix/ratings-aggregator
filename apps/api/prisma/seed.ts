@@ -82,41 +82,41 @@ async function ratingSources() {
   }
 }
 
-async function tmpMapExistingData() {
-  const sources = await prisma.rating_Source.findMany({
-    select: { id: true, code: true },
-  });
+// async function tmpMapExistingData() {
+//   const sources = await prisma.rating_Source.findMany({
+//     select: { id: true, code: true },
+//   });
 
-  const sourceMap = new Map<string, string>();
-  for (const s of sources) {
-    sourceMap.set(s.code, s.id);
-  }
+//   const sourceMap = new Map<string, string>();
+//   for (const s of sources) {
+//     sourceMap.set(s.code, s.id);
+//   }
 
-  const ratings = await prisma.movie_Rating.findMany({
-    select: { id: true, rating_source: true, rating_source_id: true },
-  });
+//   const ratings = await prisma.movie_Rating.findMany({
+//     select: { id: true, rating_source_id: true },
+//   });
 
-  const updates = ratings
-    .filter((r) => !r.rating_source_id && sourceMap.has(r.rating_source as string))
-    .map((r) =>
-      prisma.movie_Rating.update({
-        where: { id: r.id },
-        data: {
-          rating_source_id: sourceMap.get(r.rating_source as string)!,
-        },
-      }),
-    );
+//   const updates = ratings
+//     .filter((r) => !r.rating_source_id && sourceMap.has(r.rating_source as string))
+//     .map((r) =>
+//       prisma.movie_Rating.update({
+//         where: { id: r.id },
+//         data: {
+//           rating_source_id: sourceMap.get(r.rating_source as string)!,
+//         },
+//       }),
+//     );
 
-  if (updates.length > 0) {
-    await prisma.$transaction(updates);
-  }
+//   if (updates.length > 0) {
+//     await prisma.$transaction(updates);
+//   }
 
-  console.log(`✅ Backfilled ${updates.length} Movie_Rating rows`);
-}
+//   console.log(`✅ Backfilled ${updates.length} Movie_Rating rows`);
+// }
 
 async function main() {
   await ratingSources();
-  await tmpMapExistingData();
+  // await tmpMapExistingData();
 }
 
 main()
