@@ -15,7 +15,6 @@ class MovieHandler {
 
     async handle(job: Job<MovieJob>): Promise<MovieType> {
         const { tmdbId } = job.data.payload;
-
         const movie = await this.addMovie.execute(tmdbId);
         return movie;
     }
