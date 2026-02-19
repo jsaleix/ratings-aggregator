@@ -7,7 +7,7 @@ export type CalcScoreRatingItem = {
     value: string;
     Rating_Source: {
         rating_unit: string;
-    } | null;
+    };
 };
 
 export class ScoreService {
@@ -34,7 +34,7 @@ export class ScoreService {
         const value = +rating.value;
         let score: number;
 
-        switch (rating.Rating_Source!.rating_unit) {
+        switch (rating.Rating_Source.rating_unit) {
             case RATING_UNITS.PERCENTAGE:
                 score = value;
                 break;

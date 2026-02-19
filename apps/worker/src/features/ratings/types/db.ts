@@ -4,9 +4,7 @@ const ratingModel = Prisma.validator<Prisma.Movie_RatingDefaultArgs>()({
     select: {
         id: true,
         movieId: true,
-        rating_source: true,
         value: true,
-        rating_unit: true,
         extra: true,
         created_at: true,
         updated_at: true,
@@ -21,7 +19,7 @@ export type FullRatingType = {
     extra: string;
     created_at: Date;
     updated_at: Date;
-    source_url: string | null;
+    source_url: string | null;
     Rating_Source: {
         id: string;
         code: string;
@@ -29,7 +27,7 @@ export type FullRatingType = {
         rating_unit: string;
         url: string;
         country_code: string;
-    } | null;
+    };
 };
 
 const ratingWithMovieModel = Prisma.validator<Prisma.Movie_RatingDefaultArgs>()(
