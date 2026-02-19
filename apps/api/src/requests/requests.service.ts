@@ -15,7 +15,7 @@ export class RequestsService {
     const request = await this.prisma.movie_Request.create({
       data: {
         title: '',
-        tmdbId,
+        tmdb_id: tmdbId,
         userId: user.id,
       },
     });
@@ -24,12 +24,15 @@ export class RequestsService {
       throw new Error('Failed to create request');
     }
 
-    this.addToQueue(request.id, request.tmdbId);
+    this.addToQueue(request.id, request.tmdb_id);
     return request;
   }
 
-  async findAll(processed: boolean) {
-    return this.prisma.movie_Request.findMany({ where: { processed } });
+  async findAllPublic(processed: boolean) {
+    return this.prisma.movie_Request.findMany({
+      where: { processed },
+      omit: { userId: true },
+    });
   }
 
   async findOne(id: string) {

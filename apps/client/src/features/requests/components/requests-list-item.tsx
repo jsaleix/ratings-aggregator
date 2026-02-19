@@ -6,15 +6,15 @@ interface Props {
 
 export default function RequestListItem({ request }: Props) {
     const url = new URL(
-        request.tmdbId.toString(),
-        "https://www.themoviedb.org/movie/"
+        request.tmdb_id.toString(),
+        "https://www.themoviedb.org/movie/",
     );
 
     return (
         <article className="w-full flex md:flex-row flex-col gap-1 justify-between border-b-1 border-b-bg-light px-5 py-3">
             <div className="flex flex-col">
                 <h2 className="text-xl text-white">
-                    #<span>{request.tmdbId}</span>
+                    #<span>{request.tmdb_id}</span>
                 </h2>
                 <a
                     href={url.toString()}

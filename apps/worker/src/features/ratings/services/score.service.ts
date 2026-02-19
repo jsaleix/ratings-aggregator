@@ -1,7 +1,14 @@
-import { RatingType } from "../types/db";
+import { FullRatingType, RatingType } from "../types/db";
 import { RATING_UNITS } from "../../../config/ratings";
 
-export type CalcScoreRatingItem = Pick<RatingType, "value" | "rating_unit">;
+// export type CalcScoreRatingItem = Pick<FullRatingType, "value">;
+
+export type CalcScoreRatingItem = {
+    value: string;
+    Rating_Source: {
+        rating_unit: string;
+    } | null;
+};
 
 export class ScoreService {
     private clamp(value: number, min: number = 0, max: number = 100): number {
@@ -27,7 +34,7 @@ export class ScoreService {
         const value = +rating.value;
         let score: number;
 
-        switch (rating.rating_unit) {
+        switch (rating.Rating_Source!.rating_unit) {
             case RATING_UNITS.PERCENTAGE:
                 score = value;
                 break;

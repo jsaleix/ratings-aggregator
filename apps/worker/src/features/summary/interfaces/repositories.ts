@@ -1,4 +1,4 @@
-import { RatingType } from "../../ratings/types/db";
+import { FullRatingType, RatingType } from "../../ratings/types/db";
 import { MovieRatingSummaryType } from "../types/db";
 
 export interface SummaryRepositoryI {
@@ -12,5 +12,5 @@ export interface SummaryRepositoryI {
         scoreValue: number;
     }): Promise<MovieRatingSummaryType>;
 
-    getRatingsByMovieId(movieId: string): Promise<RatingType[]>;
+    getRatingsByMovieId(movieId: string): Promise<FullRatingType[]>;
 }

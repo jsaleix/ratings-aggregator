@@ -1,7 +1,7 @@
 import { logger } from "../../../shared/logger";
 
 import { ScoreService } from "../../ratings/services/score.service";
-import { RatingType } from "../../ratings/types/db";
+import { FullRatingType, RatingType } from "../../ratings/types/db";
 import { SummaryRepositoryI } from "../interfaces/repositories";
 import AIService from "../services/ai.service";
 
@@ -12,14 +12,14 @@ export class GenerateMovieSummaryUseCase {
         private readonly scoreService: ScoreService,
     ) {}
 
-    public static generateUserPrompt(ratings: RatingType[]) {
+    public static generateUserPrompt(ratings: FullRatingType[]) {
         return (
             "{" +
             ratings
                 .map(
-                    (rating) => `'${rating.rating_source}': {
+                    (rating) => `'${rating.Rating_Source?.name}': {
         value: '${rating.value}',
-        unit: '${rating.rating_unit}',
+        unit: '${rating.Rating_Source?.rating_unit}',
     }`,
                 )
                 .join(",\n") +
