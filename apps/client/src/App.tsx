@@ -71,7 +71,7 @@ function App() {
                         path="/movies/search"
                         element={<SearchMoviesPage />}
                     />
-                    <Route path="/movies/:id" element={<MoviePage />} />
+                    <Route path="/movies/:slug" element={<MoviePage />} />
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/" element={<HomePage />} />
                     <Route path="*" element={<NotFoundPage />} />

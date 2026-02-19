@@ -15,6 +15,7 @@ export type MovieApiResponseType = {
     original_title: string;
     tmdb_id: number;
     imdb_id: string;
+    slug: string;
 };
 
 export type GetAllMoviesResponse = MovieApiResponseType[];
