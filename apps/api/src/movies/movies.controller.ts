@@ -61,6 +61,12 @@ export class MoviesController {
     return await this.moviesService.findOne(id);
   }
 
+  @Public()
+  @Get('/slug/:slug')
+  async findOneBySlug(@Param('slug') slug: string) {
+    return await this.moviesService.findOneBySlug(slug);
+  }
+
   @Role('admin')
   @Delete(':id')
   async remove(@Param('id', ParseUUIDPipe) id: string) {

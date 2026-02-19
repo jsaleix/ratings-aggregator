@@ -84,7 +84,9 @@ describe("Use-cases/AddMovieByTMDBId", () => {
                 tag_line: "",
                 language: mockMovieResponse.original_language,
                 imdb_id: mockMovieResponse.imdb_id,
-            } satisfies MovieCreateInput);
+            } satisfies Omit<MovieCreateInput, "slug">);
+
+            const slug = `${mockMovieResponse.title.toLowerCase().replace(" ", "-")}-2021`;
 
             // Mocks repository upsert return value
             prismaMock.movie.upsert.mockResolvedValue({
@@ -92,6 +94,7 @@ describe("Use-cases/AddMovieByTMDBId", () => {
                 title: mockMovieResponse.title,
                 id: "2",
                 created_at: new Date(),
+                slug,
             } satisfies MovieCreateInput);
 
             const result = await useCase.execute(tmdbId);
@@ -108,6 +111,7 @@ describe("Use-cases/AddMovieByTMDBId", () => {
                 tag_line: "",
                 language: mockMovieResponse.original_language,
                 imdb_id: mockMovieResponse.imdb_id,
+                slug,
             };
             expect(prismaMock.movie.upsert).toHaveBeenCalledWith({
                 create: payload,

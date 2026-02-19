@@ -1,8 +1,8 @@
 import { Job } from "bullmq";
 
 import { GenerateMovieSummaryUseCase } from "../../features/summary/use-cases/generate-summary";
-import SummaryHandler, { SummaryJob } from "./handler";
 import { MovieRatingSummaryType } from "../../features/summary/types/db";
+import SummaryHandler, { SummaryJob } from "./handler";
 
 describe("SummaryHandler Unit", () => {
     let handler: SummaryHandler;

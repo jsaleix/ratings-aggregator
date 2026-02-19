@@ -11,7 +11,7 @@ interface Props {
 export default function MovieListItem({ movie }: Props) {
     const posterUrl = useMemo(
         () => BASE_POSTER_URL + movie.poster_path,
-        [movie]
+        [movie],
     );
 
     const summary = useMemo(() => {
@@ -21,7 +21,7 @@ export default function MovieListItem({ movie }: Props) {
     }, [movie]);
 
     return (
-        <Link to={`/movies/${movie.id}`}>
+        <Link to={`/movies/${movie.slug}`}>
             <article className="flex w-96 max-h-55 overflow-hidden border-1 border-bg-light rounded-xl p-5 gap-5 bg-bg-dark shadow-md shadow-bg-medium hover:border-primary duration-150 group">
                 <div className="w-55 overflow-hidden object-contain">
                     <img

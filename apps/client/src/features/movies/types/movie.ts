@@ -14,4 +14,5 @@ export interface MovieModel {
     language: string;
     original_title: string;
     imdbId: string;
+    slug: string;
 }

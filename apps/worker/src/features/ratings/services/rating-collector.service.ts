@@ -1,4 +1,4 @@
-import { RATING_SOURCES, RATING_UNITS } from "../../../config/ratings";
+import { RATING_SOURCES } from "../../../config/ratings";
 import { MovieType } from "../../movies/types/db";
 import {
     RatingRepositoryI,
@@ -32,7 +32,6 @@ export class RatingCollectorService {
             );
             this.ratingSourceCacheExpiry = now + this.CACHE_TTL_MS;
         }
-        console.log(this.ratingSourceCache);
         const id = this.ratingSourceCache.get(code);
         if (!id) throw new Error(`Rating source "${code}" not found`);
         return id;

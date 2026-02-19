@@ -44,7 +44,9 @@ class TMDBService {
         return res.results as TMDBGetMovieType[];
     }
 
-    mapApiResponseToModel(tmdbMovie: TMDBGetMovieType): MovieCreateInput {
+    mapApiResponseToModel(
+        tmdbMovie: TMDBGetMovieType,
+    ): Omit<MovieCreateInput, "slug"> {
         let {
             id: tmdb_id,
             title,

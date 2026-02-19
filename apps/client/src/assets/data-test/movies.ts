@@ -17,4 +17,5 @@ export const MovieMockData = {
     original_title: "Superman",
     language: "en",
     imdbId: "tt5950044",
+    slug: "Superman-2015"
 } satisfies MovieModel;
