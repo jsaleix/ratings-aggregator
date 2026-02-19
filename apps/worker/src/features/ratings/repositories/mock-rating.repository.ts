@@ -7,11 +7,11 @@ class MockRatingRepository implements RatingRepositoryI {
     constructor(private db: PrismaClient) {}
 
     async addOrUpdate(data: RatingAttributesType) {
-        const { movieId, value, rating_source, rating_unit, source_url } = data;
+        const { movieId, value, rating_source_id, source_url } = data;
         const exists = await this.db.movie_Rating.findFirst({
             where: {
                 movieId,
-                rating_source,
+                rating_source_id,
             },
         });
         if (exists) {
@@ -24,9 +24,8 @@ class MockRatingRepository implements RatingRepositoryI {
                 data: {
                     movieId,
                     value,
-                    rating_source,
-                    rating_unit,
                     source_url: source_url ?? null,
+                    rating_source_id,
                 },
             });
         }

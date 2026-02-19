@@ -63,8 +63,6 @@ export class RatingCollectorService {
                 rating_source_id: await this.getRatingSourceId(
                     RATING_SOURCES.ALLOCINE_PRESS,
                 ),
-                // rating_source: RATING_SOURCES.ALLOCINE_PRESS,
-                // rating_unit: RATING_UNITS.STARS,
             }),
             this.ratingRepository.addOrUpdate({
                 movieId,
@@ -86,8 +84,6 @@ export class RatingCollectorService {
         return this.ratingRepository.addOrUpdate({
             movieId,
             value: score,
-            // rating_source: RATING_SOURCES.IMDB,
-            // rating_unit: RATING_UNITS.POINTS,
             source_url: url,
             rating_source_id: await this.getRatingSourceId(RATING_SOURCES.IMDB),
         });
@@ -105,8 +101,6 @@ export class RatingCollectorService {
             this.ratingRepository.addOrUpdate({
                 movieId,
                 value: criticsRatings,
-                // rating_source: RATING_SOURCES.ROTTEN_TOMATOES,
-                // rating_unit: RATING_UNITS.PERCENTAGE,
                 source_url: url,
                 rating_source_id: await this.getRatingSourceId(
                     RATING_SOURCES.ROTTEN_TOMATOES,
@@ -115,8 +109,6 @@ export class RatingCollectorService {
             this.ratingRepository.addOrUpdate({
                 movieId,
                 value: audienceRatings,
-                // rating_source: RATING_SOURCES.ROTTEN_TOMATOES_AUDIENCE,
-                // rating_unit: RATING_UNITS.PERCENTAGE,
                 source_url: url,
                 rating_source_id: await this.getRatingSourceId(
                     RATING_SOURCES.ROTTEN_TOMATOES_AUDIENCE,
@@ -137,8 +129,6 @@ export class RatingCollectorService {
         return this.ratingRepository.addOrUpdate({
             movieId,
             value: score,
-            // rating_source: RATING_SOURCES.LETTERBOXD,
-            // rating_unit: RATING_UNITS.STARS,
             source_url: url,
             rating_source_id: await this.getRatingSourceId(
                 RATING_SOURCES.LETTERBOXD,
