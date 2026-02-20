@@ -21,6 +21,7 @@ const existingMovie = {
     tag_line: "A test movie tagline",
     created_at: new Date(),
     updated_at: new Date(),
+    slug: "test-movie-2020"
 } satisfies MovieCreateInput;
 
 describe("Use-cases/AddMovieByTMDBId", () => {

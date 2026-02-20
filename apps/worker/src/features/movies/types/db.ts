@@ -23,6 +23,7 @@ const movieModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
         poster_path: true,
         updated_at: true,
         imdb_id: true,
+        slug: true
     },
 });
 

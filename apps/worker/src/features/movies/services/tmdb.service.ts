@@ -84,7 +84,7 @@ class TMDBService {
             imdb_id,
             original_title,
             language: original_language,
-        } satisfies MovieCreateInput;
+        } satisfies Omit<MovieCreateInput, "slug">;
     }
 }
 
