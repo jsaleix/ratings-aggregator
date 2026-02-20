@@ -151,7 +151,7 @@ export default function MoviePage() {
                             <Link
                                 to={`/auth`}
                                 state={{
-                                    redirect: `/movies/${movie.id}`,
+                                    redirect: `/movies/${movie.slug}`,
                                 }}
                             >
                                 <Button variant="primary">Login</Button>
