@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateMovieDto } from '../dto/create-movie.dto';
 import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { SearchMovieQueryDto } from '../dto/search-movie-query.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
@@ -13,12 +12,12 @@ import { PaginateFunction, paginator } from 'src/shared/utils/pagination';
 export class MoviesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createMovieDto: CreateMovieDto) {
-    const movie = await this.prisma.movie.create({
-      data: createMovieDto,
-    });
-    return movie;
-  }
+  // async create(createMovieDto: CreateMovieDto) {
+  //   const movie = await this.prisma.movie.create({
+  //     data: createMovieDto,
+  //   });
+  //   return movie;
+  // }
 
   async findOne(id: string) {
     const movie = await this.prisma.movie.findUnique({ where: { id } });

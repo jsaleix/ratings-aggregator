@@ -30,7 +30,7 @@ model Movie {
   original_title        String
   imdb_id               String
   language              String
-  slug                  String? @unique
+  slug                  String @unique
   Movie_Rating          Movie_Rating[]
   Movie_Ratings_Summary Movie_Ratings_Summary[]
 }

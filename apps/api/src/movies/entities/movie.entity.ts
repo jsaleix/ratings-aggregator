@@ -12,7 +12,8 @@ const movieModel: Prisma.MovieSelect = {
   year: true,
   budget: true,
   poster_path: true,
+  slug: true,
 };
 
 export type MovieType = typeof movieModel;
-export type MovieCreateInput = Prisma.MovieCreateInput;
+export type MovieCreateInput = Omit<Prisma.MovieCreateInput, "slug">;
