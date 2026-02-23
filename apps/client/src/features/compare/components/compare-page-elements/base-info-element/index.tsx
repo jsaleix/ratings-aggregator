@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Link } from "react-router";
 
 import { BASE_POSTER_URL } from "../../../../../core/config/misc";
-import type { MovieModel } from "../../../../movies/types/movie";
+import type { MovieModel } from "../../../../movies/models/movie";
 import ExternalLinkIcon from "../../../../../shared/ui/icons/external-link-icon";
 
 interface Props {

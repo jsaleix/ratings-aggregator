@@ -1,6 +1,6 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import { authHeaders } from "../../../shared/api/headers";
-import type { MovieRatingModel } from "../types/movie-rating";
+import type { MovieRatingModel } from "../models/movie-rating";
 import {
     mapRatingApiToModel,
     type ApiMovieRatingType,

@@ -1,4 +1,4 @@
-import type { MovieModel } from "./movie";
+import type { MovieModel } from "../models/movie";
 
 export type ApiMovieType = {
     id: string;

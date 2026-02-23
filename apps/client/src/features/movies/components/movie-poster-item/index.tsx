@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { useMemo } from "react";
 import { formatDistanceToNow } from "date-fns";
 
-import type { MovieModel } from "../../types/movie";
+import type { MovieModel } from "../../models/movie";
 import { BASE_POSTER_URL } from "../../../../core/config/misc";
 import UpdatedIcon from "../../../../shared/ui/icons/updated-icon";
 

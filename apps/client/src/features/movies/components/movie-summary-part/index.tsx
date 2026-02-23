@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import type { RatingsSummaryModel } from "../../types/ratings-summary";
+import type { RatingsSummaryModel } from "../../models/ratings-summary";
 import MovieSummaryItem from "../movie-summary-item";
 import Button from "../../../../shared/ui/button";
 import ArrowIcon from "../../../../shared/ui/icons/arrow-icon";

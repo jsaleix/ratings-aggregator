@@ -1,4 +1,4 @@
-import { type RatingsSummaryModel } from "./ratings-summary";
+import { type RatingsSummaryModel } from "../models/ratings-summary";
 
 export interface ApiRatingsSummaryType {
     id: string;

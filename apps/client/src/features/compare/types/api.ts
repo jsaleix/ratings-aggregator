@@ -1,4 +1,4 @@
-import type { MovieRatingModel } from "../../movies/types/movie-rating";
+import type { MovieRatingModel } from "../../movies/models/movie-rating";
 import type { ApiMovieType } from "../../movies/types/movie.api";
 import type { ApiRatingsSummaryType } from "../../movies/types/ratings-summary.api";
 

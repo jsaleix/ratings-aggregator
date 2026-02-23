@@ -6,7 +6,7 @@ import { MemoryRouter } from "react-router";
 
 import { MovieMockData } from "../../../../assets/data-test/movies";
 import apiMoviesService from "../../services/api-movies.service";
-import type { MovieModel } from "../../types/movie";
+import type { MovieModel } from "../../models/movie";
 import Component from "./random-movies";
 
 const client = new QueryClient();

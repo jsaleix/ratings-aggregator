@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { motion } from "motion/react";
 
-import type { MovieModel } from "../../../movies/types/movie";
+import type { MovieModel } from "../../../movies/models/movie";
 import Button from "../../../../shared/ui/button";
 import { displayMsg } from "../../../../shared/utils/toast";
 import apiRequestService from "../../../requests/services/api-request.service";

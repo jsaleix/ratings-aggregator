@@ -1,4 +1,4 @@
-import type { MovieRatingModel } from "./movie-rating";
+import type { MovieRatingModel } from "../models/movie-rating";
 
 export interface ApiMovieRatingType {
     id: string;

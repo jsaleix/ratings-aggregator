@@ -1,6 +1,6 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import { authHeaders } from "../../../shared/api/headers";
-import type { RatingsSummaryModel } from "../types/ratings-summary";
+import type { RatingsSummaryModel } from "../models/ratings-summary";
 import {
     mapRatingsSummaryApiToModel,
     type ApiRatingsSummaryType,

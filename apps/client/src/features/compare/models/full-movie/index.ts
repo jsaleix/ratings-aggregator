@@ -1,7 +1,7 @@
-import type { MovieModel } from "../../../movies/types/movie";
-import type { MovieRatingModel } from "../../../movies/types/movie-rating";
+import type { MovieModel } from "../../../movies/models/movie";
+import type { MovieRatingModel } from "../../../movies/models/movie-rating";
 import { mapMovieApiToModel } from "../../../movies/types/movie.api";
-import type { RatingsSummaryModel } from "../../../movies/types/ratings-summary";
+import type { RatingsSummaryModel } from "../../../movies/models/ratings-summary";
 import type { FullMovieApiResponse } from "../../types/api";
 
 export interface FullMovieModel {

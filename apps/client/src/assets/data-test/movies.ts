@@ -1,4 +1,4 @@
-import type { MovieModel } from "../../features/movies/types/movie";
+import type { MovieModel } from "../../features/movies/models/movie";
 
 export const MovieMockData = {
     id: "f576483e-6538-4334-a937-a75256e739fb",

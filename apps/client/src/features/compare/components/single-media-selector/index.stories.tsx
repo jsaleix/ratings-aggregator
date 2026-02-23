@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { sleep } from "../../../../shared/utils";
-import type { MovieModel } from "../../../movies/types/movie";
+import type { MovieModel } from "../../../movies/models/movie";
 import { MovieMockData } from "../../../../assets/data-test/movies";
 import Component from ".";
 

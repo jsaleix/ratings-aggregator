@@ -1,7 +1,7 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import type { PaginatedResult } from "../../../shared/types/pagination";
 import type { TMDBGetMovieType } from "../../requests/types/tmdb";
-import type { MovieModel } from "../types/movie";
+import type { MovieModel } from "../models/movie";
 import { mapMovieApiToModel, type ApiMovieType } from "../types/movie.api";
 
 type SearchMovieParams = {

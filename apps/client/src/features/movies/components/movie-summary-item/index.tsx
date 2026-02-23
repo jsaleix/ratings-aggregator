@@ -1,4 +1,4 @@
-import type { RatingsSummaryModel } from "../../types/ratings-summary";
+import type { RatingsSummaryModel } from "../../models/ratings-summary";
 
 interface Props {
     data: RatingsSummaryModel;
