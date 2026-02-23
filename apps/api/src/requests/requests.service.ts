@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { User } from 'generated/prisma/client';
+
 import { CreateRequestDto } from './dto/create-request.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { BullmqService } from 'src/shared/services/bullmq.service';
-import { User } from 'generated/prisma/client';
+import {
+  MovieRequestPublicType,
+  movieRequestSelect,
+} from './entities/request.entity';
 
 @Injectable()
 export class RequestsService {
@@ -11,13 +16,19 @@ export class RequestsService {
     private bullmqService: BullmqService,
   ) {}
 
-  async create({ tmdbId }: CreateRequestDto, user: User) {
+  async create(
+    { tmdbId }: CreateRequestDto,
+    user: User,
+  ): Promise<MovieRequestPublicType> {
+    // TODO: Check if there is no pending request for the same movie
+
     const request = await this.prisma.movie_Request.create({
       data: {
         title: '',
         tmdb_id: tmdbId,
         userId: user.id,
       },
+      select: movieRequestSelect,
     });
 
     if (!request) {
@@ -28,22 +39,24 @@ export class RequestsService {
     return request;
   }
 
-  async findAllPublic(processed: boolean) {
+  async findAllPublic(processed: boolean): Promise<MovieRequestPublicType[]> {
     return this.prisma.movie_Request.findMany({
       where: { processed },
-      omit: { userId: true },
+      select: movieRequestSelect,
     });
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<MovieRequestPublicType | null> {
     return this.prisma.movie_Request.findUnique({
       where: { id },
+      select: movieRequestSelect,
     });
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<MovieRequestPublicType> {
     return this.prisma.movie_Request.delete({
       where: { id },
+      select: movieRequestSelect,
     });
   }
 

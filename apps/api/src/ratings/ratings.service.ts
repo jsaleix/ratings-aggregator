@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateRatingDto } from './dto/update-rating.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
+import { movieRatingSelect, MovieRatingType } from './entities/rating.entity';
 
 @Injectable()
 export class RatingsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
+  async findAll(): Promise<MovieRatingType[]> {
     const res = await this.prisma.movie_Rating.findMany({
-      include: { Rating_Source: true },
+      select: movieRatingSelect,
     });
     if (!res) {
       throw new Error('Failed to fetch ratings');
@@ -16,9 +17,10 @@ export class RatingsService {
     return res;
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<MovieRatingType> {
     const res = await this.prisma.movie_Rating.findUnique({
       where: { id },
+      select: movieRatingSelect,
     });
     if (!res) {
       throw new Error('Failed to fetch rating');
@@ -26,10 +28,14 @@ export class RatingsService {
     return res;
   }
 
-  async update(id: string, updateRatingDto: UpdateRatingDto) {
+  async update(
+    id: string,
+    updateRatingDto: UpdateRatingDto,
+  ): Promise<MovieRatingType> {
     const res = await this.prisma.movie_Rating.update({
       where: { id },
       data: updateRatingDto,
+      select: movieRatingSelect,
     });
     if (!res) {
       throw new Error('Failed to update rating');
@@ -37,9 +43,10 @@ export class RatingsService {
     return res;
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<MovieRatingType> {
     const res = await this.prisma.movie_Rating.delete({
       where: { id },
+      select: movieRatingSelect,
     });
     if (!res) {
       throw new Error('Failed to remove rating');
@@ -47,7 +54,7 @@ export class RatingsService {
     return res;
   }
 
-  async findForMovie(movieId: string) {
+  async findForMovie(movieId: string): Promise<MovieRatingType[]> {
     const res = await this.prisma.movie_Rating.findMany({
       where: { movieId },
       orderBy: {
@@ -55,7 +62,7 @@ export class RatingsService {
           name: 'asc',
         },
       },
-      include: { Rating_Source: true },
+      select: movieRatingSelect,
     });
     if (!res) {
       throw new Error('Failed to fetch ratings for movie');
