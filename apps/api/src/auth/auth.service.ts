@@ -24,7 +24,7 @@ export class AuthService {
 
   async login(data: LoginDto) {
     const { email, password } = data;
-    const user = await this.userService.adminGetUserWithMail(email);
+    const user = await this.userService.authGetUserWithMail(email);
     if (!user) throw new NotFoundException();
     if (!compareSync(password, user.password)) {
       throw new UnauthorizedException();
