@@ -1,6 +1,6 @@
 import type { MovieModel } from "./movie";
 
-export type MovieApiResponseType = {
+export type ApiMovieType = {
     id: string;
     title: string;
     created_at: string;
@@ -18,9 +18,7 @@ export type MovieApiResponseType = {
     slug: string;
 };
 
-export type GetAllMoviesResponse = MovieApiResponseType[];
-
-export function mapMovieApiToModel(data: MovieApiResponseType) {
+export function mapMovieApiToModel(data: ApiMovieType) {
     const {
         tag_line: tagLine,
         imdb_id: imdbId,

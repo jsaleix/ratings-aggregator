@@ -2,10 +2,7 @@ import { API_ENDPOINT } from "../../../core/config/api";
 import type { PaginatedResult } from "../../../shared/types/pagination";
 import type { TMDBGetMovieType } from "../../requests/types/tmdb";
 import type { MovieModel } from "../types/movie";
-import {
-    mapMovieApiToModel,
-    type MovieApiResponseType,
-} from "../types/movie.api";
+import { mapMovieApiToModel, type ApiMovieType } from "../types/movie.api";
 
 type SearchMovieParams = {
     title: string;
@@ -37,8 +34,7 @@ class ApiMoviesService {
         if (!res.ok) {
             throw new Error(`Error fetching movies: ${res.statusText}`);
         }
-        const rawResponse =
-            (await res.json()) as PaginatedResult<MovieApiResponseType>;
+        const rawResponse = (await res.json()) as PaginatedResult<ApiMovieType>;
         const { data, pagination } = rawResponse;
         return {
             pagination,
@@ -55,7 +51,7 @@ class ApiMoviesService {
         if (!res.ok) {
             throw new Error(`Error fetching movies: ${res.statusText}`);
         }
-        const data = (await res.json()) as Array<MovieApiResponseType>;
+        const data = (await res.json()) as Array<ApiMovieType>;
         return data.map(mapMovieApiToModel) satisfies MovieModel[];
     }
 
@@ -69,7 +65,7 @@ class ApiMoviesService {
                 `Error fetching movie with id ${id}: ${res.statusText}`,
             );
         }
-        const data = (await res.json())["movie"] as MovieApiResponseType;
+        const data = (await res.json())["movie"] as ApiMovieType;
         return mapMovieApiToModel(data) satisfies MovieModel;
     }
 
@@ -81,7 +77,7 @@ class ApiMoviesService {
         if (!res.ok) {
             throw new Error(`Error fetching movie: ${slug}: ${res.statusText}`);
         }
-        const data = (await res.json())["movie"] as MovieApiResponseType;
+        const data = (await res.json())["movie"] as ApiMovieType;
         return mapMovieApiToModel(data) satisfies MovieModel;
     }
 
@@ -103,7 +99,7 @@ class ApiMoviesService {
             throw new Error(`Error searching movies: ${res.statusText}`);
         }
         const { data, pagination } =
-            (await res.json()) as PaginatedResult<MovieApiResponseType>;
+            (await res.json()) as PaginatedResult<ApiMovieType>;
         return {
             data: data.map((d) => mapMovieApiToModel(d)),
             pagination,

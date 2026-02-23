@@ -1,9 +1,13 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import { authHeaders } from "../../../shared/api/headers";
 import type { MovieRatingModel } from "../types/movie-rating";
+import {
+    mapRatingApiToModel,
+    type ApiMovieRatingType,
+} from "../types/movie-rating.api";
 
 class ApiRatingsService {
-    async getMovieRatings(id: string) {
+    async getMovieRatings(id: string): Promise<MovieRatingModel[]> {
         const url = new URL(`/ratings/movie/${id}`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "GET",
@@ -11,10 +15,11 @@ class ApiRatingsService {
         });
         if (!res.ok) {
             throw new Error(
-                `Error fetching ratings for movie with id ${id}: ${res.statusText}`
+                `Error fetching ratings for movie with id ${id}: ${res.statusText}`,
             );
         }
-        return (await res.json()) as MovieRatingModel[];
+        const response = (await res.json()) as ApiMovieRatingType[];
+        return response.map(mapRatingApiToModel);
     }
 
     async delete(id: string) {
@@ -24,7 +29,7 @@ class ApiRatingsService {
         });
         if (!res.ok) {
             throw new Error(
-                `Error deleting rating with id ${id}: ${res.statusText}`
+                `Error deleting rating with id ${id}: ${res.statusText}`,
             );
         }
         return true;
