@@ -1,12 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import PageHeader from "../../../../shared/ui/page-header";
 import apiRequestService from "../../../requests/services/api-request.service";
 import { mapApiRequestToMovieRequestModel } from "../../../requests/types/api-request";
 import clsx from "clsx";
 import Button from "../../../../shared/ui/button";
+import { displayMsg } from "../../../../shared/utils/toast";
 
 export default function RequestsPage() {
-    const { data, isFetched } = useQuery({
+    const { data, isFetched, refetch } = useQuery({
         queryKey: ["getRequests"],
         queryFn: async () => {
             const res = await apiRequestService.getAll();
@@ -15,6 +16,21 @@ export default function RequestsPage() {
         initialData: [],
         refetchOnWindowFocus: false,
         refetchInterval: 15000,
+    });
+
+    const { mutate: deleteRequestMutation } = useMutation({
+        mutationFn: async (requestId: string) => {
+            if (!window.confirm("Are you sure?"))
+                throw new Error("Action canceled");
+            return await apiRequestService.delete(requestId);
+        },
+        onSuccess: () => {
+            displayMsg("Request deleted!", "success");
+            refetch();
+        },
+        onError: (e) => {
+            displayMsg(e.message, "error");
+        },
     });
 
     return (
@@ -46,7 +62,7 @@ export default function RequestsPage() {
                                         className={clsx(
                                             idx % 2 === 0
                                                 ? "bg-bg-medium/50"
-                                                : "bg-bg-medium"
+                                                : "bg-bg-medium",
                                         )}
                                     >
                                         <td title={request.id} className="">
@@ -59,7 +75,7 @@ export default function RequestsPage() {
                                             <a
                                                 href={new URL(
                                                     request.tmdb_id.toString(),
-                                                    "https://www.themoviedb.org/movie/"
+                                                    "https://www.themoviedb.org/movie/",
                                                 ).toString()}
                                                 target="_blank"
                                                 className="text-utils-orange hover:underline"
@@ -72,11 +88,18 @@ export default function RequestsPage() {
                                         </td>
                                         <td className="">
                                             {new Date(
-                                                request.created_at
+                                                request.created_at,
                                             ).toLocaleString()}
                                         </td>
                                         <td className="">
-                                            <Button variant={"danger"}>
+                                            <Button
+                                                variant={"danger"}
+                                                onClick={() =>
+                                                    deleteRequestMutation(
+                                                        request.id,
+                                                    )
+                                                }
+                                            >
                                                 Delete
                                             </Button>
                                         </td>

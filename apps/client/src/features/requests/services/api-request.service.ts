@@ -44,6 +44,18 @@ class ApiRequestService {
         }
         return (await res.json()) as ApiGetCountResponse;
     }
+
+    async delete(id: string) {
+        const url = new URL(`/requests/${id}`, API_ENDPOINT);
+        const res = await fetch(url, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json", ...authHeaders() },
+        });
+        if (!res.ok) {
+            throw new Error(`Error deleting movie request: ${res.statusText}`);
+        }
+        return true;
+    }
 }
 
 export default new ApiRequestService();
