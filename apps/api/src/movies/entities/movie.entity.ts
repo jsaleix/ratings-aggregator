@@ -1,9 +1,10 @@
 import { Prisma } from 'generated/prisma/client';
 
-const movieModel: Prisma.MovieSelect = {
+export const movieSelect: Prisma.MovieSelect = {
   id: true,
   title: true,
   created_at: true,
+  updated_at: true,
   tmdb_id: true,
   tag_line: true,
   summary: true,
@@ -12,8 +13,11 @@ const movieModel: Prisma.MovieSelect = {
   year: true,
   budget: true,
   poster_path: true,
+  language: true,
+  original_title: false,
+  imdb_id: true,
   slug: true,
 };
 
-export type MovieType = typeof movieModel;
-export type MovieCreateInput = Omit<Prisma.MovieCreateInput, "slug">;
+export type MovieType = Prisma.MovieGetPayload<{ select: typeof movieSelect }>;
+export type MovieCreateInput = Omit<Prisma.MovieCreateInput, 'slug'>;
