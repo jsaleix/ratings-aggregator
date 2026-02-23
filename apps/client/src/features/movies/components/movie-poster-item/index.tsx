@@ -1,9 +1,10 @@
 import { Link } from "react-router";
 import { useMemo } from "react";
-import type { MovieModel } from "../types/movie";
-import { BASE_POSTER_URL } from "../../../core/config/misc";
 import { formatDistanceToNow } from "date-fns";
-import UpdatedIcon from "../../../shared/ui/icons/updated-icon";
+
+import type { MovieModel } from "../../types/movie";
+import { BASE_POSTER_URL } from "../../../../core/config/misc";
+import UpdatedIcon from "../../../../shared/ui/icons/updated-icon";
 
 interface Props {
     movie: MovieModel;
@@ -12,7 +13,7 @@ interface Props {
 export default function MoviePosterItem({ movie }: Props) {
     const posterUrl = useMemo(
         () => BASE_POSTER_URL + movie.poster_path,
-        [movie]
+        [movie],
     );
 
     const lastUpdateString = useMemo(() => {

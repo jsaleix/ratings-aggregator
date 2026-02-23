@@ -1,8 +1,8 @@
-import Select from "../../../shared/ui/select";
-import type { FiltersType } from "../hooks/use-filters";
+import Select from "../../../../shared/ui/select";
+import type { FiltersType } from "../../hooks/use-filters";
 
-type OrderType = FiltersType["order"];
-type OrderByType = FiltersType["orderBy"];
+export type OrderType = FiltersType["order"];
+export type OrderByType = FiltersType["orderBy"];
 
 interface Props {
     filters: FiltersType;

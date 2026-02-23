@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { Link } from "react-router";
 
-import type { MovieModel } from "../types/movie";
-import { BASE_POSTER_URL } from "../../../core/config/misc";
+import { BASE_POSTER_URL } from "../../../../core/config/misc";
+import type { MovieModel } from "../../types/movie";
 
 interface Props {
     movie: MovieModel;

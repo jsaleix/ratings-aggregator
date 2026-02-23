@@ -10,6 +10,18 @@ const meta: Meta<typeof Component> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const MovieSummaryItem: Story = {
+export const Regular: Story = {
     args: { data: RatingsSummaryMockData },
+};
+
+export const NoSummary: Story = {
+    args: {
+        data: { ...RatingsSummaryMockData, content: "" },
+    },
+};
+
+export const NoScoreValue: Story = {
+    args: {
+        data: { ...RatingsSummaryMockData, score_value: 0 },
+    },
 };

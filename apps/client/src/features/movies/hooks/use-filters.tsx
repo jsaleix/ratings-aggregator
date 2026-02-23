@@ -11,6 +11,11 @@ export type FiltersType = {
         | undefined;
 };
 
+export const DEFAULT_FILTERS: FiltersType = {
+    order: "desc",
+    orderBy: "release_date",
+};
+
 export default function useMovieFilters() {
     const [filters, setFilters] = useState<FiltersType>({
         order: "desc",

@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
-import { useInView } from "../hooks/use-in-view";
-import type { MovieModel } from "../types/movie";
-import MovieListItem from "./movie-list-item";
+import { useInView } from "../../hooks/use-in-view";
+import type { MovieModel } from "../../types/movie";
+import MovieListItem from "../movie-list-item";
 
 interface Props {
     movies: MovieModel[];

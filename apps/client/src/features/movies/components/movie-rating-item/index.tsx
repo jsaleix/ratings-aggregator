@@ -1,4 +1,4 @@
-import type { MovieRatingModel } from "../types/movie-rating";
+import type { MovieRatingModel } from "../../types/movie-rating";
 
 interface Props {
     rating: MovieRatingModel;
