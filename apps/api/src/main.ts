@@ -12,8 +12,6 @@ async function bootstrap() {
       .setTitle('Ratings Aggregator')
       .setDescription('')
       .setVersion('1.0')
-      .addTag('movies')
-      .addBearerAuth()
       .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('documentation', app, documentFactory);

@@ -13,7 +13,9 @@ import { Role } from 'src/auth/decorators/role.decorator';
 
 import { AdminUpdateUserFullDTO } from './dto/admin/update-user-full.dto';
 import { AdminUpdatePasswordDTO } from './dto/admin/update-password.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("Users Admin")
 @Controller('users/admin')
 @Role('admin')
 export class UsersAdminController {
