@@ -2,6 +2,7 @@ import { Prisma } from 'generated/prisma/client';
 
 export const movieRatingSelect = {
   id: true,
+  value: true,
   movieId: true,
   extra: true,
   source_url: true,

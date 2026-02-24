@@ -33,10 +33,12 @@ Finally, start the project:
 docker compose up -d --build
 ```
 
-You can run seeds on the API by using this command :
+After that, you need to do the following steps:
 ```bash
+docker compose exec api npx prisma migrate dev
 docker compose exec api npm run db:seed
 # or if running locally, in apps/api/
+pnpm prisma migrate dev
 pnpm run db:seed
 ```
 
