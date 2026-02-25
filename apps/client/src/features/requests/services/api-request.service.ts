@@ -28,7 +28,12 @@ class ApiRequestService {
             body: JSON.stringify(data),
         });
         if (!res.ok) {
-            throw new Error(`Error creating request: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error creating request: ${res.statusText}`,
+            );
         }
         return (await res.json()) as ApiMovieRequestType;
     }
@@ -40,7 +45,12 @@ class ApiRequestService {
             headers: { "Content-Type": "application/json" },
         });
         if (!res.ok) {
-            throw new Error(`Error fetching request count: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error fetching request: ${res.statusText}`,
+            );
         }
         return (await res.json()) as ApiGetCountResponse;
     }
@@ -52,7 +62,12 @@ class ApiRequestService {
             headers: { "Content-Type": "application/json", ...authHeaders() },
         });
         if (!res.ok) {
-            throw new Error(`Error deleting movie request: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error deleting request: ${res.statusText}`,
+            );
         }
         return true;
     }

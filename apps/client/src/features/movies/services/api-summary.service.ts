@@ -14,8 +14,11 @@ class ApiSummaryService {
             headers: { ...authHeaders() },
         });
         if (!res.ok) {
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
             throw new Error(
-                `Error fetching ratings summary for movie with id ${movieId}: ${res.statusText}`,
+                error.message ?? `Error fetching movie summary: ${res.statusText}`,
             );
         }
         const response = (await res.json()) as ApiRatingsSummaryType;
