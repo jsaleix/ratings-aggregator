@@ -1,4 +1,5 @@
-import { ScoreService, type CalcScoreRatingItem } from "./score.service";
+import { CalcScoreRatingItem } from "../interfaces/services";
+import { ScoreService } from "./score.service";
 
 describe("scoreService", () => {
     let scoreService: ScoreService;

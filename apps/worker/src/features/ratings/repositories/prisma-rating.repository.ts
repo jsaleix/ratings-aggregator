@@ -1,13 +1,17 @@
 import { PrismaClient } from "../../../../generated/prisma";
 import { db } from "../../../core/db";
 import { RatingRepositoryI } from "../interfaces/repositories";
-import { RatingType } from "../types/db";
+import {
+    RatingCollectorResult,
+    RatingSourceServiceI,
+} from "../interfaces/services";
+import { FullRatingType, RatingType } from "../types/db";
 import { CreateRatingAttributesType } from "../types/rating";
 
 class PrismaRatingRepository implements RatingRepositoryI {
     db: PrismaClient;
 
-    constructor() {
+    constructor(private ratingSourceService: RatingSourceServiceI) {
         this.db = db;
     }
 
@@ -29,6 +33,31 @@ class PrismaRatingRepository implements RatingRepositoryI {
                 Rating_Source: true,
             },
         });
+    }
+
+    async setAllForMovie(
+        movieId: string,
+        ratings: RatingCollectorResult[],
+    ): Promise<FullRatingType[]> {
+        const added: FullRatingType[] = [];
+        await this.db.movie_Rating.deleteMany({ where: { movieId } });
+        for (let rating of ratings) {
+            const source = await this.ratingSourceService.getRatingSourceId(
+                rating.rating_source_code,
+            );
+            const newRating = await this.db.movie_Rating.create({
+                data: {
+                    movieId,
+                    rating_source_id: source,
+                    value: rating.value,
+                    source_url: rating.source_url,
+                    extra: rating.extra,
+                },
+                include: { Rating_Source: true },
+            });
+            added.push(newRating);
+        }
+        return added;
     }
 }
 

@@ -11,18 +11,20 @@ import { RatingCollectorService } from "../../features/ratings/services/rating-c
 
 import { summaryQueue } from "..";
 import RatingHandler from "./handler";
+import { RatingSourceService } from "../../features/ratings/services/rating-source.service";
 
 const movieRepository = new PrismaMovieRepository();
 const ratingSourceRepository = new PrismaRatingSourceRepository();
-const ratingRepository = new PrismaRatingRepository();
-const ratingCollector = new RatingCollectorService(
-    ratingRepository,
-    ratingSourceRepository,
-);
+const ratingSourceService = new RatingSourceService(ratingSourceRepository);
+
+const ratingRepository = new PrismaRatingRepository(ratingSourceService);
+
+const ratingCollector = new RatingCollectorService();
 
 const setMovieRatingsUseCase = new SetMovieRatings(
     movieRepository,
     ratingCollector,
+    ratingRepository,
 );
 const ratingHandler = new RatingHandler(setMovieRatingsUseCase);
 
