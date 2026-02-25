@@ -9,7 +9,7 @@ import { MovieRatingSummaryType } from "../../features/summary/types/db";
 import { logger } from "../../shared/logger";
 import { PrismaSummaryRepository } from "../../features/summary/repositories/prisma-summary.repository";
 import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
-import { ScoreService } from "../../features/ratings/services/score.service";
+import { ScoreService } from "../../features/summary/services/score.service";
 
 const aiService = new AIService();
 const scoreService = new ScoreService();
@@ -31,9 +31,8 @@ export const summaryWorker = new Worker(
         concurrency: 1,
         autorun: false,
         limiter: {
-            // Add a delay of 2 minutes between jobs
             max: 1,
-            duration: 2 * 60 * 1000,
+            duration: 1 * 30 * 1000,
         },
     },
 );

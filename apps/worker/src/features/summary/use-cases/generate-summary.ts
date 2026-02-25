@@ -1,15 +1,14 @@
 import { logger } from "../../../shared/logger";
 
-import { ScoreService } from "../../ratings/services/score.service";
 import { FullRatingType } from "../../ratings/types/db";
 import { SummaryRepositoryI } from "../interfaces/repositories";
-import AIService from "../services/ai.service";
+import { AiServiceI, ScoreServiceI } from "../interfaces/services";
 
 export class GenerateMovieSummaryUseCase {
     constructor(
-        private readonly aiService: AIService,
+        private readonly aiService: AiServiceI,
         private readonly summaryRepository: SummaryRepositoryI,
-        private readonly scoreService: ScoreService,
+        private readonly scoreService: ScoreServiceI,
     ) {}
 
     public static generateUserPrompt(ratings: FullRatingType[]) {

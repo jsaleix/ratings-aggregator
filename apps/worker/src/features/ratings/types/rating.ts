@@ -5,13 +5,6 @@ export type CreateRatingAttributesType = {
     rating_source_id: string;
 };
 
-export type CalcScoreRatingItem = {
-    value: string;
-    Rating_Source: {
-        rating_unit: string;
-    };
-};
-
 export type RatingCollectorResult = {
     movieId: string;
     value: string;

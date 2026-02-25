@@ -1,4 +1,4 @@
-import { CalcScoreRatingItem } from "../types/rating";
+import { CalcScoreRatingItem } from "../types/score";
 import { ScoreService } from "./score.service";
 
 describe("scoreService", () => {
