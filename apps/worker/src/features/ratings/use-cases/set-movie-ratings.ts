@@ -1,10 +1,12 @@
 import { MovieRepositoryI } from "../../movies/interfaces/repositories";
-import { RatingCollectorService } from "../services/rating-collector.service";
+import { RatingRepositoryI } from "../interfaces/repositories";
+import { RatingCollectorServiceI } from "../interfaces/services";
 
 export class SetMovieRatings {
     constructor(
         private movieRepository: MovieRepositoryI,
-        private ratingCollector: RatingCollectorService,
+        private ratingCollector: RatingCollectorServiceI,
+        private ratingRepository: RatingRepositoryI,
     ) {}
 
     async execute(movieId: string) {
@@ -19,10 +21,12 @@ export class SetMovieRatings {
             this.ratingCollector.collectLetterboxd(movie),
         ]);
 
-        const results = rawResults
+        const ratings = rawResults
             .filter((result) => result.status === "fulfilled")
             .map((result) => result.value)
             .flat();
+
+        const results = this.ratingRepository.setAllForMovie(movieId, ratings);
 
         return results;
     }

@@ -1,12 +1,14 @@
 import { MovieRepositoryI } from "../../movies/interfaces/repositories";
 import { MovieType } from "../../movies/types/db";
-import { RatingCollectorService } from "../services/rating-collector.service";
-import { RatingType } from "../types/db";
+import { RatingRepositoryI } from "../interfaces/repositories";
+import { RatingCollectorServiceI } from "../interfaces/services";
+import { RatingCollectorResult } from "../types/rating";
 import { SetMovieRatings } from "./set-movie-ratings";
 
 describe("UseCase SetMovieRatings", () => {
     let movieRepository: jest.Mocked<MovieRepositoryI>;
-    let ratingCollector: jest.Mocked<RatingCollectorService>;
+    let ratingCollector: jest.Mocked<RatingCollectorServiceI>;
+    let ratingRepository: jest.Mocked<RatingRepositoryI>;
     let useCase: SetMovieRatings;
 
     const mockMovieFromDB = {
@@ -30,65 +32,53 @@ describe("UseCase SetMovieRatings", () => {
 
     const mockRatingsAllocine = [
         {
-            id: "r1",
             value: "7",
-            source_url: null,
+            source_url: undefined,
             extra: "",
             movieId: "movie-1",
-            created_at: new Date(),
-            updated_at: new Date(),
+            rating_source_code: "allocine",
         },
         {
-            id: "r2",
             value: "8",
-            source_url: null,
+            source_url: undefined,
             extra: "",
             movieId: "movie-1",
-            created_at: new Date(),
-            updated_at: new Date(),
+            rating_source_code: "allocine",
         },
-    ] satisfies [RatingType, RatingType];
+    ] satisfies [RatingCollectorResult, RatingCollectorResult];
 
     const mockRatingsRotten = [
         {
-            id: "r3",
             value: "85",
-            source_url: null,
+            source_url: undefined,
             extra: "",
             movieId: "movie-1",
-            created_at: new Date(),
-            updated_at: new Date(),
+            rating_source_code: "rotten",
         },
         {
-            id: "r4",
             value: "90",
-            source_url: null,
+            source_url: undefined,
             extra: "",
             movieId: "movie-1",
-            created_at: new Date(),
-            updated_at: new Date(),
+            rating_source_code: "rotten",
         },
-    ] satisfies [RatingType, RatingType];
+    ] satisfies [RatingCollectorResult, RatingCollectorResult];
 
     const mockRatingIMDB = {
-        id: "r5",
         value: "7.5",
         source_url: "https://imdb.com/title/tt1234567",
         extra: "",
         movieId: "movie-1",
-        created_at: new Date(),
-        updated_at: new Date(),
-    } satisfies RatingType;
+        rating_source_code: "imdb",
+    } satisfies RatingCollectorResult;
 
     const mockRatingLetterboxd = {
-        id: "r6",
         value: "4.5",
         source_url: "https://letterboxd.com/film/superman-2025",
         extra: "",
         movieId: "movie-1",
-        created_at: new Date(),
-        updated_at: new Date(),
-    } satisfies RatingType;
+        rating_source_code: "letterboxd",
+    } satisfies RatingCollectorResult;
 
     beforeEach(() => {
         movieRepository = {
@@ -102,7 +92,17 @@ describe("UseCase SetMovieRatings", () => {
             collectLetterboxd: jest.fn(),
         } as any;
 
-        useCase = new SetMovieRatings(movieRepository, ratingCollector);
+        ratingRepository = {
+            addOrUpdate: jest.fn(),
+            getRatingsByMovieId: jest.fn(),
+            setAllForMovie: jest.fn(),
+        };
+
+        useCase = new SetMovieRatings(
+            movieRepository,
+            ratingCollector,
+            ratingRepository,
+        );
     });
 
     it("should return combined ratings from all collectors", async () => {
@@ -115,6 +115,31 @@ describe("UseCase SetMovieRatings", () => {
             mockRatingLetterboxd,
         );
 
+        const combinedResults = [
+            ...mockRatingsAllocine.map((r) => ({
+                ...r,
+                Rating_Source: { code: r.rating_source_code },
+            })),
+            ...mockRatingsRotten.map((r) => ({
+                ...r,
+                Rating_Source: { code: r.rating_source_code },
+            })),
+            {
+                ...mockRatingIMDB,
+                Rating_Source: { code: mockRatingIMDB.rating_source_code },
+            },
+            {
+                ...mockRatingLetterboxd,
+                Rating_Source: {
+                    code: mockRatingLetterboxd.rating_source_code,
+                },
+            },
+        ];
+
+        ratingRepository.setAllForMovie.mockResolvedValue(
+            combinedResults as any,
+        );
+
         const results = await useCase.execute(mockMovieFromDB.id);
 
         expect(results).toHaveLength(6);
@@ -123,13 +148,24 @@ describe("UseCase SetMovieRatings", () => {
             id: mockMovieFromDB.id,
         });
 
-        expect(ratingCollector.collectAllocine).toHaveBeenCalledWith(mockMovieFromDB);
-        expect(ratingCollector.collectIMDB).toHaveBeenCalledWith(mockMovieFromDB);
-        expect(ratingCollector.collectRotten).toHaveBeenCalledWith(mockMovieFromDB);
+        expect(ratingCollector.collectAllocine).toHaveBeenCalledWith(
+            mockMovieFromDB,
+        );
+        expect(ratingCollector.collectIMDB).toHaveBeenCalledWith(
+            mockMovieFromDB,
+        );
+        expect(ratingCollector.collectRotten).toHaveBeenCalledWith(
+            mockMovieFromDB,
+        );
 
-        const allIds = results.map((r) => r.id);
-        expect(allIds).toEqual(
-            expect.arrayContaining(["r1", "r2", "r3", "r4", "r5", "r6"]),
+        const allSources = results.map((r) => r.Rating_Source.code);
+        expect(allSources).toEqual(
+            expect.arrayContaining([
+                "allocine",
+                "rotten",
+                "imdb",
+                "letterboxd",
+            ]),
         );
     });
 
