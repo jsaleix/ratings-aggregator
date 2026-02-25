@@ -12,13 +12,6 @@ import { PaginateFunction, paginator } from 'src/shared/utils/pagination';
 export class MoviesService {
   constructor(private prisma: PrismaService) {}
 
-  // async create(createMovieDto: CreateMovieDto) {
-  //   const movie = await this.prisma.movie.create({
-  //     data: createMovieDto,
-  //   });
-  //   return movie;
-  // }
-
   async findOne(id: string): Promise<{ movie: MovieType }> {
     const movie = await this.prisma.movie.findUnique({
       where: { id },
@@ -35,10 +28,6 @@ export class MoviesService {
     });
     if (!movie) throw new NotFoundException(`movie ${slug} not found`);
     return { movie };
-  }
-
-  update(id: string, updateMovieDto: UpdateMovieDto) {
-    return `This action updates a #${id} movie`;
   }
 
   async remove(id: string) {
@@ -107,10 +96,10 @@ export class MoviesService {
     const where: Prisma.MovieWhereInput = {};
 
     if (title) {
-      where.title = {
-        contains: title,
-        mode: 'insensitive',
-      };
+      where.OR = [
+        { title: { contains: title, mode: 'insensitive' } },
+        { original_title: { contains: title, mode: 'insensitive' } },
+      ];
     }
 
     if (year) {
