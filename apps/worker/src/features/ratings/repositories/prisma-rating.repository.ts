@@ -2,11 +2,10 @@ import { PrismaClient } from "../../../../generated/prisma";
 import { db } from "../../../core/db";
 import { RatingRepositoryI } from "../interfaces/repositories";
 import {
-    RatingCollectorResult,
     RatingSourceServiceI,
 } from "../interfaces/services";
 import { FullRatingType, RatingType } from "../types/db";
-import { CreateRatingAttributesType } from "../types/rating";
+import { CreateRatingAttributesType, RatingCollectorResult } from "../types/rating";
 
 class PrismaRatingRepository implements RatingRepositoryI {
     db: PrismaClient;

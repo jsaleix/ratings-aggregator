@@ -1,13 +1,13 @@
 import { RATING_SOURCES } from "../../../config/ratings";
 import { MovieType } from "../../movies/types/db";
 import {
-    RatingCollectorResult,
     RatingCollectorServiceI,
 } from "../interfaces/services";
 import { getAllocineScore } from "../providers/allocine";
 import { getIMDBScore } from "../providers/imdb";
 import { getLetterBoxdScore } from "../providers/letterboxd";
 import { getRottenTomatoesScores } from "../providers/rotten";
+import { RatingCollectorResult } from "../types/rating";
 
 export class RatingCollectorService implements RatingCollectorServiceI {
     constructor() {}

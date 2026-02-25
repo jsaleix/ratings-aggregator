@@ -4,3 +4,18 @@ export type CreateRatingAttributesType = {
     source_url?: string;
     rating_source_id: string;
 };
+
+export type CalcScoreRatingItem = {
+    value: string;
+    Rating_Source: {
+        rating_unit: string;
+    };
+};
+
+export type RatingCollectorResult = {
+    movieId: string;
+    value: string;
+    rating_source_code: string;
+    extra?: string;
+    source_url?: string;
+};

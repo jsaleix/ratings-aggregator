@@ -1,19 +1,5 @@
 import { MovieType } from "../../movies/types/db";
-
-export type CalcScoreRatingItem = {
-    value: string;
-    Rating_Source: {
-        rating_unit: string;
-    };
-};
-
-export type RatingCollectorResult = {
-    movieId: string;
-    value: string;
-    rating_source_code: string;
-    extra?: string;
-    source_url?: string
-};
+import { CalcScoreRatingItem, RatingCollectorResult } from "../types/rating";
 
 export interface RatingCollectorServiceI {
     collectAllocine(movie: MovieType): Promise<RatingCollectorResult[]>;

@@ -1,6 +1,5 @@
 import { FullRatingType, RatingSource, RatingType } from "../types/db";
-import { CreateRatingAttributesType } from "../types/rating";
-import { RatingCollectorResult } from "./services";
+import { CreateRatingAttributesType, RatingCollectorResult } from "../types/rating";
 
 export interface RatingRepositoryI {
     addOrUpdate(data: CreateRatingAttributesType): Promise<RatingType>;

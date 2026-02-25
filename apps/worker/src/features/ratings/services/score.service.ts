@@ -1,5 +1,6 @@
 import { RATING_UNITS } from "../../../config/ratings";
-import { CalcScoreRatingItem, ScoreServiceI } from "../interfaces/services";
+import {  ScoreServiceI } from "../interfaces/services";
+import { CalcScoreRatingItem } from "../types/rating";
 
 export class ScoreService implements ScoreServiceI {
     private clamp(value: number, min: number = 0, max: number = 100): number {

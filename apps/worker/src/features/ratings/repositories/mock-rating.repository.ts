@@ -1,8 +1,7 @@
 import { PrismaClient } from "../../../../generated/prisma";
 import { RatingRepositoryI } from "../interfaces/repositories";
-import { RatingCollectorResult } from "../interfaces/services";
 import { FullRatingType, RatingType } from "../types/db";
-import { CreateRatingAttributesType } from "../types/rating";
+import { CreateRatingAttributesType, RatingCollectorResult } from "../types/rating";
 
 class MockRatingRepository implements RatingRepositoryI {
     constructor(private db: PrismaClient) {}
