@@ -7,9 +7,14 @@ export class ScoreService implements ScoreServiceI {
         return Math.max(min, Math.min(max, value));
     }
 
+    private normalizeValue(value: string): number {
+        const normalized = value.toString().trim().replace(",", ".");
+        return parseFloat(normalized);
+    }
+
     calcScore(ratings: CalcScoreRatingItem[]) {
         const scores = ratings
-            .filter((rating) => !isNaN(+rating.value))
+            .filter((rating) => !isNaN(this.normalizeValue(rating.value)))
             .map((rating) => this.getScore(rating))
             .filter((score) => score !== undefined);
 
@@ -23,7 +28,7 @@ export class ScoreService implements ScoreServiceI {
     }
 
     getScore(rating: CalcScoreRatingItem): number | undefined {
-        const value = +rating.value;
+        const value = this.normalizeValue(rating.value);
         let score: number;
 
         switch (rating.Rating_Source.rating_unit) {
