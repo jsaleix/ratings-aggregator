@@ -1,6 +1,6 @@
 import { motion, stagger } from "motion/react";
 import MovieRatingItem from "../../../../movies/components/movie-rating-item";
-import type { MovieRatingModel } from "../../../../movies/types/movie-rating";
+import type { MovieRatingModel } from "../../../../movies/models/movie-rating";
 
 const itemVariants = {
     hidden: {

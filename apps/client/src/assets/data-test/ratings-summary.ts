@@ -1,4 +1,4 @@
-import type { RatingsSummaryModel } from "../../features/movies/types/ratings-summary";
+import type { RatingsSummaryModel } from "../../features/movies/models/ratings-summary";
 
 export const RatingsSummaryMockData = {
     id: "04cfe9d3-5fc3-46bc-a021-6768c95795c9",

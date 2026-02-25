@@ -3,7 +3,9 @@ import { Body, Controller, Get, Patch } from '@nestjs/common';
 import { DynamicConfigService } from './dynamic-config.service';
 import { SetMaxRequestsDTO } from './dto/set-max-requests.dto';
 import { Role } from 'src/auth/decorators/role.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("Dynamic config")
 @Role('admin')
 @Controller('config')
 export class DynamicConfigController {

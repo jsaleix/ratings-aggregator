@@ -9,6 +9,7 @@ import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 import { EnvType } from 'src/core/configuration';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {

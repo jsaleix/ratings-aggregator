@@ -1,4 +1,6 @@
-export interface MovieRatingModel {
+import type { MovieRatingModel } from "../models/movie-rating";
+
+export interface ApiMovieRatingType {
     id: string;
     movieId: string;
     value: string;
@@ -16,4 +18,8 @@ export interface MovieRatingModel {
         url: string;
         country_code: string;
     };
+}
+
+export function mapRatingApiToModel(data: ApiMovieRatingType) {
+    return data as MovieRatingModel;
 }

@@ -35,9 +35,10 @@ export class UsersController {
     @Body() updatePasswordDto: UpdatePasswordDTO,
     @Req() req,
   ) {
-    const { password, deleted_at, ...rest } =
-      await this.usersService.updatePassword(req.user.id, updatePasswordDto);
-    return rest;
+    return await this.usersService.updatePassword(
+      req.user.id,
+      updatePasswordDto,
+    );
   }
 
   @Delete('me')

@@ -1,8 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
   Param,
   Delete,
   Query,
@@ -12,7 +10,6 @@ import {
 import { MoviesService } from './services/movies.service';
 import { TMDBService } from './services/tmdb.service';
 
-import { CreateMovieDto } from './dto/create-movie.dto';
 import { SearchMovieQueryDto } from './dto/search-movie-query.dto';
 import { FindMoviesDTO } from './dto/find-movies.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
@@ -37,11 +34,11 @@ export class MoviesController {
     return await this.tmdbService.searchByName(query);
   }
 
-  @Role('admin')
-  @Post()
-  async create(@Body() createMovieDto: CreateMovieDto) {
-    return await this.moviesService.create(createMovieDto);
-  }
+  // @Role('admin')
+  // @Post()
+  // async create(@Body() createMovieDto: CreateMovieDto) {
+  //   return await this.moviesService.create(createMovieDto);
+  // }
 
   @Public()
   @Get()

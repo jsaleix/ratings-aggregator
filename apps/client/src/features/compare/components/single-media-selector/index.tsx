@@ -3,7 +3,7 @@ import { useDebounce } from "use-debounce";
 
 import Input from "../../../../shared/ui/input";
 import { useCallback, useState } from "react";
-import { type MovieModel } from "../../../movies/types/movie";
+import { type MovieModel } from "../../../movies/models/movie";
 
 interface Props {
     searchFn: (query: string) => Promise<MovieModel[]>;

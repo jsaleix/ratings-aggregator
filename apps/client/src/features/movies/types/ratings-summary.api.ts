@@ -1,11 +1,15 @@
-import { type RatingsSummaryModel } from "./ratings-summary";
+import { type RatingsSummaryModel } from "../models/ratings-summary";
 
-export interface RatingsSummaryApiResponseType {
+export interface ApiRatingsSummaryType {
     id: string;
     content: string;
+    score: string;
+    score_value: number;
     updated_at: string;
+    created_at: string;
+    movieId: string;
 }
 
-export function mapRatingsSummaryToModel(data: RatingsSummaryApiResponseType) {
+export function mapRatingsSummaryApiToModel(data: ApiRatingsSummaryType) {
     return data as RatingsSummaryModel;
 }

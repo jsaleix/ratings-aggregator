@@ -7,7 +7,7 @@ import { MemoryRouter } from "react-router";
 import { MovieMockData } from "../../../../assets/data-test/movies";
 import type { PaginatedResult } from "../../../../shared/types/pagination";
 import apiMoviesService from "../../services/api-movies.service";
-import type { MovieModel } from "../../types/movie";
+import type { MovieModel } from "../../models/movie";
 import Component from "./last-movies-updated";
 
 const client = new QueryClient();

@@ -1,8 +1,8 @@
 import { motion, stagger } from "motion/react";
 
-import type { MovieRatingModel } from "../types/movie-rating";
-import MovieRatingItem from "./movie-rating-item";
-import Button from "../../../shared/ui/button";
+import type { MovieRatingModel } from "../../models/movie-rating";
+import MovieRatingItem from "../movie-rating-item";
+import Button from "../../../../shared/ui/button";
 
 interface Props {
     ratings: MovieRatingModel[];

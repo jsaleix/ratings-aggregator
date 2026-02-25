@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 import MovieRatingItem from "../../../movies/components/movie-rating-item";
-import type { MovieRatingModel } from "../../../movies/types/movie-rating";
+import type { MovieRatingModel } from "../../../movies/models/movie-rating";
 
 const MOCK_RATINGS = [
     {

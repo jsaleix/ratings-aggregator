@@ -4,9 +4,9 @@ import { formatDistanceToNow } from "date-fns";
 
 import { BASE_POSTER_URL } from "../../../core/config/misc";
 import { useAuthContext } from "../../../core/auth/provider";
+import { ROLES } from "../../../core/auth/constants";
 import { setPageTitle } from "../../../shared/utils/page";
 import Button from "../../../shared/ui/button";
-import { ROLES } from "../../../core/auth/constants";
 
 import MoviePageSkeleton from "../components/movie-page-skeleton";
 import LastMoviesAdded from "../components/movie-posters-section/last-movies-added";

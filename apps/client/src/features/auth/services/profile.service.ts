@@ -50,7 +50,7 @@ class ProfileService {
             headers: { "Content-Type": "application/json", ...authHeaders() },
         });
         if (!res.ok) {
-            throw new Error(`Error fetching requests: ${res.statusText}`);
+            throw new Error(`Error deleting profile: ${res.statusText}`);
         }
 
         return true;

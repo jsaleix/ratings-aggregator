@@ -1,11 +1,8 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import type { PaginatedResult } from "../../../shared/types/pagination";
 import type { TMDBGetMovieType } from "../../requests/types/tmdb";
-import type { MovieModel } from "../types/movie";
-import {
-    mapMovieApiToModel,
-    type MovieApiResponseType,
-} from "../types/movie.api";
+import type { MovieModel } from "../models/movie";
+import { mapMovieApiToModel, type ApiMovieType } from "../types/movie.api";
 
 type SearchMovieParams = {
     title: string;
@@ -37,7 +34,12 @@ class ApiMoviesService {
         if (!res.ok) {
             throw new Error(`Error fetching movies: ${res.statusText}`);
         }
-        return (await res.json()) as PaginatedResult<MovieModel>;
+        const rawResponse = (await res.json()) as PaginatedResult<ApiMovieType>;
+        const { data, pagination } = rawResponse;
+        return {
+            pagination,
+            data: data.map(mapMovieApiToModel),
+        } satisfies PaginatedResult<MovieModel>;
     }
 
     async getRandom(): Promise<Array<MovieModel>> {
@@ -49,7 +51,8 @@ class ApiMoviesService {
         if (!res.ok) {
             throw new Error(`Error fetching movies: ${res.statusText}`);
         }
-        return (await res.json()) as Array<MovieModel>;
+        const data = (await res.json()) as Array<ApiMovieType>;
+        return data.map(mapMovieApiToModel) satisfies MovieModel[];
     }
 
     async getById(id: string) {
@@ -62,8 +65,8 @@ class ApiMoviesService {
                 `Error fetching movie with id ${id}: ${res.statusText}`,
             );
         }
-        const data = (await res.json())["movie"] as MovieApiResponseType;
-        return mapMovieApiToModel(data);
+        const data = (await res.json())["movie"] as ApiMovieType;
+        return mapMovieApiToModel(data) satisfies MovieModel;
     }
 
     async getBySlug(slug: string) {
@@ -74,8 +77,8 @@ class ApiMoviesService {
         if (!res.ok) {
             throw new Error(`Error fetching movie: ${slug}: ${res.statusText}`);
         }
-        const data = (await res.json())["movie"] as MovieApiResponseType;
-        return mapMovieApiToModel(data);
+        const data = (await res.json())["movie"] as ApiMovieType;
+        return mapMovieApiToModel(data) satisfies MovieModel;
     }
 
     async search(
@@ -96,7 +99,7 @@ class ApiMoviesService {
             throw new Error(`Error searching movies: ${res.statusText}`);
         }
         const { data, pagination } =
-            (await res.json()) as PaginatedResult<MovieApiResponseType>;
+            (await res.json()) as PaginatedResult<ApiMovieType>;
         return {
             data: data.map((d) => mapMovieApiToModel(d)),
             pagination,
@@ -126,7 +129,7 @@ class ApiMoviesService {
         if (!res.ok) {
             throw new Error(`Error searching TMDB movies: ${res.statusText}`);
         }
-        return await res.json();
+        return (await res.json()) as Array<TMDBGetMovieType>;
     }
 
     async delete(id: string) {

@@ -4,7 +4,7 @@ import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import SingleMediaSelector from ".";
 import { sleep } from "../../../../shared/utils";
 import { createQueryWrapper } from "../../../../tests/query-wrapper";
-import type { MovieModel } from "../../../movies/types/movie";
+import type { MovieModel } from "../../../movies/models/movie";
 import { MovieMockData } from "../../../../assets/data-test/movies";
 
 const searchFn = async (str: string): Promise<MovieModel[]> => {

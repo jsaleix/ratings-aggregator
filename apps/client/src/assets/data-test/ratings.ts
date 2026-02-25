@@ -1,4 +1,4 @@
-import type { MovieRatingModel } from "../../features/movies/types/movie-rating";
+import type { MovieRatingModel } from "../../features/movies/models/movie-rating";
 
 export const RatingMockData = {
     id: "b2d52ea1-34a0-4a9f-b1ec-0b1315d8f9aa",

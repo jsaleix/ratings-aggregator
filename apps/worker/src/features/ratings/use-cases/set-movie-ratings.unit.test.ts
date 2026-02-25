@@ -9,7 +9,7 @@ describe("UseCase SetMovieRatings", () => {
     let ratingCollector: jest.Mocked<RatingCollectorService>;
     let useCase: SetMovieRatings;
 
-    const mockMovie = {
+    const mockMovieFromDB = {
         id: "movie-1",
         title: "Test Movie",
         year: 2023,
@@ -25,6 +25,7 @@ describe("UseCase SetMovieRatings", () => {
         language: "en",
         original_title: "movie-1",
         imdb_id: "tt123",
+        slug: "test-movie-1-2023",
     } satisfies MovieType;
 
     const mockRatingsAllocine = [
@@ -105,7 +106,7 @@ describe("UseCase SetMovieRatings", () => {
     });
 
     it("should return combined ratings from all collectors", async () => {
-        movieRepository.getMovieBy.mockResolvedValue(mockMovie);
+        movieRepository.getMovieBy.mockResolvedValue(mockMovieFromDB);
 
         ratingCollector.collectAllocine.mockResolvedValue(mockRatingsAllocine);
         ratingCollector.collectIMDB.mockResolvedValue(mockRatingIMDB);
@@ -114,17 +115,17 @@ describe("UseCase SetMovieRatings", () => {
             mockRatingLetterboxd,
         );
 
-        const results = await useCase.execute(mockMovie.id);
+        const results = await useCase.execute(mockMovieFromDB.id);
 
         expect(results).toHaveLength(6);
 
         expect(movieRepository.getMovieBy).toHaveBeenCalledWith({
-            id: mockMovie.id,
+            id: mockMovieFromDB.id,
         });
 
-        expect(ratingCollector.collectAllocine).toHaveBeenCalledWith(mockMovie);
-        expect(ratingCollector.collectIMDB).toHaveBeenCalledWith(mockMovie);
-        expect(ratingCollector.collectRotten).toHaveBeenCalledWith(mockMovie);
+        expect(ratingCollector.collectAllocine).toHaveBeenCalledWith(mockMovieFromDB);
+        expect(ratingCollector.collectIMDB).toHaveBeenCalledWith(mockMovieFromDB);
+        expect(ratingCollector.collectRotten).toHaveBeenCalledWith(mockMovieFromDB);
 
         const allIds = results.map((r) => r.id);
         expect(allIds).toEqual(

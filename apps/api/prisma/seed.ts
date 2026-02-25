@@ -1,6 +1,7 @@
 import { RatingUnit } from 'generated/prisma/enums';
 import { PrismaClient } from '../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { DynamicConfigService } from 'src/dynamic-config/dynamic-config.service';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -82,6 +83,17 @@ async function ratingSources() {
   }
 }
 
+async function seedConfig() {
+  await prisma.app_Config
+    .create({
+      data: {
+        key: DynamicConfigService.MAX_REQUESTS_KEY,
+        value: '50',
+      },
+    })
+    .catch((e) => console.error('Error seeding AppConfig:', e));
+}
+
 // async function tmpMapExistingData() {
 //   const sources = await prisma.rating_Source.findMany({
 //     select: { id: true, code: true },
@@ -116,6 +128,7 @@ async function ratingSources() {
 
 async function main() {
   await ratingSources();
+  await seedConfig();
   // await tmpMapExistingData();
 }
 

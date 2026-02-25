@@ -15,6 +15,14 @@ import { UpdatePasswordDTO } from './dto/update-password.dto';
 
 import { AdminUpdateUserFullDTO } from './dto/admin/update-user-full.dto';
 import { AdminUpdatePasswordDTO } from './dto/admin/update-password.dto';
+import { PaginatedResult } from 'src/shared/types/pagination';
+import {
+  FullUserWithPasswordType,
+  userPrivateSelect,
+  UserPrivateType,
+  userPublicSelect,
+  UserPublicType,
+} from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -42,56 +50,44 @@ export class UsersService {
     return { id, role, username, email, created_at };
   }
 
-  async findAllPublic() {
+  async findAllPublic(): Promise<Array<UserPublicType>> {
     return await this.prismaService.user.findMany({
-      select: {
-        id: true,
-        username: true,
-      },
+      select: userPublicSelect,
       where: {
         deleted_at: null,
       },
     });
   }
 
-  async findAllFull() {
+  async findAllFull(): Promise<PaginatedResult<UserPrivateType>> {
     const paginate: PaginateFunction = paginator({ perPage: 15 });
 
     return await paginate(this.prismaService.user, {
-      omit: {
-        password: true,
-      },
+      select: userPrivateSelect,
       where: {
         deleted_at: null,
       },
     });
-    return await this.prismaService.user.findMany({
-      omit: {
-        password: true,
-      },
-    });
   }
 
-  async findOneFull(id: string) {
+  async findOneFull(id: string): Promise<UserPrivateType | null> {
     return await this.prismaService.user.findUnique({
       where: { id, deleted_at: null },
-      omit: {
-        password: true,
-      },
+      select: userPrivateSelect,
     });
   }
 
-  async findOnePublic(id: string) {
+  async findOnePublic(id: string): Promise<UserPublicType | null> {
     return await this.prismaService.user.findUnique({
       where: { id, deleted_at: null },
-      select: {
-        id: true,
-        username: true,
-      },
+      select: userPublicSelect,
     });
   }
 
-  async adminUpdateAccountFull(id: string, data: AdminUpdateUserFullDTO) {
+  async adminUpdateAccountFull(
+    id: string,
+    data: AdminUpdateUserFullDTO,
+  ): Promise<UserPrivateType> {
     try {
       const isMailTaken = await this.adminGetUserWithMail(data.email);
       if (isMailTaken && isMailTaken.id !== id) {
@@ -100,12 +96,7 @@ export class UsersService {
       return this.prismaService.user.update({
         where: { id },
         data,
-        select: {
-          id: true,
-          username: true,
-          email: true,
-          created_at: true,
-        },
+        select: userPrivateSelect,
       });
     } catch (error) {
       throw new Error('Error updating user account');
@@ -115,7 +106,7 @@ export class UsersService {
   async adminUpdatePassword(
     id: string,
     updatePassword: AdminUpdatePasswordDTO,
-  ) {
+  ): Promise<UserPrivateType> {
     try {
       const { newPassword } = updatePassword;
       const user = await this.prismaService.user.findUnique({ where: { id } });
@@ -126,13 +117,17 @@ export class UsersService {
       return this.prismaService.user.update({
         where: { id },
         data: { password: hashedPassword },
+        select: userPrivateSelect,
       });
     } catch (error) {
       throw new BadRequestException('Error updating user password');
     }
   }
 
-  async updateAccount(id: string, data: UpdateUserDTO) {
+  async updateAccount(
+    id: string,
+    data: UpdateUserDTO,
+  ): Promise<UserPrivateType> {
     try {
       const isMailTaken = await this.adminGetUserWithMail(data.email);
       if (isMailTaken && isMailTaken.id !== id) {
@@ -141,19 +136,17 @@ export class UsersService {
       return this.prismaService.user.update({
         where: { id },
         data,
-        select: {
-          id: true,
-          username: true,
-          email: true,
-          created_at: true,
-        },
+        select: userPrivateSelect,
       });
     } catch (error) {
       throw new Error('Error updating user account');
     }
   }
 
-  async updatePassword(id: string, updatePassword: UpdatePasswordDTO) {
+  async updatePassword(
+    id: string,
+    updatePassword: UpdatePasswordDTO,
+  ): Promise<UserPrivateType> {
     try {
       const { currentPassword, newPassword } = updatePassword;
       const user = await this.prismaService.user.findUnique({ where: { id } });
@@ -171,6 +164,7 @@ export class UsersService {
       return this.prismaService.user.update({
         where: { id },
         data: { password: hashedPassword },
+        select: userPrivateSelect,
       });
     } catch (error) {
       throw new BadRequestException('Error updating user password');
@@ -180,23 +174,41 @@ export class UsersService {
   async remove(id: string) {
     const user = await this.findOneFull(id);
     if (!user) throw new NotFoundException();
+
     const timestamp = new Date().toISOString();
-    user.deleted_at = new Date(timestamp);
-    user.email = `${timestamp}-deleted@example.com`;
-    user.username = `${timestamp}-deleted`;
-    user.role = 'user';
+
     return this.prismaService.user.update({
       where: { id },
-      data: user,
+      data: {
+        deleted_at: new Date(timestamp),
+        email: `${timestamp}-deleted@example.com`,
+        username: `${timestamp}-deleted`,
+        role: 'user',
+      },
+      select: userPrivateSelect,
     });
   }
 
-  async adminGetUserWithMail(email: string) {
-    return await this.prismaService.user.findFirst({ where: { email } });
+  async adminGetUserWithMail(email: string): Promise<UserPrivateType | null> {
+    return await this.prismaService.user.findFirst({
+      where: { email },
+      select: userPrivateSelect,
+    });
   }
 
-  async adminGetUserWithUsername(username: string) {
-    return await this.prismaService.user.findFirst({ where: { username } });
+  async adminGetUserWithUsername(
+    username: string,
+  ): Promise<UserPrivateType | null> {
+    return await this.prismaService.user.findFirst({
+      where: { username },
+      select: userPrivateSelect,
+    });
+  }
+
+  async authGetUserWithMail(
+    email: string,
+  ): Promise<FullUserWithPasswordType | null> {
+    return await this.prismaService.user.findFirst({ where: { email } });
   }
 
   async banUser(id: string) {
@@ -205,6 +217,7 @@ export class UsersService {
     return await this.prismaService.user.update({
       data: { verified: false },
       where: { id },
+      select: userPrivateSelect,
     });
   }
 

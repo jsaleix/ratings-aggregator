@@ -1,11 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateMovieDto } from '../dto/create-movie.dto';
 import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { SearchMovieQueryDto } from '../dto/search-movie-query.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { Prisma } from 'generated/prisma/client';
 import { PaginatedResult } from 'src/shared/types/pagination';
-import { MovieType } from '../entities/movie.entity';
+import { movieSelect, MovieType } from '../entities/movie.entity';
 import { FindMoviesDTO } from '../dto/find-movies.dto';
 import { PaginateFunction, paginator } from 'src/shared/utils/pagination';
 
@@ -13,21 +12,27 @@ import { PaginateFunction, paginator } from 'src/shared/utils/pagination';
 export class MoviesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createMovieDto: CreateMovieDto) {
-    const movie = await this.prisma.movie.create({
-      data: createMovieDto,
-    });
-    return movie;
-  }
+  // async create(createMovieDto: CreateMovieDto) {
+  //   const movie = await this.prisma.movie.create({
+  //     data: createMovieDto,
+  //   });
+  //   return movie;
+  // }
 
-  async findOne(id: string) {
-    const movie = await this.prisma.movie.findUnique({ where: { id } });
+  async findOne(id: string): Promise<{ movie: MovieType }> {
+    const movie = await this.prisma.movie.findUnique({
+      where: { id },
+      select: movieSelect,
+    });
     if (!movie) throw new NotFoundException(`movie ${id} not found`);
     return { movie };
   }
 
-  async findOneBySlug(slug: string) {
-    const movie = await this.prisma.movie.findUnique({ where: { slug } });
+  async findOneBySlug(slug: string): Promise<{ movie: MovieType }> {
+    const movie = await this.prisma.movie.findUnique({
+      where: { slug },
+      select: movieSelect,
+    });
     if (!movie) throw new NotFoundException(`movie ${slug} not found`);
     return { movie };
   }
@@ -59,13 +64,14 @@ export class MoviesService {
     return { message: `Movie with id ${id} deleted successfully` };
   }
 
-  async getRandomMovies() {
+  async getRandomMovies(): Promise<MovieType[]> {
     const moviesCount = await this.prisma.movie.count();
     const skip =
       moviesCount > 10 ? Math.floor(Math.random() * (moviesCount - 10)) : 0;
     const movies = await this.prisma.movie.findMany({
       skip,
       take: 15,
+      select: movieSelect,
     });
     return movies;
   }
@@ -86,6 +92,7 @@ export class MoviesService {
         orderBy: {
           [orderBy]: order,
         },
+        select: movieSelect,
       },
       {
         page,
@@ -93,7 +100,9 @@ export class MoviesService {
     );
   }
 
-  async search(query: SearchMovieQueryDto) {
+  async search(
+    query: SearchMovieQueryDto,
+  ): Promise<PaginatedResult<MovieType>> {
     let { title, year, order, orderBy, page } = query;
     const where: Prisma.MovieWhereInput = {};
 
@@ -121,6 +130,7 @@ export class MoviesService {
           [orderBy]: order,
         },
         where,
+        select: movieSelect,
       },
       {
         page,

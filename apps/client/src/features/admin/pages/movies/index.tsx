@@ -9,7 +9,7 @@ import Button from "../../../../shared/ui/button";
 import Input from "../../../../shared/ui/input";
 import useMovieFilters from "../../../movies/hooks/use-filters";
 import useSearchMovies from "../../../movies/hooks/use-search-movies";
-import { type MovieModel } from "../../../movies/types/movie";
+import { type MovieModel } from "../../../movies/models/movie";
 import MovieModal from "../../components/movies/movie-modal";
 
 export default function MoviesPage() {
