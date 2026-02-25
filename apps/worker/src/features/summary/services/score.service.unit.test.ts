@@ -20,7 +20,7 @@ describe("scoreService", () => {
         });
         it("Should return correct result #2", () => {
             const rating = {
-                value: "5",
+                value: "5,0",
                 Rating_Source: {
                     rating_unit: "stars",
                 },
@@ -29,7 +29,7 @@ describe("scoreService", () => {
         });
         it("Should return correct result #3", () => {
             const rating = {
-                value: "10",
+                value: "10,0",
                 Rating_Source: {
                     rating_unit: "points",
                 },
@@ -47,7 +47,7 @@ describe("scoreService", () => {
         });
         it("Should return correct result #5", () => {
             const rating = {
-                value: "3.5",
+                value: "3,5",
                 Rating_Source: {
                     rating_unit: "stars",
                 },
