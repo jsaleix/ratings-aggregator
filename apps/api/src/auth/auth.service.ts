@@ -4,13 +4,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { compareSync } from 'bcrypt';
 import Redis from 'ioredis';
 
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
-import { ConfigService } from '@nestjs/config';
 import { EnvType } from 'src/core/configuration';
 
 @Injectable()
@@ -23,12 +23,17 @@ export class AuthService {
   ) {}
 
   async login(data: LoginDto) {
+    const INVALID_CREDENTIALS_MSG =
+      'Account does not exist or invalid credentials';
+    const BANNED_USER_MSG = 'This user account has been banned';
+
     const { email, password } = data;
     const user = await this.userService.authGetUserWithMail(email);
-    if (!user) throw new NotFoundException();
-    if (!compareSync(password, user.password)) {
-      throw new UnauthorizedException();
-    }
+
+    if (!user) throw new NotFoundException(INVALID_CREDENTIALS_MSG);
+    if (user.deleted_at) throw new UnauthorizedException(BANNED_USER_MSG);
+    if (!compareSync(password, user.password))
+      throw new NotFoundException(INVALID_CREDENTIALS_MSG);
 
     const payload = {
       sub: user.id,
