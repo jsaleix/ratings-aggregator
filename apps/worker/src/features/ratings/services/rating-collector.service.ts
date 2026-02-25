@@ -1,43 +1,18 @@
 import { RATING_SOURCES } from "../../../config/ratings";
 import { MovieType } from "../../movies/types/db";
 import {
-    RatingRepositoryI,
-    RatingSourceRepositoryI,
-} from "../interfaces/repositories";
+    RatingCollectorServiceI,
+} from "../interfaces/services";
 import { getAllocineScore } from "../providers/allocine";
 import { getIMDBScore } from "../providers/imdb";
 import { getLetterBoxdScore } from "../providers/letterboxd";
 import { getRottenTomatoesScores } from "../providers/rotten";
+import { RatingCollectorResult } from "../types/rating";
 
-export class RatingCollectorService {
-    private ratingSourceCache: Map<string, string> | null = null;
-    private ratingSourceCacheExpiry: number | null = null;
-    private readonly CACHE_TTL_MS = 60 * 60 * 1000; // 1h
+export class RatingCollectorService implements RatingCollectorServiceI {
+    constructor() {}
 
-    constructor(
-        private ratingRepository: RatingRepositoryI,
-        private ratingSourceRepository: RatingSourceRepositoryI,
-    ) {}
-
-    private async getRatingSourceId(code: string): Promise<string> {
-        const now = Date.now();
-        if (
-            !this.ratingSourceCache ||
-            !this.ratingSourceCacheExpiry ||
-            now > this.ratingSourceCacheExpiry
-        ) {
-            const sources = await this.ratingSourceRepository.findAll();
-            this.ratingSourceCache = new Map(
-                sources.map((s) => [s.code, s.id]),
-            );
-            this.ratingSourceCacheExpiry = now + this.CACHE_TTL_MS;
-        }
-        const id = this.ratingSourceCache.get(code);
-        if (!id) throw new Error(`Rating source "${code}" not found`);
-        return id;
-    }
-
-    async collectAllocine(movie: MovieType) {
+    async collectAllocine(movie: MovieType): Promise<RatingCollectorResult[]> {
         const { title, id: movieId, year, language, original_title } = movie;
 
         let values: Awaited<ReturnType<typeof getAllocineScore>>;
@@ -55,40 +30,36 @@ export class RatingCollectorService {
 
         const { press, audience } = values;
 
-        return Promise.all([
-            this.ratingRepository.addOrUpdate({
+        return [
+            {
                 movieId,
                 value: press,
-                rating_source_id: await this.getRatingSourceId(
-                    RATING_SOURCES.ALLOCINE_PRESS,
-                ),
-            }),
-            this.ratingRepository.addOrUpdate({
+                rating_source_code: RATING_SOURCES.ALLOCINE_PRESS,
+            },
+            {
                 movieId,
                 value: audience,
-                rating_source_id: await this.getRatingSourceId(
-                    RATING_SOURCES.ALLOCINE_AUDIENCE,
-                ),
-            }),
-        ]);
+                rating_source_code: RATING_SOURCES.ALLOCINE_AUDIENCE,
+            },
+        ];
     }
 
-    async collectIMDB(movie: MovieType) {
+    async collectIMDB(movie: MovieType): Promise<RatingCollectorResult> {
         const { title, id: movieId, year, imdb_id } = movie;
         const value = await getIMDBScore(title, year, imdb_id);
         if (!value) throw new Error(`IMDB rating for ${title} not found`);
 
         const { score, url } = value;
 
-        return this.ratingRepository.addOrUpdate({
+        return {
             movieId,
             value: score,
             source_url: url,
-            rating_source_id: await this.getRatingSourceId(RATING_SOURCES.IMDB),
-        });
+            rating_source_code: RATING_SOURCES.IMDB,
+        };
     }
 
-    async collectRotten(movie: MovieType) {
+    async collectRotten(movie: MovieType): Promise<RatingCollectorResult[]> {
         const { title, id: movieId, year } = movie;
         const values = await getRottenTomatoesScores(title, year);
         if (!values)
@@ -96,27 +67,23 @@ export class RatingCollectorService {
 
         const { criticsRatings, audienceRatings, url } = values;
 
-        return Promise.all([
-            this.ratingRepository.addOrUpdate({
+        return [
+            {
                 movieId,
                 value: criticsRatings,
                 source_url: url,
-                rating_source_id: await this.getRatingSourceId(
-                    RATING_SOURCES.ROTTEN_TOMATOES,
-                ),
-            }),
-            this.ratingRepository.addOrUpdate({
+                rating_source_code: RATING_SOURCES.ROTTEN_TOMATOES,
+            },
+            {
                 movieId,
                 value: audienceRatings,
                 source_url: url,
-                rating_source_id: await this.getRatingSourceId(
-                    RATING_SOURCES.ROTTEN_TOMATOES_AUDIENCE,
-                ),
-            }),
-        ]);
+                rating_source_code: RATING_SOURCES.ROTTEN_TOMATOES_AUDIENCE,
+            },
+        ];
     }
 
-    async collectLetterboxd(movie: MovieType) {
+    async collectLetterboxd(movie: MovieType): Promise<RatingCollectorResult> {
         const { title, id: movieId, year } = movie;
         const value = await getLetterBoxdScore(title, year);
         if (!value) throw new Error(`Letterboxd score for ${title} not found`);
@@ -125,13 +92,11 @@ export class RatingCollectorService {
 
         const { score, url } = value;
 
-        return this.ratingRepository.addOrUpdate({
+        return {
             movieId,
             value: score,
             source_url: url,
-            rating_source_id: await this.getRatingSourceId(
-                RATING_SOURCES.LETTERBOXD,
-            ),
-        });
+            rating_source_code: RATING_SOURCES.LETTERBOXD,
+        };
     }
 }

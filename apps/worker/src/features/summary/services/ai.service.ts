@@ -1,9 +1,10 @@
 import { AI_CONFIG } from "../../../config/ai";
 import { logger } from "../../../shared/logger";
 import TooManyRequestsError from "../errors/too-many-requests";
+import { AiServiceI } from "../interfaces/services";
 import { AIResponseType, AISummaryResponseType } from "../types/ai";
 
-class AIService {
+class AIService implements AiServiceI {
     async sendRequest({
         user,
         system,
@@ -40,7 +41,7 @@ class AIService {
             if (res.status === 429) throw new TooManyRequestsError();
             else
                 throw new Error(
-                    `Failed to fetch AI response: ${res.status} ${res.statusText}`
+                    `Failed to fetch AI response: ${res.status} ${res.statusText}`,
                 );
         }
 
@@ -55,7 +56,7 @@ class AIService {
         const result = JSON.parse(rawContent) as AISummaryResponseType;
         if (!result.content || !result.score)
             throw new Error(
-                "Invalid response type, missing content and/or score"
+                "Invalid response type, missing content and/or score",
             );
         return result;
     }

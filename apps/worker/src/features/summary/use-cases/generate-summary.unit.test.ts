@@ -1,7 +1,7 @@
-import { ScoreService } from "../../ratings/services/score.service";
 import { FullRatingType } from "../../ratings/types/db";
 import { SummaryRepositoryI } from "../interfaces/repositories";
 import AIService from "../services/ai.service";
+import { ScoreService } from "../services/score.service";
 import { GenerateMovieSummaryUseCase } from "./generate-summary";
 
 describe("UseCase GenerateSummary", () => {
