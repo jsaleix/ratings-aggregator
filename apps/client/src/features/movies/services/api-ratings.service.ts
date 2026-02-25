@@ -14,8 +14,11 @@ class ApiRatingsService {
             headers: { ...authHeaders() },
         });
         if (!res.ok) {
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
             throw new Error(
-                `Error fetching ratings for movie with id ${id}: ${res.statusText}`,
+                error.message ?? `Error fetching ratings: ${res.statusText}`,
             );
         }
         const response = (await res.json()) as ApiMovieRatingType[];
@@ -28,8 +31,11 @@ class ApiRatingsService {
             method: "DELETE",
         });
         if (!res.ok) {
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
             throw new Error(
-                `Error deleting rating with id ${id}: ${res.statusText}`,
+                error.message ?? `Error deleting rating: ${res.statusText}`,
             );
         }
         return true;

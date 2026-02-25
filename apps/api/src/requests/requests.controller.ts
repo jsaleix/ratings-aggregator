@@ -7,6 +7,7 @@ import {
   Delete,
   Req,
   UseGuards,
+  HttpException,
 } from '@nestjs/common';
 import { RequestsService } from './requests.service';
 import { CreateRequestDto } from './dto/create-request.dto';
@@ -14,6 +15,7 @@ import { Public } from 'src/auth/decorators/public.decorator';
 import { Role } from 'src/auth/decorators/role.decorator';
 import { LimitRequestsGuard } from './guards/limit-requests.guard';
 import { DynamicConfigService } from 'src/dynamic-config/dynamic-config.service';
+import { RequestAlreadyPendingError } from './errors/request_already_pending.error';
 
 @Controller('requests')
 export class RequestsController {
@@ -25,7 +27,13 @@ export class RequestsController {
   @UseGuards(LimitRequestsGuard)
   @Post()
   async create(@Req() req, @Body() createRequestDto: CreateRequestDto) {
-    return this.requestsService.create(createRequestDto, req.user);
+    try {
+      return await this.requestsService.create(createRequestDto, req.user);
+    } catch (e: any) {
+      if (e instanceof RequestAlreadyPendingError)
+        throw new HttpException(e.message, 409);
+      throw e;
+    }
   }
 
   @Public()
@@ -37,7 +45,7 @@ export class RequestsController {
     if (left !== null && left < 0) {
       left = 0; // Ensure left is not negative
     }
-    
+
     return {
       current,
       max,

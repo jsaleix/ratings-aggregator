@@ -8,6 +8,7 @@ import {
   MovieRequestPublicType,
   movieRequestSelect,
 } from './entities/request.entity';
+import { RequestAlreadyPendingError } from './errors/request_already_pending.error';
 
 @Injectable()
 export class RequestsService {
@@ -20,8 +21,14 @@ export class RequestsService {
     { tmdbId }: CreateRequestDto,
     user: User,
   ): Promise<MovieRequestPublicType> {
-    // TODO: Check if there is no pending request for the same movie
-
+    // Checks if there is no pending request for the same movie
+    const alreadyPendingRequest = await this.prisma.movie_Request.findFirst({
+      where: {
+        tmdb_id: tmdbId,
+        processed: false,
+      },
+    });
+    if (alreadyPendingRequest) throw new RequestAlreadyPendingError();
     const request = await this.prisma.movie_Request.create({
       data: {
         title: '',
@@ -31,11 +38,7 @@ export class RequestsService {
       select: movieRequestSelect,
     });
 
-    if (!request) {
-      throw new Error('Failed to create request');
-    }
-
-    this.addToQueue(request.id, request.tmdb_id);
+    await this.addToQueue(request.id, request.tmdb_id);
     return request;
   }
 

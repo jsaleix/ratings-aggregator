@@ -11,7 +11,12 @@ class UserService {
             headers: { "Content-Type": "application/json", ...authHeaders() },
         });
         if (!res.ok) {
-            throw new Error(`Error fetching requests: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error fetching profile: ${res.statusText}`,
+            );
         }
         return (await res.json()) as UserType;
     }
@@ -24,7 +29,12 @@ class UserService {
             body: JSON.stringify({ ...data }),
         });
         if (!res.ok) {
-            throw new Error(`Error fetching requests: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error during sign-up: ${res.statusText}`,
+            );
         }
         return (await res.json()) as SignupReturnType;
     }
@@ -39,7 +49,12 @@ class UserService {
             body: JSON.stringify({ email, password }),
         });
         if (!res.ok) {
-            throw new Error(`Error fetching requests: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error during login: ${res.statusText}`,
+            );
         }
         return true;
     }
@@ -53,7 +68,12 @@ class UserService {
             },
         });
         if (!res.ok) {
-            throw new Error(`Error fetching requests: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error during logout: ${res.statusText}`,
+            );
         }
         return true;
     }

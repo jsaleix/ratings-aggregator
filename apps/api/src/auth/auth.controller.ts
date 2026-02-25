@@ -1,5 +1,6 @@
 import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
+import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 
 import { UsersService } from 'src/users/users.service';
@@ -7,9 +8,7 @@ import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
-import { ConfigService } from '@nestjs/config';
 import { EnvType } from 'src/core/configuration';
-import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {

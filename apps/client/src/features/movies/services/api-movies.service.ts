@@ -32,7 +32,12 @@ class ApiMoviesService {
             method: "GET",
         });
         if (!res.ok) {
-            throw new Error(`Error fetching movies: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error fetching movies: ${res.statusText}`,
+            );
         }
         const rawResponse = (await res.json()) as PaginatedResult<ApiMovieType>;
         const { data, pagination } = rawResponse;
@@ -49,7 +54,12 @@ class ApiMoviesService {
             method: "GET",
         });
         if (!res.ok) {
-            throw new Error(`Error fetching movies: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error fetching movies: ${res.statusText}`,
+            );
         }
         const data = (await res.json()) as Array<ApiMovieType>;
         return data.map(mapMovieApiToModel) satisfies MovieModel[];
@@ -61,8 +71,11 @@ class ApiMoviesService {
             method: "GET",
         });
         if (!res.ok) {
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
             throw new Error(
-                `Error fetching movie with id ${id}: ${res.statusText}`,
+                error.message ?? `Error fetching movie: ${res.statusText}`,
             );
         }
         const data = (await res.json())["movie"] as ApiMovieType;
@@ -75,7 +88,12 @@ class ApiMoviesService {
             method: "GET",
         });
         if (!res.ok) {
-            throw new Error(`Error fetching movie: ${slug}: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error fetching movies: ${res.statusText}`,
+            );
         }
         const data = (await res.json())["movie"] as ApiMovieType;
         return mapMovieApiToModel(data) satisfies MovieModel;
@@ -96,7 +114,12 @@ class ApiMoviesService {
             method: "GET",
         });
         if (!res.ok) {
-            throw new Error(`Error searching movies: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error searching movies: ${res.statusText}`,
+            );
         }
         const { data, pagination } =
             (await res.json()) as PaginatedResult<ApiMovieType>;
@@ -115,7 +138,12 @@ class ApiMoviesService {
             method: "GET",
         });
         if (!res.ok) {
-            throw new Error(`Error searching movies: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error searching movies: ${res.statusText}`,
+            );
         }
         return (await res.json()) as Array<TMDBGetMovieType>;
     }
@@ -127,7 +155,12 @@ class ApiMoviesService {
             method: "GET",
         });
         if (!res.ok) {
-            throw new Error(`Error searching TMDB movies: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error searching movies: ${res.statusText}`,
+            );
         }
         return (await res.json()) as Array<TMDBGetMovieType>;
     }
@@ -138,8 +171,11 @@ class ApiMoviesService {
             method: "DELETE",
         });
         if (!res.ok) {
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
             throw new Error(
-                `Error deleting movie with id ${id}: ${res.statusText}`,
+                error.message ?? `Error deleting movie: ${res.statusText}`,
             );
         }
         return true;

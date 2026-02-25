@@ -14,7 +14,7 @@ export const movieSelect = {
   budget: true,
   poster_path: true,
   language: true,
-  original_title: false,
+  original_title: true,
   imdb_id: true,
   slug: true,
 } satisfies Prisma.MovieSelect;

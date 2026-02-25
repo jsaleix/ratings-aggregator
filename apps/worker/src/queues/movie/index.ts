@@ -36,7 +36,18 @@ movieWorker.on("active", async (job: Job<MovieJob>) => {
         tags: ["movie-worker", "worker"],
         payload: job.data.payload,
     });
-    await movieRequestRepository.updateRequestState(payload.requestId, true);
+    try {
+        await movieRequestRepository.updateRequestState(
+            payload.requestId,
+            true,
+        );
+    } catch (error) {
+        logger.warn("Failed to update request state", {
+            tags: ["movie-worker", "worker"],
+            requestId: payload.requestId,
+            error: error instanceof Error ? error.message : String(error),
+        });
+    }
 });
 
 movieWorker.on(
