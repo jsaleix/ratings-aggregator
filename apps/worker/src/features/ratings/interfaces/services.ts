@@ -1,5 +1,4 @@
 import { MovieType } from "../../movies/types/db";
-import { CalcScoreRatingItem } from "../../summary/types/score";
 import { RatingCollectorResult } from "../types/rating";
 
 export interface RatingCollectorServiceI {

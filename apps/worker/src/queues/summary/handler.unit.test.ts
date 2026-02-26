@@ -1,7 +1,7 @@
 import { Job } from "bullmq";
 
 import { GenerateMovieSummaryUseCase } from "../../features/summary/use-cases/generate-summary";
-import { MovieRatingSummaryType } from "../../features/summary/types/db";
+import { MovieRatingsSummaryType } from "../../features/summary/types/db";
 import SummaryHandler, { SummaryJob } from "./handler";
 
 describe("SummaryHandler Unit", () => {
@@ -18,7 +18,7 @@ describe("SummaryHandler Unit", () => {
 
     test("should call useCase.execute with id for movie", async () => {
         mockUseCase.execute.mockResolvedValue(
-            {} as unknown as MovieRatingSummaryType,
+            {} as unknown as MovieRatingsSummaryType,
         );
 
         const jobMock = {

@@ -1,7 +1,8 @@
 import { PrismaClient } from "../../../../generated/prisma";
 import { db } from "../../../core/db";
-import { FullRatingType } from "../../ratings/types/db";
+import { movieRatingSelect, MovieRatingType } from "../../ratings/types/db";
 import { SummaryRepositoryI } from "../interfaces/repositories";
+import { movieRatingsSummarySelect } from "../types/db";
 
 export class PrismaSummaryRepository implements SummaryRepositoryI {
     db: PrismaClient;
@@ -23,13 +24,14 @@ export class PrismaSummaryRepository implements SummaryRepositoryI {
             where: { movieId },
             update: { content, score_value: scoreValue },
             create: { movieId, content, score_value: scoreValue },
+            select: movieRatingsSummarySelect,
         });
     }
 
-    async getRatingsByMovieId(movieId: string): Promise<FullRatingType[]> {
+    async getRatingsByMovieId(movieId: string): Promise<MovieRatingType[]> {
         return (await this.db.movie_Rating.findMany({
             where: { movieId },
-            include: { Rating_Source: true },
-        })) satisfies FullRatingType[];
+            select: movieRatingSelect,
+        })) satisfies MovieRatingType[];
     }
 }

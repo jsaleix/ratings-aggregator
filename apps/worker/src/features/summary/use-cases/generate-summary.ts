@@ -1,6 +1,6 @@
 import { logger } from "../../../shared/logger";
 
-import { FullRatingType } from "../../ratings/types/db";
+import { MovieRatingType } from "../../ratings/types/db";
 import { SummaryRepositoryI } from "../interfaces/repositories";
 import { AiServiceI, ScoreServiceI } from "../interfaces/services";
 
@@ -11,7 +11,7 @@ export class GenerateMovieSummaryUseCase {
         private readonly scoreService: ScoreServiceI,
     ) {}
 
-    public static generateUserPrompt(ratings: FullRatingType[]) {
+    public static generateUserPrompt(ratings: MovieRatingType[]) {
         return (
             "{" +
             ratings

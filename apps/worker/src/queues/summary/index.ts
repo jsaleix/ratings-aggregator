@@ -5,7 +5,7 @@ import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 import AIService from "../../features/summary/services/ai.service";
 import { GenerateMovieSummaryUseCase } from "../../features/summary/use-cases/generate-summary";
 import SummaryHandler, { SummaryJob } from "./handler";
-import { MovieRatingSummaryType } from "../../features/summary/types/db";
+import { MovieRatingsSummaryType } from "../../features/summary/types/db";
 import { logger } from "../../shared/logger";
 import { PrismaSummaryRepository } from "../../features/summary/repositories/prisma-summary.repository";
 import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
@@ -56,7 +56,7 @@ summaryWorker.on("failed", (job, error) => {
 
 summaryWorker.on(
     "completed",
-    async (job, summary: MovieRatingSummaryType | undefined) => {
+    async (job, summary: MovieRatingsSummaryType | undefined) => {
         logger.info("Summary worker completed", {
             tags: ["summary-worker", "worker"],
             payload: job.data.payload,

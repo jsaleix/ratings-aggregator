@@ -1,7 +1,12 @@
 import { Prisma, PrismaClient } from "../../../../generated/prisma";
 import { db } from "../../../core/db";
 import { MovieRepositoryI } from "../interfaces/repositories";
-import { GenreType, MovieCreateInput, MovieType } from "../types/db";
+import {
+    GenreType,
+    MovieCreateInput,
+    movieSelect,
+    MovieType,
+} from "../types/db";
 
 class PrismaMovieRepository implements MovieRepositoryI {
     db: PrismaClient;
@@ -11,7 +16,7 @@ class PrismaMovieRepository implements MovieRepositoryI {
     }
 
     async createMovie(data: MovieCreateInput) {
-        return await this.db.movie.create({ data, include: { Genre: true } });
+        return await this.db.movie.create({ data, select: movieSelect });
     }
 
     async createOrUpdate(data: MovieCreateInput, genres: GenreType[]) {
@@ -26,18 +31,14 @@ class PrismaMovieRepository implements MovieRepositoryI {
             where: { tmdb_id: data.tmdb_id },
             create: data,
             update: data,
-            include: {
-                Genre: true,
-            },
+            select: movieSelect,
         });
     }
 
     async getMovieBy(where: Prisma.MovieWhereInput): Promise<MovieType | null> {
         return await this.db.movie.findFirst({
             where,
-            include: {
-                Genre: true,
-            },
+            select: movieSelect,
         });
     }
 
@@ -45,9 +46,7 @@ class PrismaMovieRepository implements MovieRepositoryI {
         return await this.db.movie.update({
             where: { id },
             data,
-            include: {
-                Genre: true,
-            },
+            select: movieSelect,
         });
     }
 }
