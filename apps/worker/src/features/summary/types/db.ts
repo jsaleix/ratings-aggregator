@@ -1,17 +1,14 @@
 import { Prisma } from "../../../../generated/prisma";
 
-const movieRatingSummaryModel =
-    Prisma.validator<Prisma.Movie_Ratings_SummaryDefaultArgs>()({
-        select: {
-            id: true,
-            content: true,
-            movieId: true,
-            created_at: true,
-            updated_at: true,
-            score: true,
-        },
-    });
+export const movieRatingsSummarySelect = {
+    id: true,
+    content: true,
+    movieId: true,
+    created_at: true,
+    updated_at: true,
+    score: true,
+};
 
-export type MovieRatingSummaryType = Prisma.Movie_Ratings_SummaryGetPayload<
-    typeof movieRatingSummaryModel
->;
+export type MovieRatingsSummaryType = Prisma.Movie_Ratings_SummaryGetPayload<{
+    select: typeof movieRatingsSummarySelect;
+}>;

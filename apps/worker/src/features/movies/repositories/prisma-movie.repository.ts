@@ -1,7 +1,12 @@
 import { Prisma, PrismaClient } from "../../../../generated/prisma";
 import { db } from "../../../core/db";
 import { MovieRepositoryI } from "../interfaces/repositories";
-import { MovieCreateInput, MovieType } from "../types/db";
+import {
+    GenreType,
+    MovieCreateInput,
+    movieSelect,
+    MovieType,
+} from "../types/db";
 
 class PrismaMovieRepository implements MovieRepositoryI {
     db: PrismaClient;
@@ -11,29 +16,36 @@ class PrismaMovieRepository implements MovieRepositoryI {
     }
 
     async createMovie(data: MovieCreateInput) {
-        return await this.db.movie.create({ data });
+        return await this.db.movie.create({ data, select: movieSelect });
     }
 
-    async createOrUpdate(data: MovieCreateInput) {
+    async createOrUpdate(data: MovieCreateInput, genres: GenreType[]) {
+        const prismaData: Prisma.MovieCreateInput = {
+            ...data,
+            Genre: {
+                connect: genres.map((item) => ({ id: item.id })),
+            },
+        };
         return await this.db.movie.upsert({
             where: { tmdb_id: data.tmdb_id },
-            create: data,
-            update: data,
+            create: prismaData,
+            update: prismaData,
+            select: movieSelect,
         });
     }
 
     async getMovieBy(where: Prisma.MovieWhereInput): Promise<MovieType | null> {
-        const movie = await this.db.movie.findFirst({
+        return await this.db.movie.findFirst({
             where,
+            select: movieSelect,
         });
-
-        return movie ? movie : null;
     }
 
     async updateMovie(id: string, data: Partial<MovieCreateInput>) {
         return await this.db.movie.update({
             where: { id },
             data,
+            select: movieSelect,
         });
     }
 }

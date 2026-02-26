@@ -1,7 +1,10 @@
 import { PrismaClient } from "../../../../generated/prisma";
 import { RatingRepositoryI } from "../interfaces/repositories";
-import { FullRatingType, RatingType } from "../types/db";
-import { CreateRatingAttributesType, RatingCollectorResult } from "../types/rating";
+import { movieRatingSelect, MovieRatingType } from "../types/db";
+import {
+    CreateRatingAttributesType,
+    RatingCollectorResult,
+} from "../types/rating";
 
 class MockRatingRepository implements RatingRepositoryI {
     constructor(private db: PrismaClient) {}
@@ -13,22 +16,26 @@ class MockRatingRepository implements RatingRepositoryI {
             where: { id: movieId, rating_source_id },
             create: { movieId, rating_source_id, value, source_url },
             update: { value, source_url },
+            select: movieRatingSelect,
         });
     }
 
-    async getRatingsByMovieId(movieId: string): Promise<Array<RatingType>> {
+    async getRatingsByMovieId(
+        movieId: string,
+    ): Promise<Array<MovieRatingType>> {
         return await this.db.movie_Rating.findMany({
             where: {
                 movieId,
             },
+            select: movieRatingSelect,
         });
     }
 
     async setAllForMovie(
-        movieId: string,
-        ratings: RatingCollectorResult[],
-    ): Promise<FullRatingType[]> {
-        return [] as FullRatingType[];
+        _: string,
+        __: RatingCollectorResult[],
+    ): Promise<MovieRatingType[]> {
+        return [] satisfies MovieRatingType[];
     }
 }
 

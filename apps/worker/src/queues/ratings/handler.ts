@@ -1,5 +1,5 @@
 import { Job } from "bullmq";
-import { RatingType } from "../../features/ratings/types/db";
+import { MovieRatingType } from "../../features/ratings/types/db";
 import { SetMovieRatings } from "../../features/ratings/use-cases/set-movie-ratings";
 
 type RatingJob = {
@@ -12,7 +12,7 @@ type RatingJob = {
 class RatingHandler {
     constructor(private setMovieRatings: SetMovieRatings) {}
 
-    async handle(job: Job<RatingJob>): Promise<Array<RatingType>> {
+    async handle(job: Job<RatingJob>): Promise<Array<MovieRatingType>> {
         const {
             type,
             payload: { id },
@@ -24,7 +24,6 @@ class RatingHandler {
             default:
                 throw new Error("Unknown type");
         }
-        
     }
 }
 

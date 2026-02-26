@@ -11,13 +11,14 @@ import Button from "../../../shared/ui/button";
 import MoviePageSkeleton from "../components/movie-page-skeleton";
 import LastMoviesAdded from "../components/movie-posters-section/last-movies-added";
 import LastMoviesUpdated from "../components/movie-posters-section/last-movies-updated";
-import CompareBtn from "../components/compare-btn";
 import RatingListPart from "../components/rating-list-part";
 import MovieSummaryPart from "../components/movie-summary-part";
 
 import useMovieRatings from "../hooks/use-movie-ratings";
 import useMovieSummary from "../hooks/use-movie-summary";
 import useMovieBySlug from "../hooks/use-movie-by-slug";
+import GenresLabelsPart from "../components/genres-labels-part";
+import RelatedMovies from "../components/movie-posters-section/related-movies";
 
 export default function MoviePage() {
     const { isConnected, role } = useAuthContext();
@@ -52,13 +53,20 @@ export default function MoviePage() {
         <div className="w-full max-w-screen">
             <div className="flex flex-col items-center container mx-auto gap-5 pb-5 md:py-5">
                 <header className="flex flex-col w-full md:flex-row gap-5 justify-center">
-                    <div className="hidden md:flex overflow-hidden aspect-[9/16] w-[300px] h-[450px]">
-                        <img
-                            width={300}
-                            height={450}
-                            src={posterUrl}
-                            alt={movie.title}
-                            className="w-full h-full object-contain select-none pointer-events-none"
+                    <div className="w-[300px] flex flex-col gap-3">
+                        <div className="hidden md:flex overflow-hidden aspect-[9/16] w-[300px] h-[450px]">
+                            <img
+                                width={300}
+                                height={450}
+                                src={posterUrl}
+                                alt={movie.title}
+                                className="w-full h-full object-contain select-none pointer-events-none"
+                            />
+                        </div>
+                        <GenresLabelsPart
+                            genres={movie.genres}
+                            id="genres_desktop"
+                            style="hidden md:flex"
                         />
                     </div>
                     <div
@@ -119,7 +127,11 @@ export default function MoviePage() {
                                     {movie.tmdbId}
                                 </code>
                             </p>
-                            <CompareBtn movieId={movie.id} />
+                            <GenresLabelsPart
+                                genres={movie.genres}
+                                id="genres_mobile"
+                                style="flex md:hidden"
+                            />
                         </div>
                     </div>
                 </header>
@@ -129,7 +141,9 @@ export default function MoviePage() {
                         <h1 className="text-xl font-bold uppercase text-white">
                             <span className="text-secondary">R</span>atings
                         </h1>
-                        <p>Updated {lastUpdatedStr}</p>
+                        <p className="text-text-secondary">
+                            Updated {lastUpdatedStr}
+                        </p>
                     </div>
                     {isConnected ? (
                         <>
@@ -144,6 +158,7 @@ export default function MoviePage() {
                                 deleteAction={deleteSummaryMutation}
                                 refreshAction={refreshSummaryMutation}
                             />
+                            {/* <CompareBtn movieId={movie.id} /> */}
                         </>
                     ) : (
                         <div className="w-full flex flex-col items-center justify-center gap-3">
@@ -160,6 +175,7 @@ export default function MoviePage() {
                     )}
                 </div>
             </div>
+            <RelatedMovies slug={movie.slug} />
             <LastMoviesAdded />
             <hr className="divider" />
             <LastMoviesUpdated />

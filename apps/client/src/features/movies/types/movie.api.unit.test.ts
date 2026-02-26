@@ -17,6 +17,7 @@ const mockApiMovie: ApiMovieType = {
     tmdb_id: 27205,
     imdb_id: "tt1375666",
     slug: "inception",
+    Genre: [],
 };
 
 describe("mapMovieApiToModel", () => {

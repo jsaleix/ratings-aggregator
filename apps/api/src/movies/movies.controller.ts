@@ -64,6 +64,12 @@ export class MoviesController {
     return await this.moviesService.findOneBySlug(slug);
   }
 
+  @Public()
+  @Get('/slug/:slug/related')
+  async getRelatedMovies(@Param('slug') slug: string) {
+    return await this.moviesService.getRelatedMovies(slug);
+  }
+
   @Role('admin')
   @Delete(':id')
   async remove(@Param('id', ParseUUIDPipe) id: string) {

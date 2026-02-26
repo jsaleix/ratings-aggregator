@@ -1,3 +1,9 @@
+export interface GenreModel {
+    id: string;
+    tmdb_id: number;
+    name: string;
+}
+
 export interface MovieModel {
     id: string;
     title: string;
@@ -15,4 +21,5 @@ export interface MovieModel {
     original_title: string;
     imdbId: string;
     slug: string;
+    genres: Array<GenreModel>;
 }

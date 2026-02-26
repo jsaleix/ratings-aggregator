@@ -1,36 +1,33 @@
 import { Prisma, RatingUnit } from "../../../../generated/prisma";
 
-const ratingModel = Prisma.validator<Prisma.Movie_RatingDefaultArgs>()({
-    select: {
-        id: true,
-        movieId: true,
-        value: true,
-        extra: true,
-        created_at: true,
-        updated_at: true,
-        source_url: true,
-    },
-});
+// Rating Source
 
-export type RatingSource = {
-    id: string;
-    code: string;
-    name: string;
-    rating_unit: RatingUnit;
-    url: string;
-    country_code: string;
-};
+export const ratingSourceSelect = {
+    id: true,
+    code: true,
+    name: true,
+    rating_unit: true,
+    url: true,
+    country_code: true,
+} satisfies Prisma.Rating_SourceSelect;
 
-// FullRatingType includes the Rating_Source
-export type FullRatingType = {
-    id: string;
-    movieId: string;
-    value: string;
-    extra: string;
-    created_at: Date;
-    updated_at: Date;
-    source_url: string | null;
-    Rating_Source: RatingSource;
-};
 
-export type RatingType = Prisma.Movie_RatingGetPayload<typeof ratingModel>;
+export type RatingSourceType = Prisma.Rating_SourceGetPayload<{
+    select: typeof ratingSourceSelect;
+}>;
+
+// Movie Rating
+export const movieRatingSelect = {
+    id: true,
+    movieId: true,
+    value: true,
+    extra: true,
+    created_at: true,
+    updated_at: true,
+    source_url: true,
+    Rating_Source: true
+} satisfies Prisma.Movie_RatingSelect;
+
+export type MovieRatingType = Prisma.Movie_RatingGetPayload<{
+    select: typeof movieRatingSelect;
+}>;
