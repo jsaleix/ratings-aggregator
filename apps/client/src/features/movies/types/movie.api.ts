@@ -1,5 +1,11 @@
 import type { MovieModel } from "../models/movie";
 
+type ApiGenreType = {
+    id: string;
+    tmdb_id: string;
+    name: string;
+};
+
 export type ApiMovieType = {
     id: string;
     title: string;
@@ -16,6 +22,7 @@ export type ApiMovieType = {
     tmdb_id: number;
     imdb_id: string;
     slug: string;
+    Genre: Array<ApiGenreType>;
 };
 
 export function mapMovieApiToModel(data: ApiMovieType) {
@@ -23,7 +30,8 @@ export function mapMovieApiToModel(data: ApiMovieType) {
         tag_line: tagLine,
         imdb_id: imdbId,
         tmdb_id: tmdbId,
+        Genre,
         ...rest
     } = data;
-    return { ...rest, tagLine, imdbId, tmdbId } as MovieModel;
+    return { ...rest, tagLine, imdbId, tmdbId, genres: Genre } as MovieModel;
 }
