@@ -1,11 +1,12 @@
 import { PrismaClient } from "../../../../generated/prisma";
 import { db } from "../../../core/db";
 import { RatingRepositoryI } from "../interfaces/repositories";
+import { RatingSourceServiceI } from "../interfaces/services";
+import { movieRatingSelect, MovieRatingType } from "../types/db";
 import {
-    RatingSourceServiceI,
-} from "../interfaces/services";
-import { FullRatingType, RatingType } from "../types/db";
-import { CreateRatingAttributesType, RatingCollectorResult } from "../types/rating";
+    CreateRatingAttributesType,
+    RatingCollectorResult,
+} from "../types/rating";
 
 class PrismaRatingRepository implements RatingRepositoryI {
     db: PrismaClient;
@@ -20,25 +21,26 @@ class PrismaRatingRepository implements RatingRepositoryI {
             where: { id: movieId, rating_source_id },
             create: { movieId, rating_source_id, value, source_url },
             update: { value, source_url },
+            select: movieRatingSelect,
         });
     }
 
-    async getRatingsByMovieId(movieId: string): Promise<Array<RatingType>> {
+    async getRatingsByMovieId(
+        movieId: string,
+    ): Promise<Array<MovieRatingType>> {
         return await this.db.movie_Rating.findMany({
             where: {
                 movieId,
             },
-            include: {
-                Rating_Source: true,
-            },
+            select: movieRatingSelect,
         });
     }
 
     async setAllForMovie(
         movieId: string,
         ratings: RatingCollectorResult[],
-    ): Promise<FullRatingType[]> {
-        const added: FullRatingType[] = [];
+    ): Promise<MovieRatingType[]> {
+        const added: MovieRatingType[] = [];
         await this.db.movie_Rating.deleteMany({ where: { movieId } });
         for (let rating of ratings) {
             const source = await this.ratingSourceService.getRatingSourceId(
@@ -52,7 +54,7 @@ class PrismaRatingRepository implements RatingRepositoryI {
                     source_url: rating.source_url,
                     extra: rating.extra,
                 },
-                include: { Rating_Source: true },
+                select: movieRatingSelect,
             });
             added.push(newRating);
         }

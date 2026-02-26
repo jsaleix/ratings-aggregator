@@ -1,15 +1,18 @@
-import { FullRatingType, RatingSource, RatingType } from "../types/db";
-import { CreateRatingAttributesType, RatingCollectorResult } from "../types/rating";
+import { MovieRatingType, RatingSourceType } from "../types/db";
+import {
+    CreateRatingAttributesType,
+    RatingCollectorResult,
+} from "../types/rating";
 
 export interface RatingRepositoryI {
-    addOrUpdate(data: CreateRatingAttributesType): Promise<RatingType>;
-    getRatingsByMovieId(movieId: string): Promise<Array<RatingType>>;
+    addOrUpdate(data: CreateRatingAttributesType): Promise<MovieRatingType>;
+    getRatingsByMovieId(movieId: string): Promise<Array<MovieRatingType>>;
     setAllForMovie(
         movieId: string,
         collectedRatings: RatingCollectorResult[],
-    ): Promise<FullRatingType[]>;
+    ): Promise<MovieRatingType[]>;
 }
 
 export interface RatingSourceRepositoryI {
-    findAll(): Promise<RatingSource[]>;
+    findAll(): Promise<RatingSourceType[]>;
 }

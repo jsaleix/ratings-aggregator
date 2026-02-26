@@ -1,4 +1,5 @@
 import { prismaMock } from "../../../tests/singleton";
+import { GenreRepositoryI } from "../interfaces/repositories";
 import MockMovieRepository from "../repositories/mock-movie.repository";
 import TMDBService from "../services/tmdb.service";
 import { MovieCreateInput } from "../types/db";
@@ -21,10 +22,11 @@ const existingMovie = {
     tag_line: "A test movie tagline",
     created_at: new Date(),
     updated_at: new Date(),
-    slug: "test-movie-2020"
+    slug: "test-movie-2020",
 } satisfies MovieCreateInput;
 
 describe("Use-cases/AddMovieByTMDBId", () => {
+    let genreRepository: GenreRepositoryI;
     let tmdbService: TMDBService;
     let movieService: MockMovieRepository;
     let useCase: AddMovieByTMDBIdUseCase;
@@ -32,33 +34,57 @@ describe("Use-cases/AddMovieByTMDBId", () => {
     beforeEach(() => {
         jest.clearAllMocks();
 
-        tmdbService = jest.mocked(new TMDBService());
+        genreRepository = {
+            createOrUpdateGenre: jest.fn(),
+        } as GenreRepositoryI;
+        tmdbService = {
+            getMovieById: jest.fn(),
+            getPopulars: jest.fn(),
+            findMovie: jest.fn(),
+            mapApiGenreResponseToModel: jest.fn(),
+            mapApiResponseToModel: jest.fn(),
+        } as TMDBService;
         movieService = new MockMovieRepository(prismaMock);
-        useCase = new AddMovieByTMDBIdUseCase(tmdbService, movieService);
+        useCase = new AddMovieByTMDBIdUseCase(
+            tmdbService,
+            movieService,
+            genreRepository,
+        );
     });
 
     describe("execute", () => {
-        // it("the movies already exists so it should return it", async () => {
-        //     prismaMock.movie.findFirst.mockResolvedValue(existingMovie);
-        //     const movieId = existingMovie.tmdbId;
-        //     const movieResponse = await useCase.execute(movieId);
-        //     expect(movieResponse).toEqual(existingMovie);
-        // });
-
-        it("should throw an error if TMDB ID is not provided (because the movie doesn't exist then)", async () => {
-            await expect(useCase.execute(undefined as any)).rejects.toThrow();
+        it("should throw an error if movie not appropriate", async () => {
+            const mockTMDBResponse = {
+                adult: true,
+                id: 67890,
+                title: "New Movie",
+                original_title: "New Movie",
+                overview: "This is a new movie.",
+                genres: [],
+                release_date: "2021-01-01",
+                runtime: 150,
+                poster_path: "/path/to/poster.jpg",
+                original_language: "en",
+                imdb_id: "tt123",
+            } satisfies TMDBGetMovieType;
+            tmdbService.getMovieById = jest
+                .fn()
+                .mockResolvedValue(mockTMDBResponse);
+            await expect(useCase.execute(67890)).rejects.toThrow(
+                "Movie is marked as adult content and cannot be added.",
+            );
         });
 
         it("should add a new movie by ID", async () => {
             const tmdbId = 67890;
             // Mocks TMDB ID return value
-            const mockMovieResponse = {
+            const mockTMDBResponse = {
                 adult: false,
                 id: tmdbId,
                 title: "New Movie",
                 original_title: "New Movie",
                 overview: "This is a new movie.",
-                genre: [],
+                genres: [],
                 release_date: "2021-01-01",
                 runtime: 150,
                 poster_path: "/path/to/poster.jpg",
@@ -66,62 +92,75 @@ describe("Use-cases/AddMovieByTMDBId", () => {
                 imdb_id: "tt123",
             } satisfies TMDBGetMovieType;
 
-            // Mocks getMovieById return value
-            tmdbService.getMovieById = jest
-                .fn()
-                .mockResolvedValue(mockMovieResponse);
-
-            // Mocks mapApiResponseToModel return value
-            tmdbService.mapApiResponseToModel = jest.fn().mockReturnValue({
+            const tmdbServiceMapMovieModelMockResponse = {
                 tmdb_id: tmdbId,
-                title: mockMovieResponse.title,
-                original_title: mockMovieResponse.original_title,
-                summary: mockMovieResponse.overview,
-                release_date: new Date(mockMovieResponse.release_date),
-                runtime: mockMovieResponse.runtime,
+                title: mockTMDBResponse.title,
+                original_title: mockTMDBResponse.original_title,
+                summary: mockTMDBResponse.overview,
+                release_date: new Date(mockTMDBResponse.release_date),
+                runtime: mockTMDBResponse.runtime,
                 poster_path: "",
                 year: 2021,
                 budget: 0,
                 tag_line: "",
-                language: mockMovieResponse.original_language,
-                imdb_id: mockMovieResponse.imdb_id,
-            } satisfies Omit<MovieCreateInput, "slug">);
+                language: mockTMDBResponse.original_language,
+                imdb_id: mockTMDBResponse.imdb_id,
+            } satisfies Omit<MovieCreateInput, "slug">;
 
-            const slug = `${mockMovieResponse.title.toLowerCase().replace(" ", "-")}-2021`;
+            const slug = `${mockTMDBResponse.title.toLowerCase().replace(" ", "-")}-2021`;
 
-            // Mocks repository upsert return value
-            prismaMock.movie.upsert.mockResolvedValue({
+            const movieRepositoryMockResponse = {
                 ...existingMovie,
-                title: mockMovieResponse.title,
+                title: mockTMDBResponse.title,
                 id: "2",
                 created_at: new Date(),
                 slug,
-            } satisfies MovieCreateInput);
+            } satisfies MovieCreateInput;
 
-            const result = await useCase.execute(tmdbId);
-            const payload = {
+            const expectedReceivedParams = {
                 tmdb_id: tmdbId,
-                title: mockMovieResponse.title,
-                original_title: mockMovieResponse.original_title,
-                summary: mockMovieResponse.overview,
-                release_date: new Date(mockMovieResponse.release_date),
-                runtime: mockMovieResponse.runtime,
+                title: mockTMDBResponse.title,
+                original_title: mockTMDBResponse.original_title,
+                summary: mockTMDBResponse.overview,
+                release_date: new Date(mockTMDBResponse.release_date),
+                runtime: mockTMDBResponse.runtime,
                 poster_path: "",
                 year: 2021,
                 budget: 0,
                 tag_line: "",
-                language: mockMovieResponse.original_language,
-                imdb_id: mockMovieResponse.imdb_id,
+                language: mockTMDBResponse.original_language,
+                imdb_id: mockTMDBResponse.imdb_id,
                 slug,
             };
-            expect(prismaMock.movie.upsert).toHaveBeenCalledWith({
-                create: payload,
-                update: payload,
-                where: { tmdb_id: payload.tmdb_id },
-            });
 
-            expect(result).toHaveProperty("id");
-            expect(result).toHaveProperty("title", mockMovieResponse.title);
+            tmdbService.getMovieById = jest
+                .fn()
+                .mockResolvedValue(mockTMDBResponse);
+            tmdbService.mapApiResponseToModel = jest
+                .fn()
+                .mockReturnValue(tmdbServiceMapMovieModelMockResponse);
+            tmdbService.mapApiGenreResponseToModel = jest
+                .fn()
+                .mockReturnValue([]);
+            movieService.createOrUpdate = jest
+                .fn()
+                .mockReturnValue(movieRepositoryMockResponse);
+            genreRepository.createOrUpdateGenre = jest.fn().mockReturnValue([]);
+
+            const useCaseResult = await useCase.execute(tmdbId);
+
+            expect(tmdbService.mapApiResponseToModel).toHaveBeenCalled();
+            expect(tmdbService.mapApiGenreResponseToModel).toHaveBeenCalled();
+
+            expect(movieService.createOrUpdate).toHaveBeenCalledWith(
+                expectedReceivedParams,
+                [],
+            );
+            expect(useCaseResult).toHaveProperty("id");
+            expect(useCaseResult).toHaveProperty(
+                "title",
+                mockTMDBResponse.title,
+            );
         });
     });
 });

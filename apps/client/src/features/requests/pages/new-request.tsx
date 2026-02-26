@@ -13,7 +13,7 @@ import RequestPremiumForm from "../components/new-request-premium-form";
 
 export default function NewRequestPage() {
     const navigate = useNavigate();
-    const [searchBy, setSearchBy] = useState<"title" | "tmdbId">("tmdbId");
+    const [searchBy, setSearchBy] = useState<"title" | "tmdbId">("title");
 
     const { mutateAsync: createRequest } = useMutation({
         mutationFn: async (request: CreateRequestType) => {

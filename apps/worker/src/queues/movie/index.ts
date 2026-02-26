@@ -9,14 +9,17 @@ import { MovieType } from "../../features/movies/types/db";
 import { AddMovieByTMDBIdUseCase } from "../../features/movies/use-cases/add-movie-by-tmdb-id";
 import { ratingQueue } from "..";
 import MovieHandler, { MovieJob } from "./handler";
+import { PrismaGenreRepository } from "../../features/movies/repositories/prisma-genre.repository";
 
 const tmdbService = new TMDBService();
+const genreRepository = new PrismaGenreRepository();
 const movieRepository = new PrismaMovieRepository();
 const movieRequestRepository = new PrismaMovieRequestRepository();
 
 const addMovieByTMDBIdUseCase = new AddMovieByTMDBIdUseCase(
     tmdbService,
     movieRepository,
+    genreRepository,
 );
 const movieHandler = new MovieHandler(addMovieByTMDBIdUseCase);
 

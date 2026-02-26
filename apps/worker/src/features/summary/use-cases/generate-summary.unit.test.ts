@@ -1,4 +1,4 @@
-import { FullRatingType } from "../../ratings/types/db";
+import { MovieRatingType } from "../../ratings/types/db";
 import { SummaryRepositoryI } from "../interfaces/repositories";
 import AIService from "../services/ai.service";
 import { ScoreService } from "../services/score.service";
@@ -45,7 +45,7 @@ describe("UseCase GenerateSummary", () => {
                 country_code: "FR",
             },
         },
-    ] satisfies FullRatingType[];
+    ] satisfies MovieRatingType[];
 
     beforeEach(() => {
         aiService = {

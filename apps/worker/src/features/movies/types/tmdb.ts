@@ -10,7 +10,7 @@ export type TMDBGetMovieType = {
     tagline?: string;
     overview: string; // Summary
     budget?: number;
-    genre: Array<TMDBGenreType>;
+    genres: Array<TMDBGenreType>;
     poster_path: string;
     release_date: string;
     runtime?: number;
