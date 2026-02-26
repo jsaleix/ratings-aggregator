@@ -132,4 +132,45 @@ export class MoviesService {
     const total = await this.prisma.movie.count();
     return { total };
   }
+
+  async getRelatedMovies(slug: string, max: number = 15): Promise<MovieType[]> {
+    const movie = await this.prisma.movie.findUnique({
+      where: { slug },
+      include: { Genre: true },
+    });
+
+    if (!movie) throw new NotFoundException(`Movie "${slug}" not found`);
+
+    const genreIds = movie.Genre.map((g) => g.id);
+
+    if (genreIds.length === 0) return [];
+
+    const related = await this.prisma.$queryRaw<
+      { id: string; score: number }[]
+    >`
+    SELECT
+        m.id,
+        COUNT(mg."A")::text AS common_genres,
+        1.0 / (1 + ABS(m.year - ${movie.year}) * 0.1) AS year_score,
+        COUNT(mg."A") + 1.0 / (1 + ABS(m.year - ${movie.year}) * 0.1) AS score
+    FROM "Movie" m
+    JOIN "_GenreToMovie" mg ON mg."B" = m.id
+    WHERE mg."A" = ANY(${genreIds}::text[])
+        AND m.id != ${movie.id}
+    GROUP BY m.id
+    ORDER BY score DESC
+    LIMIT ${max}
+`;
+
+    const relatedIds = related.map((r) => r.id);
+
+    const movies = await this.prisma.movie.findMany({
+      where: { id: { in: relatedIds } },
+      select: movieSelect,
+    });
+
+    return relatedIds.map((id) => movies.find((m) => m.id === id)!);
+  }
+
+  async getTopMovies() {}
 }
