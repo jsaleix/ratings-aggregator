@@ -3,6 +3,7 @@ import { Prisma } from "../../../../generated/prisma";
 const movieWithRatingsModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
     include: {
         Movie_Rating: true,
+        Genre: true,
     },
 });
 
@@ -23,7 +24,10 @@ const movieModel = Prisma.validator<Prisma.MovieDefaultArgs>()({
         poster_path: true,
         updated_at: true,
         imdb_id: true,
-        slug: true
+        slug: true,
+    },
+    include: {
+        Genre: true,
     },
 });
 
@@ -31,4 +35,8 @@ export type MovieType = Prisma.MovieGetPayload<typeof movieModel>;
 export type MovieWithRatingsType = Prisma.MovieGetPayload<
     typeof movieWithRatingsModel
 >;
-export type MovieCreateInput = Prisma.MovieCreateInput;
+export type MovieCreateInput = Omit<Prisma.MovieCreateInput, "Genre">;
+
+export type GenreCreateInput = Prisma.GenreCreateInput;
+
+export type GenreType = Prisma.GenreGetPayload<{ omit: {} }>;

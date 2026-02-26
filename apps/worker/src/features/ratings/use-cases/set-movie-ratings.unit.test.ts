@@ -28,6 +28,7 @@ describe("UseCase SetMovieRatings", () => {
         original_title: "movie-1",
         imdb_id: "tt123",
         slug: "test-movie-1-2023",
+        Genre: [],
     } satisfies MovieType;
 
     const mockRatingsAllocine = [

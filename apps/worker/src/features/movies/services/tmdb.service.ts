@@ -1,6 +1,6 @@
 import { TMDB_TOKEN } from "../../../config/tmdb";
-import { MovieCreateInput } from "../types/db";
-import { TMDBGetMovieType } from "../types/tmdb";
+import { GenreCreateInput, MovieCreateInput } from "../types/db";
+import { TMDBGenreType, TMDBGetMovieType } from "../types/tmdb";
 
 const authHeaders = { Authorization: `Bearer ${TMDB_TOKEN}` };
 
@@ -42,6 +42,13 @@ class TMDBService {
         const res = await raw.json();
         if (!res?.results || !Array.isArray(res.results)) throw new Error();
         return res.results as TMDBGetMovieType[];
+    }
+
+    mapApiGenreResponseToModel(data: TMDBGenreType[]): GenreCreateInput[] {
+        return data.map((item) => {
+            const { id, ...rest } = item;
+            return { ...rest, tmdb_id: id };
+        });
     }
 
     mapApiResponseToModel(

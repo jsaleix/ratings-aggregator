@@ -17,7 +17,10 @@ export const movieSelect = {
   original_title: true,
   imdb_id: true,
   slug: true,
+  Genre: true,
 } satisfies Prisma.MovieSelect;
 
-export type MovieType = Prisma.MovieGetPayload<{ select: typeof movieSelect }>;
+export type MovieType = Prisma.MovieGetPayload<{
+  select: typeof movieSelect;
+}>;
 export type MovieCreateInput = Omit<Prisma.MovieCreateInput, 'slug'>;
