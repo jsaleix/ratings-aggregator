@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  NotImplementedException,
+} from '@nestjs/common';
 import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { SearchMovieQueryDto } from '../dto/search-movie-query.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
@@ -169,8 +173,14 @@ export class MoviesService {
       select: movieSelect,
     });
 
-    return relatedIds.map((id) => movies.find((m) => m.id === id)!);
+    const movieById = new Map(movies.map((m) => [m.id, m] as const));
+
+    return relatedIds
+      .map((id) => movieById.get(id))
+      .filter((m) => m !== undefined);
   }
 
-  async getTopMovies() {}
+  async getTopMovies() {
+    throw new NotImplementedException();
+  }
 }

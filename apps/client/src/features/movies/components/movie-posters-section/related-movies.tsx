@@ -10,9 +10,9 @@ interface Props {
 }
 export default function RelatedMovies({ slug }: Props) {
     const { data: movies } = useQuery({
-        queryKey: ["related"],
+        queryKey: ["related", slug],
         queryFn: async () => {
-            const res = await apiMoviesService.gerRelated(slug);
+            const res = await apiMoviesService.getRelated(slug);
             return res;
         },
         initialData: [],
@@ -49,10 +49,6 @@ export default function RelatedMovies({ slug }: Props) {
                             </i>
                         </Link>
                     </div>
-
-                    {movies.length === 0 && (
-                        <p className="text-text-secondary">No movie found</p>
-                    )}
                     {movies.length > 0 && (
                         <div className="w-full">
                             <MoviesSlider>

@@ -20,17 +20,16 @@ class PrismaMovieRepository implements MovieRepositoryI {
     }
 
     async createOrUpdate(data: MovieCreateInput, genres: GenreType[]) {
-        data = {
+        const prismaData: Prisma.MovieCreateInput = {
             ...data,
             Genre: {
                 connect: genres.map((item) => ({ id: item.id })),
             },
-        } as MovieCreateInput;
-
+        };
         return await this.db.movie.upsert({
             where: { tmdb_id: data.tmdb_id },
-            create: data,
-            update: data,
+            create: prismaData,
+            update: prismaData,
             select: movieSelect,
         });
     }

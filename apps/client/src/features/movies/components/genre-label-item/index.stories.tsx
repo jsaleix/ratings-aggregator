@@ -15,7 +15,7 @@ export const GenreLabelItem: Story = {
         genre: {
             id: "1",
             name: "Mystery",
-            tmdb_id: "1",
+            tmdb_id: 1,
         },
         size: "small",
     },

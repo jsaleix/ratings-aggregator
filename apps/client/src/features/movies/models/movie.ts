@@ -1,6 +1,6 @@
 export interface GenreModel {
     id: string;
-    tmdb_id: string;
+    tmdb_id: number;
     name: string;
 }
 

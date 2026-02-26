@@ -2,7 +2,7 @@ import type { MovieModel } from "../models/movie";
 
 type ApiGenreType = {
     id: string;
-    tmdb_id: string;
+    tmdb_id: number;
     name: string;
 };
 

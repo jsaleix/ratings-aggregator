@@ -65,7 +65,7 @@ class ApiMoviesService {
         return data.map(mapMovieApiToModel) satisfies MovieModel[];
     }
 
-    async gerRelated(slug: string): Promise<Array<MovieModel>> {
+    async getRelated(slug: string): Promise<Array<MovieModel>> {
         const url = new URL(`/movies/slug/${slug}/related`, API_ENDPOINT);
 
         const res = await fetch(url, {

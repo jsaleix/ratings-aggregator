@@ -16,17 +16,17 @@ export const GenresLabelsPart: Story = {
             {
                 id: "1",
                 name: "Mystery",
-                tmdb_id: "1",
+                tmdb_id: 1,
             },
             {
                 id: "2",
                 name: "Crime",
-                tmdb_id: "2",
+                tmdb_id: 2,
             },
             {
                 id: "3",
                 name: "Fantasy",
-                tmdb_id: "3",
+                tmdb_id: 3,
             },
         ],
         labelSize: "medium"

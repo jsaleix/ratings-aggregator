@@ -129,7 +129,7 @@ export default function MoviePage() {
                             </p>
                             <GenresLabelsPart
                                 genres={movie.genres}
-                                id="genres_desktop"
+                                id="genres_mobile"
                                 style="flex md:hidden"
                             />
                         </div>
