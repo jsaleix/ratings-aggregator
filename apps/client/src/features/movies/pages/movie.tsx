@@ -19,6 +19,7 @@ import useMovieRatings from "../hooks/use-movie-ratings";
 import useMovieSummary from "../hooks/use-movie-summary";
 import useMovieBySlug from "../hooks/use-movie-by-slug";
 import GenresLabelsPart from "../components/genres-labels-part";
+import RelatedMovies from "../components/movie-posters-section/related-movies";
 
 export default function MoviePage() {
     const { isConnected, role } = useAuthContext();
@@ -175,6 +176,7 @@ export default function MoviePage() {
                     )}
                 </div>
             </div>
+            <RelatedMovies slug={movie.slug} />
             <LastMoviesAdded />
             <hr className="divider" />
             <LastMoviesUpdated />
