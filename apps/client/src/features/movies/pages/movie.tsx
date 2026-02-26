@@ -11,7 +11,6 @@ import Button from "../../../shared/ui/button";
 import MoviePageSkeleton from "../components/movie-page-skeleton";
 import LastMoviesAdded from "../components/movie-posters-section/last-movies-added";
 import LastMoviesUpdated from "../components/movie-posters-section/last-movies-updated";
-import CompareBtn from "../components/compare-btn";
 import RatingListPart from "../components/rating-list-part";
 import MovieSummaryPart from "../components/movie-summary-part";
 
