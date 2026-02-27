@@ -10,17 +10,16 @@ import Input from "../../../../shared/ui/input";
 import useMovieFilters from "../../../movies/hooks/use-filters";
 import { type MovieModel } from "../../../movies/models/movie";
 import MovieModal from "../../components/movies/movie-modal";
-import useAdminSearchMovies from "../../hooks/use-admin-search-movies";
+import Pagination from "../../../../shared/ui/pagination";
+import useAdminSearchMoviesV2 from "../../hooks/use-admin-search-movies-v2";
 
 export default function MoviesPage() {
     let [searchParams] = useSearchParams();
     const [title, setTitle] = useState(searchParams.get("title") ?? "");
     const [debouncedTitle] = useDebounce(title, 500);
     const { filters } = useMovieFilters();
-    const { refetch, movies, isFetched } = useAdminSearchMovies(
-        filters,
-        debouncedTitle,
-    );
+    const { refetch, setCurrentPage, pagination, movies, isFetched } =
+        useAdminSearchMoviesV2(filters, debouncedTitle);
     const [selectedMovie, setSelectedMovie] = useState<MovieModel | null>(null);
 
     const onCloseModal = useCallback(() => {
@@ -68,8 +67,8 @@ export default function MoviesPage() {
                                         <td title={movie.id}>
                                             <Link
                                                 className="underline hover:opacity-80"
-                                                to={`/movies/${movie.id}`}
-                                                target="_blankl"
+                                                to={`/movies/${movie.slug}`}
+                                                target="_blank"
                                             >
                                                 <span className="text-white">
                                                     {movie.title}
@@ -104,6 +103,7 @@ export default function MoviesPage() {
                         </table>
                     </div>
                 )}
+                <Pagination data={pagination} onPageChange={setCurrentPage} />
             </div>
             <MovieModal movie={selectedMovie} onClose={onCloseModal} />
         </div>

@@ -2,11 +2,22 @@ import { useCallback } from "react";
 import type { PaginationType } from "../../types/pagination";
 
 interface Props {
-    data: PaginationType;
+    data: PaginationType | undefined;
     onPageChange?: (page: number) => void;
 }
 
-export default function Pagination({ data, onPageChange }: Props) {
+const empty_pagination = {
+    total: 0,
+    currentPage: 1,
+    next: null,
+    prev: null,
+    perPage: 10,
+} satisfies PaginationType;
+
+export default function Pagination({
+    data = empty_pagination,
+    onPageChange,
+}: Props) {
     const lastPageIdx = Math.floor(data.total / data.perPage);
     const style =
         "bg-white hover:bg-white/80 duration-150 rounded-xs disabled:bg-gray-600 px-2 py-1 text-black cursor-pointer disabled:cursor-not-allowed";
