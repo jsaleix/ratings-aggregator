@@ -15,13 +15,11 @@ import useAdminSearchMovies from "../../hooks/use-admin-search-movies";
 export default function MoviesPage() {
     let [searchParams] = useSearchParams();
     const [title, setTitle] = useState(searchParams.get("title") ?? "");
-    const [year, _] = useState(searchParams.get("year") ?? "");
     const [debouncedTitle] = useDebounce(title, 500);
     const { filters } = useMovieFilters();
     const { refetch, movies, isFetched } = useAdminSearchMovies(
         filters,
         debouncedTitle,
-        year ? +year : undefined,
     );
     const [selectedMovie, setSelectedMovie] = useState<MovieModel | null>(null);
 
