@@ -11,6 +11,7 @@ import { PaginatedResult } from 'src/shared/types/pagination';
 import { movieSelect, MovieType } from '../entities/movie.entity';
 import { FindMoviesDTO } from '../dto/find-movies.dto';
 import { PaginateFunction, paginator } from 'src/shared/utils/pagination';
+import { AdminFindMoviesDTO } from '../dto/admin/find-movies.dto';
 
 @Injectable()
 export class MoviesService {
@@ -85,6 +86,42 @@ export class MoviesService {
         orderBy: {
           [orderBy]: order,
         },
+        select: movieSelect,
+      },
+      {
+        page,
+      },
+    );
+  }
+
+  async findAllV2(
+    findMoviesDTO: AdminFindMoviesDTO,
+  ): Promise<PaginatedResult<MovieType>> {
+    let { title, year, order, orderBy, page } = findMoviesDTO;
+
+    const where: Prisma.MovieWhereInput = {};
+    if (title) {
+      where.OR = [
+        { title: { contains: title, mode: 'insensitive' } },
+        { original_title: { contains: title, mode: 'insensitive' } },
+      ];
+    }
+    if (year) {
+      where.year = year;
+    }
+    if (!orderBy) orderBy = 'release_date';
+    if (!order) order = 'desc';
+    if (!page) page = 1;
+
+    const paginate: PaginateFunction = paginator({ perPage: 15 });
+
+    return await paginate(
+      this.prisma.movie,
+      {
+        orderBy: {
+          [orderBy]: order,
+        },
+        where,
         select: movieSelect,
       },
       {
