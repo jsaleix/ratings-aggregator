@@ -4,14 +4,14 @@ import type { TMDBGetMovieType } from "../../requests/types/tmdb";
 import type { MovieModel } from "../models/movie";
 import { mapMovieApiToModel, type ApiMovieType } from "../types/movie.api";
 
-type SearchMovieParams = {
+export type SearchMovieParams = {
     title: string;
     order?: "asc" | "desc";
     orderBy?: string;
     page?: number;
 };
 
-type GetAllMoviesParams = {
+export type GetAllMoviesParams = {
     order?: "asc" | "desc";
     orderBy?: string;
     page?: number;
@@ -76,28 +76,12 @@ class ApiMoviesService {
                 .json()
                 .catch(() => ({ message: res.statusText }));
             throw new Error(
-                error.message ?? `Error fetching related movies: ${res.statusText}`,
+                error.message ??
+                    `Error fetching related movies: ${res.statusText}`,
             );
         }
         const data = (await res.json()) as Array<ApiMovieType>;
         return data.map(mapMovieApiToModel) satisfies MovieModel[];
-    }
-
-    async getById(id: string) {
-        const url = new URL(`/movies/${id}`, API_ENDPOINT);
-        const res = await fetch(url, {
-            method: "GET",
-        });
-        if (!res.ok) {
-            const error = await res
-                .json()
-                .catch(() => ({ message: res.statusText }));
-            throw new Error(
-                error.message ?? `Error fetching movie: ${res.statusText}`,
-            );
-        }
-        const data = (await res.json())["movie"] as ApiMovieType;
-        return mapMovieApiToModel(data) satisfies MovieModel;
     }
 
     async getBySlug(slug: string) {
@@ -181,22 +165,6 @@ class ApiMoviesService {
             );
         }
         return (await res.json()) as Array<TMDBGetMovieType>;
-    }
-
-    async delete(id: string) {
-        const url = new URL(`/movies/${id}`, API_ENDPOINT);
-        const res = await fetch(url, {
-            method: "DELETE",
-        });
-        if (!res.ok) {
-            const error = await res
-                .json()
-                .catch(() => ({ message: res.statusText }));
-            throw new Error(
-                error.message ?? `Error deleting movie: ${res.statusText}`,
-            );
-        }
-        return true;
     }
 }
 

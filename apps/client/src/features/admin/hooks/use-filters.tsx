@@ -2,7 +2,13 @@ import { useCallback, useState } from "react";
 
 export type FiltersType = {
     order: "asc" | "desc" | undefined;
-    orderBy: "title" | "id" | "created_at" | undefined;
+    orderBy:
+        | "title"
+        | "id"
+        | "created_at"
+        | "updated_at"
+        | "release_date"
+        | undefined;
 };
 
 export default function useBaseFilters() {

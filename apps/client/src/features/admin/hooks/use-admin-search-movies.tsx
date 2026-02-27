@@ -1,17 +1,22 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import useBaseFilters from "./use-filters";
-import ApiAdminUsersService from "../services/users.admin.service";
 import { useEffect, useMemo } from "react";
 
-export default function useInfiniteUsers() {
-    const { filters, changeOrder, changeOrderBy } = useBaseFilters();
+import { type FiltersType } from "./use-filters";
+import ApiAdminMoviesService from "../services/movies.admin.service";
 
-    const { refetch, data, isFetching, hasNextPage, fetchNextPage } =
+export default function useAdminSearchMovies(
+    filters: FiltersType,
+    title?: string,
+    year?: number,
+) {
+    const { refetch, data, isFetching, isFetched, hasNextPage, fetchNextPage } =
         useInfiniteQuery({
-            queryKey: ["getUsers"],
+            queryKey: ["adminFindAllMovies", title, year],
             queryFn: async ({ pageParam = 1 }) => {
                 const { order, orderBy } = filters;
-                const response = await ApiAdminUsersService.getAll({
+                const response = await ApiAdminMoviesService.findAll({
+                    year,
+                    title,
                     page: pageParam,
                     order,
                     orderBy,
@@ -27,7 +32,7 @@ export default function useInfiniteUsers() {
             getNextPageParam: (lastPage) => lastPage.next,
         });
     const currentPage = data?.pageParams?.length ?? 0;
-    const users = useMemo(() => {
+    const movies = useMemo(() => {
         return data?.pages.flatMap((page) => page.items) ?? [];
     }, [data]);
 
@@ -36,13 +41,12 @@ export default function useInfiniteUsers() {
     }, [filters]);
 
     return {
-        users,
+        refetch,
+        movies,
         isFetching,
+        isFetched,
         fetchNextPage,
         currentPage,
         hasNextPage,
-        filters,
-        changeOrder,
-        changeOrderBy,
     };
 }

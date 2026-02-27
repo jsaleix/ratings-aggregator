@@ -10,7 +10,7 @@ type GetAllUsersParams = {
     page?: number;
 };
 
-class ApiUsersService {
+class ApiAdminUsersService {
     async getAll({ page, order, orderBy }: GetAllUsersParams) {
         const url = new URL("/users/admin", API_ENDPOINT);
         if (page) url.searchParams.append("page", page.toString());
@@ -60,4 +60,4 @@ class ApiUsersService {
     }
 }
 
-export default new ApiUsersService();
+export default new ApiAdminUsersService();

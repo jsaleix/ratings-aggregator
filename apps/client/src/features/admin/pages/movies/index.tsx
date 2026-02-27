@@ -8,18 +8,20 @@ import PageHeader from "../../../../shared/ui/page-header";
 import Button from "../../../../shared/ui/button";
 import Input from "../../../../shared/ui/input";
 import useMovieFilters from "../../../movies/hooks/use-filters";
-import useSearchMovies from "../../../movies/hooks/use-search-movies";
 import { type MovieModel } from "../../../movies/models/movie";
 import MovieModal from "../../components/movies/movie-modal";
+import useAdminSearchMovies from "../../hooks/use-admin-search-movies";
 
 export default function MoviesPage() {
     let [searchParams] = useSearchParams();
-    const [query, setQuery] = useState(searchParams.get("query") ?? "");
-    const [debouncedQuery] = useDebounce(query, 500);
+    const [title, setTitle] = useState(searchParams.get("title") ?? "");
+    const [year, _] = useState(searchParams.get("year") ?? "");
+    const [debouncedTitle] = useDebounce(title, 500);
     const { filters } = useMovieFilters();
-    const { refetch, movies, isFetched } = useSearchMovies(
+    const { refetch, movies, isFetched } = useAdminSearchMovies(
         filters,
-        debouncedQuery
+        debouncedTitle,
+        year ? +year : undefined,
     );
     const [selectedMovie, setSelectedMovie] = useState<MovieModel | null>(null);
 
@@ -33,8 +35,8 @@ export default function MoviesPage() {
             <div className="flex flex-col items-center container mx-auto gap-5 pb-5 md:py-5">
                 <PageHeader title="Movies">
                     <Input
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                         placeholder="Movie title"
                     />
                 </PageHeader>
@@ -62,7 +64,7 @@ export default function MoviesPage() {
                                         className={clsx(
                                             idx % 2 === 0
                                                 ? "bg-bg-medium/50"
-                                                : "bg-bg-medium"
+                                                : "bg-bg-medium",
                                         )}
                                     >
                                         <td title={movie.id}>
@@ -84,7 +86,7 @@ export default function MoviesPage() {
                                         <td>
                                             {formatDistanceToNow(
                                                 new Date(movie.updated_at),
-                                                { addSuffix: true }
+                                                { addSuffix: true },
                                             )}
                                         </td>
                                         <td className="flex gap-3">

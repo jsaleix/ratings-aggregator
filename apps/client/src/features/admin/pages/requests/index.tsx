@@ -1,16 +1,17 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import PageHeader from "../../../../shared/ui/page-header";
-import apiRequestService from "../../../requests/services/api-request.service";
-import { mapApiRequestToMovieRequestModel } from "../../../requests/types/api-request";
 import clsx from "clsx";
+
+import PageHeader from "../../../../shared/ui/page-header";
+import { mapApiRequestToMovieRequestModel } from "../../../requests/types/api-request";
 import Button from "../../../../shared/ui/button";
 import { displayMsg } from "../../../../shared/utils/toast";
+import ApiAdminRequestsService from "../../services/requests.admin.service";
 
 export default function RequestsPage() {
     const { data, isFetched, refetch } = useQuery({
         queryKey: ["getRequests"],
         queryFn: async () => {
-            const res = await apiRequestService.getAll();
+            const res = await ApiAdminRequestsService.getAll();
             return res.map((item) => mapApiRequestToMovieRequestModel(item));
         },
         initialData: [],
@@ -22,7 +23,7 @@ export default function RequestsPage() {
         mutationFn: async (requestId: string) => {
             if (!window.confirm("Are you sure?"))
                 throw new Error("Action canceled");
-            return await apiRequestService.delete(requestId);
+            return await ApiAdminRequestsService.delete(requestId);
         },
         onSuccess: () => {
             displayMsg("Request deleted!", "success");

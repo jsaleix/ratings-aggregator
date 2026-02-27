@@ -2,13 +2,13 @@ import { useParams } from "react-router";
 
 import PageHeader from "../../../../shared/ui/page-header";
 import AdminAccountForm from "../../../auth/components/admin/account-form";
-import useUser from "../../hooks/use-user";
+import useAdminUser from "../../hooks/use-admin-user";
 
 export default function UserPage() {
     let { id } = useParams();
     if (!id) return;
 
-    const { user, isFetching, updateUserMutation } = useUser(id);
+    const { user, isFetching, updateUserMutation } = useAdminUser(id);
 
     if (isFetching || !user?.id) return;
 

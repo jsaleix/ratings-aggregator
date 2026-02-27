@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import FullUserMapper from "../mappers/full-user";
-import ApiUsersService from "../services/users.service";
+import ApiAdminUsersService from "../services/users.admin.service";
 import type { AdminUpdateProfileType } from "../../auth/types/admin";
 import { displayMsg } from "../../../shared/utils/toast";
 
-export default function useUser(userId: string) {
+export default function useAdminUser(userId: string) {
     const {
         data: user,
         isFetching,
@@ -14,7 +14,7 @@ export default function useUser(userId: string) {
         queryKey: ["user-full", userId],
         queryFn: async () => {
             if (!userId) throw new Error("Missing id");
-            const res = await ApiUsersService.getOneFull(userId);
+            const res = await ApiAdminUsersService.getOneFull(userId);
             return FullUserMapper.fromApi(res);
         },
         initialData: null,
@@ -23,7 +23,7 @@ export default function useUser(userId: string) {
 
     const { mutate: updateUserMutation } = useMutation({
         mutationFn: async (data: AdminUpdateProfileType) => {
-            return await ApiUsersService.updateOneFull(userId, data);
+            return await ApiAdminUsersService.updateOneFull(userId, data);
         },
         onSuccess: () => {
             displayMsg("User updated!", "success");
