@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
-import { type FiltersType } from "./use-filters";
+import { type MoviesFiltersType } from "./use-filters";
 import ApiAdminMoviesService from "../services/movies.admin.service";
 
 export default function useAdminSearchMoviesV2(
-    filters: FiltersType,
+    filters: MoviesFiltersType,
     title?: string,
     year?: number,
 ) {

@@ -10,10 +10,10 @@ import {
     adminUpdateUserSchema,
     type AdminUpdateProfileType,
 } from "../../types/admin";
-import type { UserType } from "../../types/user";
+import type { UserAdminModel } from "../../../admin/models/user.admin";
 
 interface Props {
-    user: UserType;
+    user: UserAdminModel;
     updateAction: (value: AdminUpdateProfileType) => Promise<any>;
 }
 

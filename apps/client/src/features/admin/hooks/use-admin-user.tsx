@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import FullUserMapper from "../mappers/full-user";
 import ApiAdminUsersService from "../services/users.admin.service";
 import type { AdminUpdateProfileType } from "../../auth/types/admin";
 import { displayMsg } from "../../../shared/utils/toast";
@@ -14,8 +13,7 @@ export default function useAdminUser(userId: string) {
         queryKey: ["user-full", userId],
         queryFn: async () => {
             if (!userId) throw new Error("Missing id");
-            const res = await ApiAdminUsersService.getOneFull(userId);
-            return FullUserMapper.fromApi(res);
+            return await ApiAdminUsersService.getOneFull(userId);
         },
         initialData: null,
         refetchOnWindowFocus: false,

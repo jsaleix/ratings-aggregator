@@ -1,7 +1,8 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect, useMemo } from "react";
+
 import useBaseFilters from "./use-filters";
 import ApiAdminUsersService from "../services/users.admin.service";
-import { useEffect, useMemo } from "react";
 
 export default function useInfiniteUsers() {
     const { filters, changeOrder, changeOrderBy } = useBaseFilters();

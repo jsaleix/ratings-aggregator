@@ -1,6 +1,6 @@
-export type GetAllUsersResponse = GetOneFullResponse[];
+export type GetAllUsersResponse = ApiAdminUserType[];
 
-export type GetOneFullResponse = {
+export type ApiAdminUserType = {
     id: string;
     role: string;
     username: string;

@@ -23,6 +23,7 @@ const mockData = {
         currentPage: 1,
         next: null,
         prev: null,
+        perPage: 15,
     },
 } satisfies PaginatedResult<MovieModel>;
 

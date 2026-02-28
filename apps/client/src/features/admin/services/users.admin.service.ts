@@ -1,8 +1,12 @@
 import { API_ENDPOINT } from "../../../core/config/api";
-import type { GetOneFullResponse } from "../types/users.api";
+import type { ApiAdminUserType } from "../types/users.api";
 import { authHeaders } from "../../../shared/api/headers";
 import type { PaginatedResult } from "../../../shared/types/pagination";
 import type { AdminUpdateProfileType } from "../../auth/types/admin";
+import {
+    mapAdminUserApiToModel,
+    type UserAdminModel,
+} from "../models/user.admin";
 
 type GetAllUsersParams = {
     order?: "asc" | "desc";
@@ -11,7 +15,11 @@ type GetAllUsersParams = {
 };
 
 class ApiAdminUsersService {
-    async getAll({ page, order, orderBy }: GetAllUsersParams) {
+    async getAll({
+        page,
+        order,
+        orderBy,
+    }: GetAllUsersParams): Promise<PaginatedResult<UserAdminModel>> {
         const url = new URL("/users/admin", API_ENDPOINT);
         if (page) url.searchParams.append("page", page.toString());
         if (orderBy) url.searchParams.append("orderBy", orderBy);
@@ -24,12 +32,19 @@ class ApiAdminUsersService {
             },
         });
         if (!res.ok) {
-            throw new Error(`Error fetching users: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error fetching users: ${res.statusText}`,
+            );
         }
-        return (await res.json()) as PaginatedResult<GetOneFullResponse>;
+        const { data, pagination } =
+            (await res.json()) as PaginatedResult<ApiAdminUserType>;
+        return { pagination, data: data.map((d) => mapAdminUserApiToModel(d)) };
     }
 
-    async getOneFull(id: string) {
+    async getOneFull(id: string): Promise<UserAdminModel> {
         const url = new URL(`/users/admin/${id}`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "GET",
@@ -38,12 +53,21 @@ class ApiAdminUsersService {
             },
         });
         if (!res.ok) {
-            throw new Error(`Error fetching user: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error fetching users: ${res.statusText}`,
+            );
         }
-        return (await res.json()) as GetOneFullResponse;
+        const data = (await res.json()) as ApiAdminUserType;
+        return mapAdminUserApiToModel(data);
     }
 
-    async updateOneFull(id: string, data: AdminUpdateProfileType) {
+    async updateOneFull(
+        id: string,
+        payload: AdminUpdateProfileType,
+    ): Promise<UserAdminModel> {
         const url = new URL(`/users/admin/${id}`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "PATCH",
@@ -51,12 +75,18 @@ class ApiAdminUsersService {
                 ...authHeaders(),
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(payload),
         });
         if (!res.ok) {
-            throw new Error(`Error updating user: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error fetching users: ${res.statusText}`,
+            );
         }
-        return (await res.json()) as GetOneFullResponse;
+        const data = (await res.json()) as ApiAdminUserType;
+        return mapAdminUserApiToModel(data);
     }
 }
 
