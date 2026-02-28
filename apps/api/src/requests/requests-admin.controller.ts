@@ -6,12 +6,14 @@ import {
   Body,
   Req,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { RequestsService } from './requests.service';
 import { Role } from 'src/auth/decorators/role.decorator';
-import { AddMultipleRequestsDTO } from './dto/add-multiple-requests.dto';
+import { AddMultipleRequestsDTO } from './dto/admin/add-multiple-requests.dto';
+import { AdminFindRequestsDto } from './dto/admin/find-movies.dto';
 
 @ApiTags('Requests Admin')
 @Controller('requests/admin')
@@ -31,7 +33,12 @@ export class RequestsAdminController {
 
     return res;
   }
-  
+
+  @Get()
+  async getAll(@Query() query: AdminFindRequestsDto) {
+    return await this.requestsService.findAllAdmin(query);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.requestsService.findOne(id);

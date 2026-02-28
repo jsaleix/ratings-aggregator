@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'generated/prisma/client';
+import { Prisma, User } from 'generated/prisma/client';
 
 import { CreateRequestDto } from './dto/create-request.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { BullmqService } from 'src/shared/services/bullmq.service';
 import {
+  movieRequestAdminSelect,
+  MovieRequestAdminType,
   MovieRequestPublicType,
   movieRequestSelect,
 } from './entities/request.entity';
 import { RequestAlreadyPendingError } from './errors/request_already_pending.error';
+import { PaginateFunction, paginator } from 'src/shared/utils/pagination';
+import { PaginatedResult } from 'src/shared/types/pagination';
+import { AdminFindRequestsDto } from './dto/admin/find-movies.dto';
 
 @Injectable()
 export class RequestsService {
@@ -44,6 +49,36 @@ export class RequestsService {
       where: { processed },
       select: movieRequestSelect,
     });
+  }
+
+  async findAllAdmin(
+    dto: AdminFindRequestsDto,
+  ): Promise<PaginatedResult<MovieRequestAdminType[]>> {
+    let { page, order, orderBy, processed } = dto;
+    const where: Prisma.Movie_RequestWhereInput = {};
+
+    if (!orderBy) orderBy = 'created_at';
+    if (!order) order = 'desc';
+    if (!page) page = 1;
+
+    if (processed !== undefined) {
+      where.processed = processed;
+    }
+
+    const paginate: PaginateFunction = paginator({ perPage: 15 });
+    return await paginate(
+      this.prisma.movie_Request,
+      {
+        orderBy: {
+          [orderBy]: order,
+        },
+        select: movieRequestAdminSelect,
+        where,
+      },
+      {
+        page,
+      },
+    );
   }
 
   async findOne(id: string): Promise<MovieRequestPublicType | null> {
