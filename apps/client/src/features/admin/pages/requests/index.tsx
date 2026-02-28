@@ -1,54 +1,58 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import PageHeader from "../../../../shared/ui/page-header";
-import apiRequestService from "../../../requests/services/api-request.service";
-import { mapApiRequestToMovieRequestModel } from "../../../requests/types/api-request";
 import clsx from "clsx";
+
+import PageHeader from "../../../../shared/ui/page-header";
 import Button from "../../../../shared/ui/button";
-import { displayMsg } from "../../../../shared/utils/toast";
+import Pagination from "../../../../shared/ui/pagination";
+import Select from "../../../../shared/ui/select";
+import { useAdminRequests } from "../../hooks/use-admin-requests";
+
+const parseBoolean = (value: string): boolean | undefined =>
+    (
+        ({
+            true: true,
+            false: false,
+        }) as Record<string, boolean | undefined>
+    )[value];
 
 export default function RequestsPage() {
-    const { data, isFetched, refetch } = useQuery({
-        queryKey: ["getRequests"],
-        queryFn: async () => {
-            const res = await apiRequestService.getAll();
-            return res.map((item) => mapApiRequestToMovieRequestModel(item));
-        },
-        initialData: [],
-        refetchOnWindowFocus: false,
-        refetchInterval: 15000,
-    });
-
-    const { mutate: deleteRequestMutation } = useMutation({
-        mutationFn: async (requestId: string) => {
-            if (!window.confirm("Are you sure?"))
-                throw new Error("Action canceled");
-            return await apiRequestService.delete(requestId);
-        },
-        onSuccess: () => {
-            displayMsg("Request deleted!", "success");
-            refetch();
-        },
-        onError: (e) => {
-            displayMsg(e.message, "error");
-        },
-    });
+    const {
+        setPage,
+        isProcessed,
+        setIsProcessed,
+        isEmpty,
+        isLoading,
+        requests,
+        pagination,
+        deleteRequestMutation,
+    } = useAdminRequests();
 
     return (
         <div className="w-full max-w-screen">
             <div className="flex flex-col items-center container mx-auto gap-5 pb-5 md:py-5">
-                <PageHeader title="Requests"></PageHeader>
-                {isFetched && data.length === 0 && (
+                <div>
+                    <PageHeader title="Requests"></PageHeader>
+                    <Select
+                        value={(isProcessed ?? "undefined").toString()}
+                        onChange={(e) =>
+                            setIsProcessed(parseBoolean(e.target.value))
+                        }
+                    >
+                        <option value={"undefined"}>Undefined</option>
+                        <option value={"true"}>True</option>
+                        <option value={"false"}>False</option>
+                    </Select>
+                </div>
+                {isEmpty && (
                     <p className="text-md italic text-text-secondary">
                         There is no request
                     </p>
                 )}
-                {!isFetched && <p>Loading...</p>}
-                {data.length > 0 && (
+                {isLoading && <p>Loading...</p>}
+                {requests.length > 0 && (
                     <div className="flex flex-col w-full">
                         <table className="table-fixed">
                             <thead className="w-full bg-bg-medium text-left">
                                 <tr>
-                                    <th className="">Title</th>
                                     <th className="">TMDB ID</th>
                                     <th className="">Created by</th>
                                     <th className="">Date</th>
@@ -56,7 +60,7 @@ export default function RequestsPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.map((request, idx) => (
+                                {requests.map((request, idx) => (
                                     <tr
                                         key={request.id}
                                         className={clsx(
@@ -65,9 +69,6 @@ export default function RequestsPage() {
                                                 : "bg-bg-medium",
                                         )}
                                     >
-                                        <td title={request.id} className="">
-                                            <p>{request.title}</p>
-                                        </td>
                                         <td className="">
                                             <p className="text-white text-bold">
                                                 #{request.tmdb_id}
@@ -84,7 +85,10 @@ export default function RequestsPage() {
                                             </a>
                                         </td>
                                         <td className="">
-                                            <p>Unknown yet</p>
+                                            <p>
+                                                {request.creator?.username ??
+                                                    "Unknown"}
+                                            </p>
                                         </td>
                                         <td className="">
                                             {new Date(
@@ -109,6 +113,7 @@ export default function RequestsPage() {
                         </table>
                     </div>
                 )}
+                <Pagination data={pagination} onPageChange={setPage} />
             </div>
         </div>
     );

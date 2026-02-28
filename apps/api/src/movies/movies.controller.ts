@@ -53,12 +53,6 @@ export class MoviesController {
   }
 
   @Public()
-  @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return await this.moviesService.findOne(id);
-  }
-
-  @Public()
   @Get('/slug/:slug')
   async findOneBySlug(@Param('slug') slug: string) {
     return await this.moviesService.findOneBySlug(slug);
@@ -68,11 +62,5 @@ export class MoviesController {
   @Get('/slug/:slug/related')
   async getRelatedMovies(@Param('slug') slug: string) {
     return await this.moviesService.getRelatedMovies(slug);
-  }
-
-  @Role('admin')
-  @Delete(':id')
-  async remove(@Param('id', ParseUUIDPipe) id: string) {
-    return await this.moviesService.remove(id);
   }
 }

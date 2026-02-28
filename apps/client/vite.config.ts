@@ -7,7 +7,9 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
     plugins: [tailwindcss(), react()],
     test: {
+        globals: true,
         environment: "jsdom",
+        setupFiles: "./setup-tests.ts",
     },
     server: {
         watch: {

@@ -8,7 +8,7 @@ import MoviesSlider from "./movies-slider";
 interface Props {
     slug: string;
 }
-export default function RelatedMovies({ slug }: Props) {
+export default function SimilarMovies({ slug }: Props) {
     const { data: movies } = useQuery({
         queryKey: ["related", slug],
         queryFn: async () => {
@@ -25,7 +25,7 @@ export default function RelatedMovies({ slug }: Props) {
             <div className="container mx-auto px-8 md:px-0 pb-5">
                 <div className="flex flex-col py-5 gap-3 items-center">
                     <div className="w-full flex justify-between">
-                        <h2 className="text-white text-xl">Related</h2>
+                        <h2 className="text-white text-xl">Similar</h2>
                         <Link
                             to="/movies?orderBy=created_at&order=desc"
                             className="text-white font-bold hover:underline flex items-center gap-3"

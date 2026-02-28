@@ -1,12 +1,13 @@
 import { Link } from "react-router";
+import clsx from "clsx";
 
 import Button from "../../../../shared/ui/button";
 import PageHeader from "../../../../shared/ui/page-header";
-import useInfiniteUsers from "../../hooks/use-infinite-users";
-import clsx from "clsx";
+import Pagination from "../../../../shared/ui/pagination";
+import useAdminUsers from "../../hooks/use-admin-users";
 
 export default function UsersPage() {
-    const { users } = useInfiniteUsers();
+    const { setCurrentPage, pagination, users } = useAdminUsers();
 
     return (
         <div className="w-full max-w-screen">
@@ -36,7 +37,7 @@ export default function UsersPage() {
                                         className={clsx(
                                             idx % 2 === 0
                                                 ? "bg-bg-medium/50"
-                                                : "bg-bg-medium"
+                                                : "bg-bg-medium",
                                         )}
                                     >
                                         <td title={user.id}>{user.username}</td>
@@ -60,6 +61,7 @@ export default function UsersPage() {
                         </table>
                     </div>
                 )}
+                <Pagination data={pagination} onPageChange={setCurrentPage} />
             </div>
         </div>
     );

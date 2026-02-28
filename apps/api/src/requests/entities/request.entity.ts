@@ -1,4 +1,5 @@
 import { Prisma } from 'generated/prisma/client';
+import { userPublicSelect } from 'src/users/entities/user.entity';
 
 export const movieRequestSelect = {
   id: true,
@@ -14,7 +15,9 @@ export const movieRequestAdminSelect = {
   title: true,
   created_at: true,
   processed: true,
-  User: true,
+  User: {
+    select: userPublicSelect,
+  },
 } satisfies Prisma.Movie_RequestSelect;
 
 export type MovieRequestPublicType = Prisma.Movie_RequestGetPayload<{

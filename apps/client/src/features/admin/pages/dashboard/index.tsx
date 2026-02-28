@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import PageHeader from "../../../../shared/ui/page-header";
-import ApiStatsService from "../../services/stats.service";
+import ApiAdminStatsService from "../../services/stats.admin.service";
 
 export default function Dashboard() {
     const { data } = useQuery({
         queryKey: ["admin-stats"],
         queryFn: () => {
-            return ApiStatsService.getAll();
+            return ApiAdminStatsService.getAll();
         },
         initialData: {
             users: { total: -1, active: -1 },
