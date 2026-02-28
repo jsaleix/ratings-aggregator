@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import Component from "./index";
 import type { PaginationType } from "../../types/pagination";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof Component> = {
     title: "Shared/Pagination",
@@ -19,5 +20,6 @@ export const Pagination: Story = {
             total: 15,
             perPage: 5,
         } satisfies PaginationType,
+        onPageChange: fn()
     },
 };

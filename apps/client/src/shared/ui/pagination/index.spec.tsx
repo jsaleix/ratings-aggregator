@@ -24,20 +24,20 @@ describe("Shared/UI/Pagination", () => {
         });
         it("Render the 4 buttons", async () => {
             const { getByTestId } = render(<Pagination data={baseProps} />);
-            expect(getByTestId("first")).toBeDefined();
-            expect(getByTestId("last")).toBeDefined();
-            expect(getByTestId("next")).toBeDefined();
-            expect(getByTestId("previous")).toBeDefined();
+            expect(getByTestId("pagination-first")).toBeDefined();
+            expect(getByTestId("pagination-last")).toBeDefined();
+            expect(getByTestId("pagination-next")).toBeDefined();
+            expect(getByTestId("pagination-previous")).toBeDefined();
         });
     });
 
     describe("Enabled/Disabled logic", () => {
         it("Every button should be disabled", async () => {
             const { getByTestId } = render(<Pagination data={baseProps} />);
-            expect(getByTestId("first")).toBeDisabled();
-            expect(getByTestId("last")).toBeDisabled();
-            expect(getByTestId("previous")).toBeDisabled();
-            expect(getByTestId("next")).toBeDisabled();
+            expect(getByTestId("pagination-first")).toBeDisabled();
+            expect(getByTestId("pagination-last")).toBeDisabled();
+            expect(getByTestId("pagination-previous")).toBeDisabled();
+            expect(getByTestId("pagination-next")).toBeDisabled();
         });
 
         it("First and Previous should be disabled but not last and next", async () => {
@@ -49,10 +49,10 @@ describe("Shared/UI/Pagination", () => {
                 perPage: 15,
             } satisfies PaginationType;
             const { getByTestId } = render(<Pagination data={props} />);
-            expect(getByTestId("first")).toBeDisabled();
-            expect(getByTestId("previous")).toBeDisabled();
-            expect(getByTestId("last")).toBeEnabled();
-            expect(getByTestId("next")).toBeEnabled();
+            expect(getByTestId("pagination-first")).toBeDisabled();
+            expect(getByTestId("pagination-previous")).toBeDisabled();
+            expect(getByTestId("pagination-last")).toBeEnabled();
+            expect(getByTestId("pagination-next")).toBeEnabled();
         });
 
         it("First and Previous should be enabled but not next and last", async () => {
@@ -64,10 +64,10 @@ describe("Shared/UI/Pagination", () => {
                 perPage: 5,
             } satisfies PaginationType;
             const { getByTestId } = render(<Pagination data={props} />);
-            expect(getByTestId("first")).toBeEnabled();
-            expect(getByTestId("previous")).toBeEnabled();
-            expect(getByTestId("last")).toBeDisabled();
-            expect(getByTestId("next")).toBeDisabled();
+            expect(getByTestId("pagination-first")).toBeEnabled();
+            expect(getByTestId("pagination-previous")).toBeEnabled();
+            expect(getByTestId("pagination-last")).toBeDisabled();
+            expect(getByTestId("pagination-next")).toBeDisabled();
         });
     });
 
@@ -84,7 +84,7 @@ describe("Shared/UI/Pagination", () => {
             const { getByTestId } = render(
                 <Pagination data={props} onPageChange={onPageChange} />,
             );
-            fireEvent.click(getByTestId("next"));
+            fireEvent.click(getByTestId("pagination-next"));
             expect(onPageChange).toHaveBeenCalledWith(3);
         });
         it("Should call previous with the right parameter", () => {
@@ -99,7 +99,7 @@ describe("Shared/UI/Pagination", () => {
             const { getByTestId } = render(
                 <Pagination data={props} onPageChange={onPageChange} />,
             );
-            fireEvent.click(getByTestId("previous"));
+            fireEvent.click(getByTestId("pagination-previous"));
             expect(onPageChange).toHaveBeenCalledWith(1);
         });
         it("Should call last with the right parameter", () => {
@@ -114,7 +114,7 @@ describe("Shared/UI/Pagination", () => {
             const { getByTestId } = render(
                 <Pagination data={props} onPageChange={onPageChange} />,
             );
-            fireEvent.click(getByTestId("last"));
+            fireEvent.click(getByTestId("pagination-last"));
             expect(onPageChange).toHaveBeenCalledWith(3);
         });
         it("Should call first with the right parameter", () => {
@@ -129,8 +129,108 @@ describe("Shared/UI/Pagination", () => {
             const { getByTestId } = render(
                 <Pagination data={props} onPageChange={onPageChange} />,
             );
-            fireEvent.click(getByTestId("first"));
+            fireEvent.click(getByTestId("pagination-first"));
             expect(onPageChange).toHaveBeenCalledWith(1);
+        });
+        it("Should call first with the right parameter", () => {
+            const props = {
+                total: 19,
+                currentPage: 2,
+                perPage: 5,
+                prev: 1,
+                next: 3,
+            } satisfies PaginationType;
+            const onPageChange = vi.fn();
+            const { getByTestId } = render(
+                <Pagination data={props} onPageChange={onPageChange} />,
+            );
+            fireEvent.click(getByTestId("pagination-next"));
+            expect(onPageChange).toHaveBeenCalledWith(3);
+            fireEvent.click(getByTestId("pagination-last"));
+            expect(onPageChange).toHaveBeenCalledWith(4);
+        });
+    });
+
+    describe("Right label", () => {
+        it("Should display right label", () => {
+            const props = {
+                prev: 0,
+                next: 2,
+                currentPage: 1,
+                total: 10,
+                perPage: 5,
+            } satisfies PaginationType;
+            const { getByTestId } = render(<Pagination data={props} />);
+            expect(getByTestId("pagination-label").textContent).toContain(
+                "1 to 5 of 10",
+            );
+        });
+        it("Should display right label", () => {
+            const props = {
+                prev: 1,
+                next: null,
+                currentPage: 2,
+                total: 10,
+                perPage: 5,
+            } satisfies PaginationType;
+            const { getByTestId } = render(<Pagination data={props} />);
+            expect(getByTestId("pagination-label").textContent).toContain(
+                "6 to 10 of 10",
+            );
+        });
+        it("Should display right label", () => {
+            const props = {
+                prev: 1,
+                next: null,
+                currentPage: 1,
+                total: 4,
+                perPage: 5,
+            } satisfies PaginationType;
+            const { getByTestId } = render(<Pagination data={props} />);
+            expect(getByTestId("pagination-label").textContent).toContain(
+                "1 to 4 of 4",
+            );
+        });
+        it("Should display right label", () => {
+            const props = {
+                prev: 1,
+                next: null,
+                currentPage: 1,
+                total: 5,
+                perPage: 5,
+            } satisfies PaginationType;
+            const { getByTestId } = render(<Pagination data={props} />);
+            expect(getByTestId("pagination-label").textContent).toContain(
+                "1 to 5 of 5",
+            );
+        });
+
+        it("Should display right label", () => {
+            const props = {
+                prev: 1,
+                next: null,
+                currentPage: 2,
+                total: 9,
+                perPage: 5,
+            } satisfies PaginationType;
+            const { getByTestId } = render(<Pagination data={props} />);
+            expect(getByTestId("pagination-label").textContent).toContain(
+                "6 to 9 of 9",
+            );
+        });
+
+        it("Should display right label", () => {
+            const props = {
+                prev: null,
+                next: null,
+                currentPage: 1,
+                total: 0,
+                perPage: 5,
+            } satisfies PaginationType;
+            const { getByTestId } = render(<Pagination data={props} />);
+            expect(getByTestId("pagination-label").textContent).toContain(
+                "0 to 0 of 0",
+            );
         });
     });
 });
