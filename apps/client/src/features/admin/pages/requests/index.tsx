@@ -2,17 +2,16 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 
 import PageHeader from "../../../../shared/ui/page-header";
-import { mapApiRequestToMovieRequestModel } from "../../../requests/types/api-request";
 import Button from "../../../../shared/ui/button";
 import { displayMsg } from "../../../../shared/utils/toast";
 import ApiAdminRequestsService from "../../services/requests.admin.service";
+import Pagination from "../../../../shared/ui/pagination";
 
 export default function RequestsPage() {
     const { data, isFetched, refetch } = useQuery({
         queryKey: ["getRequests"],
         queryFn: async () => {
-            const res = await ApiAdminRequestsService.getAll();
-            return res.map((item) => mapApiRequestToMovieRequestModel(item));
+            return await ApiAdminRequestsService.getAll();
         },
         initialData: [],
         refetchOnWindowFocus: false,
@@ -49,7 +48,6 @@ export default function RequestsPage() {
                         <table className="table-fixed">
                             <thead className="w-full bg-bg-medium text-left">
                                 <tr>
-                                    <th className="">Title</th>
                                     <th className="">TMDB ID</th>
                                     <th className="">Created by</th>
                                     <th className="">Date</th>
@@ -66,9 +64,6 @@ export default function RequestsPage() {
                                                 : "bg-bg-medium",
                                         )}
                                     >
-                                        <td title={request.id} className="">
-                                            <p>{request.title}</p>
-                                        </td>
                                         <td className="">
                                             <p className="text-white text-bold">
                                                 #{request.tmdb_id}
@@ -85,7 +80,10 @@ export default function RequestsPage() {
                                             </a>
                                         </td>
                                         <td className="">
-                                            <p>Unknown yet</p>
+                                            <p>
+                                                {request.creator?.username ??
+                                                    "Unknown"}
+                                            </p>
                                         </td>
                                         <td className="">
                                             {new Date(
@@ -110,6 +108,7 @@ export default function RequestsPage() {
                         </table>
                     </div>
                 )}
+                <Pagination data={undefined} />
             </div>
         </div>
     );

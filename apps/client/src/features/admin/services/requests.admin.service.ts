@@ -1,18 +1,28 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import { authHeaders } from "../../../shared/api/headers";
-import type { ApiMovieRequestType } from "../../requests/types/api-request";
+import type { RequestAdminModel } from "../models/request.admin";
+import {
+    mapApiAdminRequestToModel,
+    type ApiRequestType,
+} from "../types/requests.api";
 
 class ApiAdminRequestsService {
-    async getAll() {
+    async getAll(): Promise<RequestAdminModel[]> {
         const url = new URL(`/requests`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "GET",
             headers: { "Content-Type": "application/json", ...authHeaders() },
         });
         if (!res.ok) {
-            throw new Error(`Error fetching requests: ${res.statusText}`);
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error fetching users: ${res.statusText}`,
+            );
         }
-        return (await res.json()) as ApiMovieRequestType[];
+        const data = (await res.json()) as ApiRequestType[];
+        return data.map(mapApiAdminRequestToModel);
     }
 
     async delete(id: string) {
