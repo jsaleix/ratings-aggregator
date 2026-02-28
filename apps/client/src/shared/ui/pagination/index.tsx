@@ -18,7 +18,7 @@ export default function Pagination({
     data = empty_pagination,
     onPageChange,
 }: Props) {
-    const lastPageIdx = Math.round(data.total / data.perPage);
+    const lastPageIdx = Math.ceil(data.total / data.perPage);
     const style =
         "bg-white hover:bg-white/80 duration-150 rounded-xs disabled:bg-gray-600 px-2 py-1 text-black cursor-pointer disabled:cursor-not-allowed";
 
