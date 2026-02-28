@@ -16,11 +16,13 @@ export const DEFAULT_FILTERS: FiltersType = {
     orderBy: "release_date",
 };
 
-export default function useMovieFilters() {
-    const [filters, setFilters] = useState<FiltersType>({
-        order: "desc",
-        orderBy: "release_date",
-    });
+export default function useMovieFilters(defaultValue?: FiltersType) {
+    const [filters, setFilters] = useState<FiltersType>(
+        defaultValue ?? {
+            order: "desc",
+            orderBy: "release_date",
+        },
+    );
 
     const changeOrder = useCallback((order: FiltersType["order"]) => {
         setFilters((prev) => ({ ...prev, order }));

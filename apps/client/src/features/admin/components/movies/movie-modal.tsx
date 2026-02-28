@@ -2,11 +2,11 @@ import { useCallback, useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { motion } from "motion/react";
 
-import type { MovieModel } from "../../../movies/models/movie";
 import Button from "../../../../shared/ui/button";
 import { displayMsg } from "../../../../shared/utils/toast";
+import type { MovieModel } from "../../../movies/models/movie";
 import apiRequestService from "../../../requests/services/api-request.service";
-import useMovie from "../../../movies/hooks/use-movie";
+import useAdminMovie from "../../hooks/use-admin-movie";
 
 interface Props {
     movie: MovieModel | null;
@@ -36,7 +36,7 @@ export default function MovieModal({ onClose, movie }: Props) {
         modalRef.current!.close();
     }, []);
 
-    const { deleteMovieMutation } = useMovie(movie?.id, closeModal);
+    const { deleteMovieMutation } = useAdminMovie(movie?.id, closeModal);
 
     const { mutate: sendToReloadQueue } = useMutation({
         mutationFn: async () => {

@@ -1,7 +1,8 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import useBaseFilters from "./use-filters";
-import ApiUsersService from "../services/users.service";
 import { useEffect, useMemo } from "react";
+
+import useBaseFilters from "./use-filters";
+import ApiAdminUsersService from "../services/users.admin.service";
 
 export default function useInfiniteUsers() {
     const { filters, changeOrder, changeOrderBy } = useBaseFilters();
@@ -11,7 +12,7 @@ export default function useInfiniteUsers() {
             queryKey: ["getUsers"],
             queryFn: async ({ pageParam = 1 }) => {
                 const { order, orderBy } = filters;
-                const response = await ApiUsersService.getAll({
+                const response = await ApiAdminUsersService.getAll({
                     page: pageParam,
                     order,
                     orderBy,

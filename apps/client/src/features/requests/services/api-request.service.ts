@@ -54,23 +54,6 @@ class ApiRequestService {
         }
         return (await res.json()) as ApiGetCountResponse;
     }
-
-    async delete(id: string) {
-        const url = new URL(`/requests/${id}`, API_ENDPOINT);
-        const res = await fetch(url, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json", ...authHeaders() },
-        });
-        if (!res.ok) {
-            const error = await res
-                .json()
-                .catch(() => ({ message: res.statusText }));
-            throw new Error(
-                error.message ?? `Error deleting request: ${res.statusText}`,
-            );
-        }
-        return true;
-    }
 }
 
 export default new ApiRequestService();
