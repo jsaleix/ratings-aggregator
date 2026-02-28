@@ -3,8 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Param,
-  Delete,
   Req,
   UseGuards,
   HttpException,
@@ -28,7 +26,8 @@ export class RequestsController {
   @Post()
   async create(@Req() req, @Body() createRequestDto: CreateRequestDto) {
     try {
-      return await this.requestsService.create(createRequestDto, req.user);
+      const { tmdbId } = createRequestDto;
+      return await this.requestsService.create(tmdbId, req.user);
     } catch (e: any) {
       if (e instanceof RequestAlreadyPendingError)
         throw new HttpException(e.message, 409);
@@ -57,17 +56,5 @@ export class RequestsController {
   @Get()
   async findAllPublic() {
     return this.requestsService.findAllPublic(false);
-  }
-
-  @Role('admin')
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.requestsService.findOne(id);
-  }
-
-  @Role('admin')
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return this.requestsService.remove(id);
   }
 }

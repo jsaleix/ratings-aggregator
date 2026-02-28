@@ -17,10 +17,7 @@ export class RequestsService {
     private bullmqService: BullmqService,
   ) {}
 
-  async create(
-    { tmdbId }: CreateRequestDto,
-    user: User,
-  ): Promise<MovieRequestPublicType> {
+  async create(tmdbId: number, user: User): Promise<MovieRequestPublicType> {
     // Checks if there is no pending request for the same movie
     const alreadyPendingRequest = await this.prisma.movie_Request.findFirst({
       where: {
