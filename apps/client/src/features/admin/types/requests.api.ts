@@ -1,6 +1,6 @@
 import type { RequestAdminModel } from "../models/request.admin";
 
-export type ApiRequestType = {
+export type ApiAdminRequestType = {
     id: string;
     created_at: string;
     tmdb_id: string;
@@ -14,7 +14,7 @@ export type ApiRequestType = {
 };
 
 export function mapApiAdminRequestToModel(
-    payload: ApiRequestType,
+    payload: ApiAdminRequestType,
 ): RequestAdminModel {
     const { User, ...rest } = payload;
     return {

@@ -1,14 +1,23 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import { authHeaders } from "../../../shared/api/headers";
+import type { PaginatedResult } from "../../../shared/types/pagination";
 import type { RequestAdminModel } from "../models/request.admin";
 import {
     mapApiAdminRequestToModel,
-    type ApiRequestType,
+    type ApiAdminRequestType,
 } from "../types/requests.api";
 
+type ApiGetAllRequestsParams = { page?: number; processed?: boolean };
 class ApiAdminRequestsService {
-    async getAll(): Promise<RequestAdminModel[]> {
-        const url = new URL(`/requests`, API_ENDPOINT);
+    async getAll({
+        page,
+        processed,
+    }: ApiGetAllRequestsParams): Promise<PaginatedResult<RequestAdminModel>> {
+        const url = new URL(`/requests/admin`, API_ENDPOINT);
+        if (page) url.searchParams.append("page", page.toString());
+        if (processed !== undefined)
+            url.searchParams.append("processed", processed.toString());
+
         const res = await fetch(url, {
             method: "GET",
             headers: { "Content-Type": "application/json", ...authHeaders() },
@@ -18,11 +27,15 @@ class ApiAdminRequestsService {
                 .json()
                 .catch(() => ({ message: res.statusText }));
             throw new Error(
-                error.message ?? `Error fetching users: ${res.statusText}`,
+                error.message ?? `Error fetching requests: ${res.statusText}`,
             );
         }
-        const data = (await res.json()) as ApiRequestType[];
-        return data.map(mapApiAdminRequestToModel);
+        const { data, pagination } =
+            (await res.json()) as PaginatedResult<ApiAdminRequestType>;
+        return {
+            pagination,
+            data: data.map((d) => mapApiAdminRequestToModel(d)),
+        };
     }
 
     async delete(id: string) {
