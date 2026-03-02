@@ -1,27 +1,29 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-
 import clsx from "clsx";
+
 import MagnifyingGlass from "../icons/magnifying-glass";
 
 interface Props {
     css?: string;
+    test?: (val: string) => void;
 }
 
-export default function HeaderSearchMovieInput({ css }: Props) {
+export default function HeaderSearchMovieInput({ css, test }: Props) {
     const [value, setValue] = useState("");
     const [isActive, setIsActive] = useState(false);
     const navigate = useNavigate();
 
     const containerCss = clsx(
         "w-full flex items-center bg-bg-medium flex gap-1 rounded-2xl px-3 py-1 border-1 border-transparent hover:border-primary data-active:border-utils-orange-light group duration-150",
-        css
+        css,
     );
 
     const goToResults = () => {
         if (value.length === 0) return;
         const url = `/movies/search?query=${value}`;
         navigate(url);
+        test && test(url);
         setValue("");
     };
 
@@ -47,7 +49,10 @@ export default function HeaderSearchMovieInput({ css }: Props) {
             />
             {value && (
                 <svg
-                    onClick={goToResults}
+                    onMouseDown={(e) => {
+                        e.preventDefault();
+                        goToResults();
+                    }}
                     className="cursor-pointer hover:opacity-70 duration-150"
                     width="15"
                     height="11"
