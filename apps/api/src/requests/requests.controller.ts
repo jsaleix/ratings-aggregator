@@ -10,7 +10,6 @@ import {
 import { RequestsService } from './requests.service';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
-import { Role } from 'src/auth/decorators/role.decorator';
 import { LimitRequestsGuard } from './guards/limit-requests.guard';
 import { DynamicConfigService } from 'src/dynamic-config/dynamic-config.service';
 import { RequestAlreadyPendingError } from './errors/request_already_pending.error';

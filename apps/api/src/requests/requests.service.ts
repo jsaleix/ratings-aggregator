@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from 'generated/prisma/client';
 
-import { CreateRequestDto } from './dto/create-request.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { BullmqService } from 'src/shared/services/bullmq.service';
 import {

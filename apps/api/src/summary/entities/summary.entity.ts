@@ -3,7 +3,6 @@ import { Prisma } from 'generated/prisma/client';
 export const movieRatingsSummarySelect = {
   id: true,
   content: true,
-  score: true,
   score_value: true,
   movieId: true,
   created_at: true,
