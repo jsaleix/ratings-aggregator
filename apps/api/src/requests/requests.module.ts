@@ -6,10 +6,12 @@ import { RequestsService } from './services/requests.service';
 import { RequestsQuotaService } from './services/requests-quota.service';
 import { RequestsController } from './controllers/requests.controller';
 import { RequestsAdminController } from './controllers/requests-admin.controller';
+import { AppConfigService } from 'src/app-config/app-config.service';
 
 @Module({
   controllers: [RequestsController, RequestsAdminController],
   providers: [
+    AppConfigService,
     RequestsService,
     PrismaService,
     BullmqService,

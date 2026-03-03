@@ -4,10 +4,11 @@ import Redis from 'ioredis';
 
 import { RequestsController } from './requests.controller';
 import { RequestsService } from '../services/requests.service';
-import { DynamicConfigService } from 'src/dynamic-config/dynamic-config.service';
 import { BullmqService } from 'src/shared/services/bullmq.service';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { RequestsQuotaService } from '../services/requests-quota.service';
+import { AppConfigService } from 'src/app-config/app-config.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('RequestsController', () => {
   let controller: RequestsController;
@@ -17,10 +18,11 @@ describe('RequestsController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RequestsController],
       providers: [
+        AppConfigService,
+        { provide: CACHE_MANAGER, useValue: jest.fn() },
         RequestsService,
         RequestsQuotaService,
         PrismaService,
-        DynamicConfigService,
         {
           provide: BullmqService,
           useValue: jest.fn(),
