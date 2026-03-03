@@ -8,11 +8,11 @@ import {
   MovieRequestAdminType,
   MovieRequestPublicType,
   movieRequestSelect,
-} from './entities/request.entity';
-import { RequestAlreadyPendingError } from './errors/request_already_pending.error';
+} from '../entities/request.entity';
+import { RequestAlreadyPendingError } from '../errors/request_already_pending.error';
 import { PaginateFunction, paginator } from 'src/shared/utils/pagination';
 import { PaginatedResult } from 'src/shared/types/pagination';
-import { AdminFindRequestsDto } from './dto/admin/find-movies.dto';
+import { AdminFindRequestsDto } from '../dto/admin/find-movies.dto';
 
 @Injectable()
 export class RequestsService {
@@ -32,7 +32,6 @@ export class RequestsService {
     if (alreadyPendingRequest) throw new RequestAlreadyPendingError();
     const request = await this.prisma.movie_Request.create({
       data: {
-        title: '',
         tmdb_id: tmdbId,
         userId: user.id,
       },
@@ -94,28 +93,8 @@ export class RequestsService {
     });
   }
 
-  async getCountForToday() {
-    return await this.prisma.movie_Request.count({
-      where: {
-        created_at: {
-          gte: new Date(new Date().setHours(0, 0, 0, 0)),
-        },
-      },
-    });
-  }
-
   private async addToQueue(requestId: string, tmdbId: number) {
     this.bullmqService.addRequestToQueue(requestId, tmdbId);
-  }
-
-  async getRequestsCountOfTheToday() {
-    return await this.prisma.movie_Request.count({
-      where: {
-        created_at: {
-          gte: new Date(new Date().setHours(0, 0, 0, 0)),
-        },
-      },
-    });
   }
 
   async getCount() {

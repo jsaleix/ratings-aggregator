@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { StatsService } from './stats.service';
 import { StatsController } from './stats.controller';
 import { UsersService } from 'src/users/users.service';
-import { RequestsService } from 'src/requests/requests.service';
+import { RequestsService } from 'src/requests/services/requests.service';
 import { MoviesService } from 'src/movies/services/movies.service';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { BullmqService } from 'src/shared/services/bullmq.service';

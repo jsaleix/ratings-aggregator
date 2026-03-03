@@ -5,16 +5,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { DynamicConfigService } from 'src/dynamic-config/dynamic-config.service';
-import { RequestsService } from '../requests.service';
 import { roles } from 'src/core/constants/auth';
+import { RequestsQuotaService } from '../services/requests-quota.service';
 
 @Injectable()
 export class LimitRequestsGuard implements CanActivate {
   constructor(
-    private dynamicConfigService: DynamicConfigService,
     // private reflector: Reflector,
-    private requestService: RequestsService,
+    private requestsQuotaService: RequestsQuotaService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -25,17 +23,16 @@ export class LimitRequestsGuard implements CanActivate {
       }
       if (user.role === roles.ADMIN) return true;
 
-      const maxRequests = await this.dynamicConfigService.getMaxRequests();
-      if (maxRequests === null) {
+      const { current, max } =
+        await this.requestsQuotaService.getCurrentQuota();
+      if (max === null) {
         throw new UnauthorizedException('Max requests limit not set');
       }
 
-      const requestsCount =
-        await this.requestService.getRequestsCountOfTheToday();
-      if (requestsCount >= maxRequests) {
+      if (current >= max) {
         throw new UnauthorizedException('Max requests limit reached for today');
       }
-    } catch {
+    } catch (e) {
       throw new UnauthorizedException();
     }
     return true;

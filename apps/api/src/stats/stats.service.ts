@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MoviesService } from 'src/movies/services/movies.service';
-import { RequestsService } from 'src/requests/requests.service';
+import { RequestsService } from 'src/requests/services/requests.service';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()

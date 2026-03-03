@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { RequestsService } from './requests.service';
+import { RequestsService } from '../services/requests.service';
 import { Role } from 'src/auth/decorators/role.decorator';
-import { AddMultipleRequestsDTO } from './dto/admin/add-multiple-requests.dto';
-import { AdminFindRequestsDto } from './dto/admin/find-movies.dto';
+import { AddMultipleRequestsDTO } from '../dto/admin/add-multiple-requests.dto';
+import { AdminFindRequestsDto } from '../dto/admin/find-movies.dto';
 
 @ApiTags('Requests Admin')
 @Controller('requests/admin')
