@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import { formatDistanceToNow } from "date-fns";
 
@@ -19,17 +19,36 @@ import useMovieSummary from "../hooks/use-movie-summary";
 import useMovieBySlug from "../hooks/use-movie-by-slug";
 import GenresLabelsPart from "../components/genres-labels-part";
 import SimilarMovies from "../components/movie-posters-section/similar-movies";
+import useRequest from "../../requests/hooks/use-request";
+import { displayMsg } from "../../../shared/utils/toast";
+import ArrowIcon from "../../../shared/ui/icons/arrow-icon";
 
 export default function MoviePage() {
     const { isConnected, role } = useAuthContext();
     const hasAdminRights =
         !!role && (ROLES.ADMIN === role || ROLES.MOD === role);
     let { slug } = useParams();
-
+    const [disableRequestBtn, setDisableRequestBtn] = useState(false);
     const { movie, isMovieFetching } = useMovieBySlug(slug);
     const { ratings, deleteRatingMutation } = useMovieRatings(movie?.id);
     const { summary, deleteSummaryMutation, refreshSummaryMutation } =
         useMovieSummary(movie?.id);
+
+    const { createRequestMutation } = useRequest({
+        successCb: () => {
+            displayMsg("Request successfuly added!", "success");
+        },
+        errorCb: (e) => {
+            displayMsg(e.message, "error");
+            setDisableRequestBtn(false);
+        },
+    });
+
+    const handleCreateRequest = () => {
+        if (!movie) return;
+        setDisableRequestBtn(true);
+        createRequestMutation({ tmdbId: movie.tmdbId });
+    };
 
     const lastUpdatedStr = useMemo(() => {
         if (!movie) return "";
@@ -159,6 +178,15 @@ export default function MoviePage() {
                                 refreshAction={refreshSummaryMutation}
                             />
                             {/* <CompareBtn movieId={movie.id} /> */}
+                            <Button
+                                disabled={disableRequestBtn}
+                                className="text-black flex items-center gap-3 w-fit"
+                                variant={"secondary"}
+                                onClick={handleCreateRequest}
+                            >
+                                Quick request
+                                <ArrowIcon className="fill-black group-hover:translate-x-1.5 duration-150" />
+                            </Button>
                         </>
                     ) : (
                         <div className="w-full flex flex-col items-center justify-center gap-3">
@@ -176,6 +204,7 @@ export default function MoviePage() {
                 </div>
             </div>
             <SimilarMovies slug={movie.slug} />
+            <hr className="divider" />
             <LastMoviesAdded />
             <hr className="divider" />
             <LastMoviesUpdated />

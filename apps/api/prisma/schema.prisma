@@ -33,20 +33,19 @@ model Movie {
   slug                  String                  @unique
   Genre                 Genre[]
   Movie_Rating          Movie_Rating[]
-  Movie_Ratings_Summary Movie_Ratings_Summary[]
+  Movie_Ratings_Summary Movie_Ratings_Summary?
 }
 
 model Genre {
   id      String  @id @default(uuid())
   name    String  @unique
-  tmdb_id Int  @unique
+  tmdb_id Int     @unique
   movie   Movie[]
 }
 
 model Movie_Ratings_Summary {
   id          String   @id @default(uuid())
   content     String   @default("N/A")
-  score       String   @default("N/A")
   score_value Int      @default(0)
   movieId     String   @unique @map("movie_id")
   Movie       Movie    @relation(fields: [movieId], references: [id])
@@ -80,11 +79,10 @@ model Rating_Source {
 model Movie_Request {
   id         String   @id @default(uuid())
   tmdb_id    Int
-  title      String
-  userId     String   @map("user_id")
-  User       User     @relation(fields: [userId], references: [id])
   created_at DateTime @default(now())
   processed  Boolean  @default(false)
+  userId     String   @map("user_id")
+  User       User     @relation(fields: [userId], references: [id])
 }
 
 model User {

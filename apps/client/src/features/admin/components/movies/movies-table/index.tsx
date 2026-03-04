@@ -1,8 +1,8 @@
 import { Link } from "react-router";
-import clsx from "clsx";
 import { formatDistanceToNow } from "date-fns";
 
 import Button from "../../../../../shared/ui/button";
+import Table from "../../../../../shared/ui/table";
 import type { MovieModel } from "../../../../movies/models/movie";
 
 interface Props {
@@ -20,78 +20,76 @@ export default function MoviesTable({
     onCheckAll,
     onSelectMovie,
 }: Props) {
+    const columns = [
+        {
+            header: (
+                <input
+                    type="checkbox"
+                    checked={checkedMovies.length === movies.length}
+                    onChange={onCheckAll}
+                />
+            ),
+            key: "check_all",
+        },
+        {
+            header: "Title",
+            key: "title",
+        },
+        {
+            header: "Year",
+            key: "year",
+        },
+        {
+            header: "Last update",
+            key: "last_updated",
+        },
+        {
+            header: "Actions",
+            key: "actions",
+        },
+    ];
     return (
-        <div className="flex flex-col w-full">
-            <table>
-                <thead className="w-full bg-bg-medium text-left uppercase">
-                    <tr>
-                        <th className="px-3 w-2.5">
-                            <input
-                                type="checkbox"
-                                checked={checkedMovies.length === movies.length}
-                                onChange={onCheckAll}
-                            />
-                        </th>
-                        <th className="">Title</th>
-                        <th className="">Year</th>
-                        <th className="">Last update</th>
-                        <th className="">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {movies.map((movie, idx) => (
-                        <tr
-                            key={movie.id}
-                            className={clsx(
-                                idx % 2 === 0
-                                    ? "bg-bg-medium/50"
-                                    : "bg-bg-medium",
-                            )}
+        <Table<MovieModel>
+            columns={columns}
+            data={movies}
+            renderRow={(movie, idx) => (
+                <Table.Row idx={idx}>
+                    <Table.Cell className="">
+                        <input
+                            type="checkbox"
+                            checked={checkedMovies.includes(movie.tmdbId)}
+                            onChange={() => onCheckChange(movie.tmdbId)}
+                        />
+                    </Table.Cell>
+                    <Table.Cell className="max-w-[120px]">
+                        <Link
+                            className="underline hover:opacity-80"
+                            to={`/movies/${movie.slug}`}
+                            target="_blank"
                         >
-                            <td className="px-3 w-2.5">
-                                <input
-                                    type="checkbox"
-                                    checked={checkedMovies.includes(
-                                        movie.tmdbId,
-                                    )}
-                                    onChange={() => onCheckChange(movie.tmdbId)}
-                                />
-                            </td>
-                            <td title={movie.id} className="max-w-[120px]">
-                                <Link
-                                    className="underline hover:opacity-80"
-                                    to={`/movies/${movie.slug}`}
-                                    target="_blank"
-                                >
-                                    <span className="text-white">
-                                        {movie.title}
-                                    </span>{" "}
-                                    /{" "}
-                                    <span className="text-text-secondary">
-                                        {movie.original_title}
-                                    </span>
-                                </Link>
-                            </td>
-                            <td className="w-[100px]">{movie.year}</td>
-                            <td>
-                                {formatDistanceToNow(
-                                    new Date(movie.updated_at),
-                                    { addSuffix: true },
-                                )}
-                            </td>
-                            <td className="flex gap-3">
-                                <Button
-                                    size={"small"}
-                                    variant={"primary"}
-                                    onClick={() => onSelectMovie(movie)}
-                                >
-                                    Actions
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+                            <span className="text-white">{movie.title}</span> /{" "}
+                            <span className="text-text-secondary">
+                                {movie.original_title}
+                            </span>
+                        </Link>
+                    </Table.Cell>
+                    <Table.Cell className="w-[100px]">{movie.year}</Table.Cell>
+                    <Table.Cell>
+                        {formatDistanceToNow(new Date(movie.updated_at), {
+                            addSuffix: true,
+                        })}
+                    </Table.Cell>
+                    <Table.Cell className="flex gap-3">
+                        <Button
+                            size={"small"}
+                            variant={"primary"}
+                            onClick={() => onSelectMovie(movie)}
+                        >
+                            Actions
+                        </Button>
+                    </Table.Cell>
+                </Table.Row>
+            )}
+        ></Table>
     );
 }

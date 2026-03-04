@@ -217,7 +217,23 @@ export class MoviesService {
       .filter((m) => m !== undefined);
   }
 
-  async getTopMovies() {
-    throw new NotImplementedException();
+  async getTopMovies(limit: number = 15): Promise<any[]> {
+    const movies = await this.prisma.movie.findMany({
+      take: limit,
+      where: {
+        Movie_Ratings_Summary: {
+          isNot: null,
+        },
+      },
+      include: {
+        Movie_Ratings_Summary: { select: { score_value: true } },
+      },
+      orderBy: {
+        Movie_Ratings_Summary: {
+          score_value: 'desc',
+        },
+      },
+    });
+    return movies;
   }
 }

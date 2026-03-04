@@ -5,7 +5,4 @@ export class CreateRequestDto {
   @ApiProperty()
   @IsNumber()
   tmdbId: number;
-
-  // @IsString()
-  // title: string;
 }

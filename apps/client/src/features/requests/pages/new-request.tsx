@@ -1,29 +1,37 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 
 import { displayMsg } from "../../../shared/utils/toast";
 import PageHeader from "../../../shared/ui/page-header";
 import Button from "../../../shared/ui/button";
 
-import type { CreateRequestType } from "../types/schemas";
-import apiRequestService from "../services/api-request.service";
 import RequestForm from "../components/new-request-form";
 import RequestPremiumForm from "../components/new-request-premium-form";
+import useRequest from "../hooks/use-request";
 
 export default function NewRequestPage() {
     const navigate = useNavigate();
     const [searchBy, setSearchBy] = useState<"title" | "tmdbId">("title");
 
-    const { mutateAsync: createRequest } = useMutation({
-        mutationFn: async (request: CreateRequestType) => {
-            return await apiRequestService.create(request);
-        },
-        onSuccess: () => {
+    // const { mutateAsync: createRequest } = useMutation({
+    //     mutationFn: async (request: CreateRequestType) => {
+    //         return await apiRequestService.create(request);
+    //     },
+    //     onSuccess: () => {
+    //         displayMsg("Request successfuly added!", "success");
+    //         navigate("/requests");
+    //     },
+    //     onError: (e) => {
+    //         displayMsg(e.message, "error");
+    //     },
+    // });
+
+    const { createRequestMutation } = useRequest({
+        successCb: () => {
             displayMsg("Request successfuly added!", "success");
             navigate("/requests");
         },
-        onError: (e) => {
+        errorCb: (e) => {
             displayMsg(e.message, "error");
         },
     });
@@ -55,11 +63,14 @@ export default function NewRequestPage() {
                     {searchBy === "title" && (
                         <RequestPremiumForm
                             label="Create"
-                            action={createRequest}
+                            action={createRequestMutation}
                         />
                     )}
                     {searchBy === "tmdbId" && (
-                        <RequestForm label="Create" action={createRequest} />
+                        <RequestForm
+                            label="Create"
+                            action={createRequestMutation}
+                        />
                     )}
                 </div>
             </div>

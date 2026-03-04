@@ -60,8 +60,8 @@ movieWorker.on(
         logger.info("Movie worker completed", {
             tags: ["movie-worker", "worker"],
             payload: job.data.payload,
-            movie,
             movieId: movie.id,
+            slug: movie.slug,
         });
         await ratingQueue.add("set-ratings", {
             type: "movie",

@@ -7,19 +7,18 @@ import {
   UseGuards,
   HttpException,
 } from '@nestjs/common';
-import { RequestsService } from './requests.service';
-import { CreateRequestDto } from './dto/create-request.dto';
+import { RequestsService } from '../services/requests.service';
+import { CreateRequestDto } from '../dto/create-request.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
-import { Role } from 'src/auth/decorators/role.decorator';
-import { LimitRequestsGuard } from './guards/limit-requests.guard';
-import { DynamicConfigService } from 'src/dynamic-config/dynamic-config.service';
-import { RequestAlreadyPendingError } from './errors/request_already_pending.error';
+import { LimitRequestsGuard } from '../guards/limit-requests.guard';
+import { RequestAlreadyPendingError } from '../errors/request_already_pending.error';
+import { RequestsQuotaService } from '../services/requests-quota.service';
 
 @Controller('requests')
 export class RequestsController {
   constructor(
     private readonly requestsService: RequestsService,
-    private dynamicConfigService: DynamicConfigService,
+    private readonly requestsQuotaService: RequestsQuotaService,
   ) {}
 
   @UseGuards(LimitRequestsGuard)
@@ -36,20 +35,9 @@ export class RequestsController {
   }
 
   @Public()
-  @Get('count')
+  @Get('quota')
   async getCountForToday() {
-    const current = await this.requestsService.getCountForToday();
-    const max = await this.dynamicConfigService.getMaxRequests();
-    let left = max !== null ? max - current : null;
-    if (left !== null && left < 0) {
-      left = 0; // Ensure left is not negative
-    }
-
-    return {
-      current,
-      max,
-      left,
-    };
+    return await this.requestsQuotaService.getCurrentQuota();
   }
 
   @Public()

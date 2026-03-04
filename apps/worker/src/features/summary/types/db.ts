@@ -6,7 +6,7 @@ export const movieRatingsSummarySelect = {
     movieId: true,
     created_at: true,
     updated_at: true,
-    score: true,
+    score_value: true,
 };
 
 export type MovieRatingsSummaryType = Prisma.Movie_Ratings_SummaryGetPayload<{

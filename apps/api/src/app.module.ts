@@ -12,10 +12,10 @@ import { RatingsModule } from './ratings/ratings.module';
 import { RequestsModule } from './requests/requests.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { DynamicConfigModule } from './dynamic-config/dynamic-config.module';
 import { SummaryModule } from './summary/summary.module';
 import { CompareModule } from './compare/compare.module';
 import { StatsModule } from './stats/stats.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -24,6 +24,9 @@ import { StatsModule } from './stats/stats.module';
       isGlobal: true,
     }),
     RedisModule.forRoot({ type: 'single', url: process.env.REDIS_URL }),
+    CacheModule.register({
+      isGlobal: true,
+    }),
     ThrottlerModule.forRoot({
       throttlers: [
         {
@@ -37,7 +40,6 @@ import { StatsModule } from './stats/stats.module';
     RequestsModule,
     UsersModule,
     AuthModule,
-    DynamicConfigModule,
     SummaryModule,
     CompareModule,
     StatsModule,

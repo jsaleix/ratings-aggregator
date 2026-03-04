@@ -39,7 +39,7 @@ class ApiRequestService {
     }
 
     async getCount() {
-        const url = new URL(`/requests/count`, API_ENDPOINT);
+        const url = new URL(`/requests/quota`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "GET",
             headers: { "Content-Type": "application/json" },

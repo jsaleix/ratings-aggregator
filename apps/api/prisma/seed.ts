@@ -1,7 +1,8 @@
+import { PrismaPg } from '@prisma/adapter-pg';
 import { RatingUnit } from 'generated/prisma/enums';
 import { PrismaClient } from '../generated/prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { DynamicConfigService } from 'src/dynamic-config/dynamic-config.service';
+
+import { RequestsQuotaService } from 'src/requests/services/requests-quota.service';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -87,7 +88,7 @@ async function seedConfig() {
   await prisma.app_Config
     .create({
       data: {
-        key: DynamicConfigService.MAX_REQUESTS_KEY,
+        key: RequestsQuotaService.MAX_REQUESTS_KEY,
         value: '50',
       },
     })

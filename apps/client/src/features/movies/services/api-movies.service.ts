@@ -1,8 +1,13 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import type { PaginatedResult } from "../../../shared/types/pagination";
 import type { TMDBGetMovieType } from "../../requests/types/tmdb";
-import type { MovieModel } from "../models/movie";
-import { mapMovieApiToModel, type ApiMovieType } from "../types/movie.api";
+import type { MovieModel, MovieWithSummaryModel } from "../models/movie";
+import {
+    mapMovieApiToModel,
+    mapMovieTopApiToModel,
+    type ApiMovieTopType,
+    type ApiMovieType,
+} from "../types/movie.api";
 
 export type SearchMovieParams = {
     title: string;
@@ -63,6 +68,26 @@ class ApiMoviesService {
         }
         const data = (await res.json()) as Array<ApiMovieType>;
         return data.map(mapMovieApiToModel) satisfies MovieModel[];
+    }
+
+    async getTop(): Promise<Array<Required<MovieWithSummaryModel>>> {
+        const url = new URL("/movies/top", API_ENDPOINT);
+
+        const res = await fetch(url, {
+            method: "GET",
+        });
+        if (!res.ok) {
+            const error = await res
+                .json()
+                .catch(() => ({ message: res.statusText }));
+            throw new Error(
+                error.message ?? `Error fetching movies: ${res.statusText}`,
+            );
+        }
+        const data = (await res.json()) as Array<ApiMovieTopType>;
+        return data.map(
+            mapMovieTopApiToModel,
+        ) as Required<MovieWithSummaryModel>[];
     }
 
     async getRelated(slug: string): Promise<Array<MovieModel>> {
