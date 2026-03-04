@@ -53,6 +53,12 @@ export class MoviesController {
   }
 
   @Public()
+  @Get('/top')
+  async getTopMovies() {
+    return await this.moviesService.getTopMovies();
+  }
+
+  @Public()
   @Get('/slug/:slug')
   async findOneBySlug(@Param('slug') slug: string) {
     return await this.moviesService.findOneBySlug(slug);
