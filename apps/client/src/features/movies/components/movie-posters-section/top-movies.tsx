@@ -9,7 +9,7 @@ import type { Settings } from "react-slick";
 const sliderConfig: Settings = {
     infinite: true,
     centerPadding: "5px",
-    slidesToShow: 2,
+    slidesToShow: 4,
     initialSlide: 0,
 
     responsive: [
