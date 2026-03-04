@@ -1,18 +1,63 @@
 import { Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import apiMoviesService from "../../services/api-movies.service";
-import MoviePosterItem from "../movie-poster-item";
 import MoviesSlider from "./movies-slider";
+import MovieTopItem from "../movie-top-item";
+import apiMoviesService from "../../services/api-movies.service";
+import type { Settings } from "react-slick";
 
-interface Props {
-    slug: string;
-}
-export default function SimilarMovies({ slug }: Props) {
+const sliderConfig: Settings = {
+    infinite: true,
+    centerPadding: "5px",
+    slidesToShow: 2,
+    initialSlide: 0,
+
+    responsive: [
+        {
+            breakpoint: 2048,
+            settings: {
+                slidesToShow: 4,
+                slidesToScroll: 3,
+            },
+        },
+        {
+            breakpoint: 1500,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 2,
+            },
+        },
+        {
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 2,
+            },
+        },
+        {
+            breakpoint: 900,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+            },
+        },
+        {
+            breakpoint: 480,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                centerMode: true,
+                initialSlide: 2,
+            },
+        },
+    ],
+};
+
+export default function TopMovies() {
     const { data: movies } = useQuery({
-        queryKey: ["related", slug],
+        queryKey: ["top"],
         queryFn: async () => {
-            const res = await apiMoviesService.getRelated(slug);
+            const res = await apiMoviesService.getTop();
             return res;
         },
         initialData: [],
@@ -25,7 +70,7 @@ export default function SimilarMovies({ slug }: Props) {
             <div className="container mx-auto px-8 md:px-0 pb-5">
                 <div className="flex flex-col py-5 gap-3 items-center">
                     <div className="w-full flex justify-between">
-                        <h2 className="text-white text-xl">Similar</h2>
+                        <h2 className="text-white text-xl">Top Movies</h2>
                         <Link
                             to="/movies"
                             className="text-white font-bold hover:underline flex items-center gap-3"
@@ -50,10 +95,11 @@ export default function SimilarMovies({ slug }: Props) {
                         </Link>
                     </div>
                     {movies.length > 0 && (
-                        <div className="w-full">
-                            <MoviesSlider>
-                                {movies.map((movie) => (
-                                    <MoviePosterItem
+                        <div className="block w-full">
+                            <MoviesSlider extraSettings={sliderConfig}>
+                                {movies.map((movie, index) => (
+                                    <MovieTopItem
+                                        index={index + 1}
                                         movie={movie}
                                         key={movie.id}
                                     />

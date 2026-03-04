@@ -1,4 +1,4 @@
-import Slider from "react-slick";
+import Slider, { type Settings } from "react-slick";
 
 const settings = {
     dots: false,
@@ -52,8 +52,15 @@ const settings = {
 
 interface Props {
     children: React.ReactNode;
+    extraSettings?: Settings;
 }
 
-export default function MoviesSlider({ children }: Props) {
-    return <Slider {...settings}>{children}</Slider>;
+export default function MoviesSlider({ children, extraSettings }: Props) {
+    const config = {
+        ...settings,
+        ...extraSettings,
+        responsive: extraSettings?.responsive ?? settings.responsive,
+    };
+    console.log(config.responsive.length);
+    return <Slider {...config}>{children}</Slider>;
 }

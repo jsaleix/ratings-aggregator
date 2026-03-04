@@ -23,3 +23,9 @@ export interface MovieModel {
     slug: string;
     genres: Array<GenreModel>;
 }
+
+export type MovieWithSummaryModel = MovieModel & {
+    ratings_summary?: {
+        score: number;
+    };
+};

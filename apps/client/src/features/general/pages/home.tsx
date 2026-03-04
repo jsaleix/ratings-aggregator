@@ -6,6 +6,7 @@ import LastMoviesAdded from "../../movies/components/movie-posters-section/last-
 import LastMoviesUpdated from "../../movies/components/movie-posters-section/last-movies-updated";
 import RandomMovies from "../../movies/components/movie-posters-section/random-movies";
 import HeroRatings from "../components/hero-ratings";
+import TopMovies from "../../movies/components/movie-posters-section/top-movies";
 
 export default function HomePage() {
     const { isConnected } = useAuthContext();
@@ -46,6 +47,8 @@ export default function HomePage() {
                     ></div>
                 </section>
 
+                <TopMovies />
+                <hr className="divider" />
                 <LastMoviesAdded />
                 <hr className="divider" />
                 <RandomMovies />

@@ -204,6 +204,7 @@ export default function MoviePage() {
                 </div>
             </div>
             <SimilarMovies slug={movie.slug} />
+            <hr className="divider" />
             <LastMoviesAdded />
             <hr className="divider" />
             <LastMoviesUpdated />
