@@ -61,6 +61,5 @@ export default function MoviesSlider({ children, extraSettings }: Props) {
         ...extraSettings,
         responsive: extraSettings?.responsive ?? settings.responsive,
     };
-    console.log(config.responsive.length);
     return <Slider {...config}>{children}</Slider>;
 }
