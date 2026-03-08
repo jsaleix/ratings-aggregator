@@ -36,7 +36,7 @@ export default function MoviePage() {
 
     const { createRequestMutation } = useRequest({
         successCb: () => {
-            displayMsg("Request successfuly added!", "success");
+            displayMsg("Request added to the queue!", "success");
         },
         errorCb: (e) => {
             displayMsg(e.message, "error");
