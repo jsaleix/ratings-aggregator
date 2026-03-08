@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
 
 const inputVariants = cva(
-    "border-1 border-transparent duration-150 px-2 outline-none rounded-sm",
+    "border-1 border-transparent duration-150 px-2 py-1 outline-none rounded-sm",
     {
         variants: {
             variant: {
