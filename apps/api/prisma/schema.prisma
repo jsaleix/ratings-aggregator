@@ -15,9 +15,9 @@ datasource db {
 }
 
 model Movie {
-  id                    String                  @id @default(uuid())
+  id                    String                 @id @default(uuid())
   title                 String
-  tmdb_id               Int                     @unique
+  tmdb_id               Int                    @unique
   tag_line              String
   summary               String
   runtime               Int
@@ -25,15 +25,32 @@ model Movie {
   year                  Int
   budget                Float
   poster_path           String
-  created_at            DateTime                @default(now()) @db.Timestamp(6)
-  updated_at            DateTime                @updatedAt
+  created_at            DateTime               @default(now()) @db.Timestamp(6)
+  updated_at            DateTime               @updatedAt
   original_title        String
   imdb_id               String
   language              String
-  slug                  String                  @unique
+  slug                  String                 @unique
   Genre                 Genre[]
   Movie_Rating          Movie_Rating[]
   Movie_Ratings_Summary Movie_Ratings_Summary?
+  Movie_Job_Pipeline    Movie_Job_Pipeline?
+}
+
+model Movie_Job_Pipeline {
+  id       String @id @default(cuid())
+  movie_id String @unique
+  movie    Movie  @relation(fields: [movie_id], references: [id])
+
+  status        MovieStatus  @default(FETCHING)
+  failed_step   MovieStatus?
+  failed_reason String?
+  failed_at     DateTime?
+
+  fetched_at    DateTime?
+  rated_at      DateTime?
+  summarized_at DateTime?
+  completed_at  DateTime?
 }
 
 model Genre {
@@ -120,4 +137,12 @@ enum Role {
   admin
   mod
   premium
+}
+
+enum MovieStatus {
+  FETCHING
+  RATING
+  SUMMARIZING
+  COMPLETE
+  FAILED
 }
