@@ -11,10 +11,10 @@ export class PrismaMovieJobPipelineService implements MovieJobPipelineServiceI {
         this.db = db;
     }
 
-    async setFetching(movie_id: string): Promise<void> {
+    async setFetching(tmdb_id: number): Promise<void> {
         const updatedAt = new Date().toISOString();
         const payload = {
-            movie_id,
+            tmdb_id,
 
             status: MOVIE_STATUS.FETCHING,
             failed_step: null,
@@ -28,16 +28,16 @@ export class PrismaMovieJobPipelineService implements MovieJobPipelineServiceI {
         } satisfies MovieJobPipelineCreateInput;
 
         await this.db.movie_Job_Pipeline.upsert({
-            where: { movie_id },
+            where: { tmdb_id },
             create: payload,
             update: payload,
         });
     }
 
-    async setRating(movie_id: string): Promise<void> {
+    async setRating(tmdb_id: number): Promise<void> {
         const updatedAt = new Date().toISOString();
         const payload = {
-            movie_id,
+            tmdb_id,
 
             status: MOVIE_STATUS.RATING,
             failed_step: null,
@@ -50,16 +50,16 @@ export class PrismaMovieJobPipelineService implements MovieJobPipelineServiceI {
         } satisfies MovieJobPipelineCreateInput;
 
         await this.db.movie_Job_Pipeline.upsert({
-            where: { movie_id },
+            where: { tmdb_id },
             create: payload,
             update: payload,
         });
     }
 
-    async setSummarizing(movie_id: string): Promise<void> {
+    async setSummarizing(tmdb_id: number): Promise<void> {
         const updatedAt = new Date().toISOString();
         const payload = {
-            movie_id,
+            tmdb_id,
 
             status: MOVIE_STATUS.SUMMARIZING,
             failed_step: null,
@@ -71,40 +71,40 @@ export class PrismaMovieJobPipelineService implements MovieJobPipelineServiceI {
         } satisfies MovieJobPipelineCreateInput;
 
         await this.db.movie_Job_Pipeline.upsert({
-            where: { movie_id },
+            where: { tmdb_id },
             create: payload,
             update: payload,
         });
     }
-    async setComplete(movie_id: string): Promise<void> {
+    async setComplete(tmdb_id: number): Promise<void> {
         const updatedAt = new Date().toISOString();
         const payload = {
-            movie_id,
+            tmdb_id,
             status: MOVIE_STATUS.COMPLETE,
             completed_at: updatedAt,
         } satisfies MovieJobPipelineCreateInput;
         await this.db.movie_Job_Pipeline.upsert({
-            where: { movie_id },
+            where: { tmdb_id },
             create: payload,
             update: payload,
         });
     }
-    
+
     async setFailed(
-        movie_id: string,
+        tmdb_id: number,
         failed_step: MovieStatusType,
         failed_reason: string,
     ): Promise<void> {
         const updatedAt = new Date().toISOString();
         const payload = {
-            movie_id,
+            tmdb_id,
             status: MOVIE_STATUS.FAILED,
             failed_at: updatedAt,
             failed_reason,
             failed_step,
         } satisfies MovieJobPipelineCreateInput;
         await this.db.movie_Job_Pipeline.upsert({
-            where: { movie_id },
+            where: { tmdb_id },
             create: payload,
             update: payload,
         });

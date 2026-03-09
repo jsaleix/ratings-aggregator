@@ -38,9 +38,9 @@ model Movie {
 }
 
 model Movie_Job_Pipeline {
-  id       String @id @default(cuid())
-  movie_id String @unique
-  movie    Movie  @relation(fields: [movie_id], references: [id])
+  id      String @id @default(cuid())
+  tmdb_id Int    @unique
+  movie   Movie  @relation(fields: [tmdb_id], references: [tmdb_id])
 
   status        MovieStatus  @default(FETCHING)
   failed_step   MovieStatus?

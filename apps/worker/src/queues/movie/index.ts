@@ -2,15 +2,17 @@ import { Job, Worker } from "bullmq";
 
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 import { logger } from "../../shared/logger";
+import { PrismaMovieJobPipelineService } from "../../shared/modules/movie-job-pipeline/services/prisma.service";
+import { MOVIE_STATUS } from "../../shared/modules/movie-job-pipeline/constants";
+
 import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
 import TMDBService from "../../features/movies/services/tmdb.service";
-import PrismaMovieRequestRepository from "../../features/requests/repositories/prisma-request.repository";
 import { MovieType } from "../../features/movies/types/db";
 import { AddMovieByTMDBIdUseCase } from "../../features/movies/use-cases/add-movie-by-tmdb-id";
+import { PrismaGenreRepository } from "../../features/movies/repositories/prisma-genre.repository";
+import PrismaMovieRequestRepository from "../../features/requests/repositories/prisma-request.repository";
 import { ratingQueue } from "..";
 import MovieHandler, { MovieJob } from "./handler";
-import { PrismaGenreRepository } from "../../features/movies/repositories/prisma-genre.repository";
-import { PrismaMovieJobPipelineService } from "../../shared/modules/movie-job-pipeline/services/prisma.service";
 
 const movieJobPipelineService = new PrismaMovieJobPipelineService();
 const tmdbService = new TMDBService();
@@ -59,26 +61,36 @@ movieWorker.on(
     "completed",
     async (job: Job<MovieJob>, movie: MovieType | undefined) => {
         if (movie == undefined) return;
+        const request_id = job.data.payload.requestId;
+        const tmdb_id = job.data.payload.tmdbId;
+        const movie_id = movie.id;
+        const movie_slug = movie.slug;
+
         logger.info("Movie worker completed", {
             tags: ["movie-worker", "worker"],
-            payload: job.data.payload,
-            movieId: movie.id,
-            slug: movie.slug,
+            payload: { request_id, tmdb_id, movie_id, movie_slug },
         });
-        await movieJobPipelineService.setRating(movie.id);
+        await movieJobPipelineService.setRating(tmdb_id);
         await ratingQueue.add("set-ratings", {
             type: "movie",
-            payload: { id: movie.id },
+            payload: { movie_id, movie_slug, tmdb_id },
             removeOnComplete: true,
             removeOnFail: true,
         });
     },
 );
 
-movieWorker.on("failed", (job, error) => {
+movieWorker.on("failed", async (job, error) => {
     logger.error("Movie worker failed", {
         tags: ["movie-worker", "worker"],
         payload: job?.data.payload,
         error: error.message,
     });
+    if (job?.data == undefined) return;
+
+    await movieJobPipelineService.setFailed(
+        job.data.payload.tmdbId,
+        MOVIE_STATUS.FETCHING,
+        error.message,
+    );
 });

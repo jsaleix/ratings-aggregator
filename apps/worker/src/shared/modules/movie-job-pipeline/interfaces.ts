@@ -1,7 +1,7 @@
 export interface MovieJobPipelineServiceI {
-    setFetching(movieId: string): Promise<void>;
-    setRating(movieId: string): Promise<void>;
-    setSummarizing(movieId: string): Promise<void>;
-    setComplete(movieId: string): Promise<void>;
-    setFailed(movieId: string, step: string, reason: string): Promise<void>;
+    setFetching(tmdb_id: number): Promise<void>;
+    setRating(tmdb_id: number): Promise<void>;
+    setSummarizing(tmdb_id: number): Promise<void>;
+    setComplete(tmdb_id: number): Promise<void>;
+    setFailed(tmdb_id: number, step: string, reason: string): Promise<void>;
 }
