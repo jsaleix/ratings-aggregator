@@ -48,10 +48,11 @@ movieWorker.on("active", async (job: Job<MovieJob>) => {
             payload.requestId,
             true,
         );
+        await movieJobPipelineService.setFetching(payload.tmdbId);
     } catch (error) {
-        logger.warn("Failed to update request state", {
+        logger.warn("Failed to update request state or movieJobPipeline", {
             tags: ["movie-worker", "worker"],
-            requestId: payload.requestId,
+            payload,
             error: error instanceof Error ? error.message : String(error),
         });
     }
