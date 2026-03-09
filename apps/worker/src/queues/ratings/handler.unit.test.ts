@@ -19,7 +19,7 @@ describe("RatingHandler Unit", () => {
         mockUseCase.execute.mockResolvedValue([]);
 
         const jobMock = {
-            data: { type: "movie", payload: { id: "42" } },
+            data: { type: "movie", payload: { movie_id: "42" } },
         } as Job<any>;
 
         const result = await handler.handle(jobMock);
@@ -30,7 +30,7 @@ describe("RatingHandler Unit", () => {
 
     test("should throw if id is missing", async () => {
         const jobMock = {
-            data: { type: "movie", payload: { id: "" } },
+            data: { type: "movie", payload: { movie_id: "" } },
         } as Job<any>;
 
         await expect(handler.handle(jobMock)).rejects.toThrow("Missing id");
@@ -38,7 +38,7 @@ describe("RatingHandler Unit", () => {
 
     test("should throw for unknown type", async () => {
         const jobMock = {
-            data: { type: "series", payload: { id: "42" } },
+            data: { type: "series", payload: { movie_id: "42" } },
         } as Job<any>;
 
         await expect(handler.handle(jobMock)).rejects.toThrow("Unknown type");

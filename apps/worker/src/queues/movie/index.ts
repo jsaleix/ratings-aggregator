@@ -10,9 +10,9 @@ import TMDBService from "../../features/movies/services/tmdb.service";
 import { MovieType } from "../../features/movies/types/db";
 import { AddMovieByTMDBIdUseCase } from "../../features/movies/use-cases/add-movie-by-tmdb-id";
 import { PrismaGenreRepository } from "../../features/movies/repositories/prisma-genre.repository";
-import PrismaMovieRequestRepository from "../../features/requests/repositories/prisma-request.repository";
 import { ratingQueue } from "..";
 import MovieHandler, { MovieJob } from "./handler";
+import PrismaMovieRequestRepository from "../../shared/modules/movie-requests/repositories/prisma-request.repository";
 
 const movieJobPipelineService = new PrismaMovieJobPipelineService();
 const tmdbService = new TMDBService();

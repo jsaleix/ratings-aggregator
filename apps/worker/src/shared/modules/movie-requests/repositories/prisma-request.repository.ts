@@ -1,5 +1,5 @@
-import { PrismaClient } from "../../../../generated/prisma";
-import { db } from "../../../core/db";
+import { PrismaClient } from "../../../../../generated/prisma";
+import { db } from "../../../../core/db";
 import { MovieRequestRepositoryI } from "../interfaces/repositories";
 import { MovieRequestModel } from "../types/db";
 
