@@ -12,6 +12,9 @@ import { RatingCollectorService } from "../../features/ratings/services/rating-c
 import { summaryQueue } from "..";
 import RatingHandler from "./handler";
 import { RatingSourceService } from "../../features/ratings/services/rating-source.service";
+import { PrismaMovieJobPipelineService } from "../../shared/modules/movie-job-pipeline/services/prisma.service";
+
+const movieJobPipelineService = new PrismaMovieJobPipelineService();
 
 const movieRepository = new PrismaMovieRepository();
 const ratingSourceRepository = new PrismaRatingSourceRepository();
@@ -61,9 +64,7 @@ ratingWorker.on("completed", async (job) => {
     const { id } = job.data.payload;
     if (!id) throw new Error("No id found in payload");
 
-    await movieRepository.updateMovie(id, {
-        updated_at: new Date().toISOString(),
-    });
+    await movieJobPipelineService.setSummarizing(job.data.payload.id);
     await summaryQueue.add(
         "generate-summary",
         {

@@ -28,7 +28,12 @@ export const movieJobPipelineCreate = {
     completed_at: true,
 } satisfies Prisma.Movie_Job_PipelineSelect;
 
-export type MovieJobPipelineCreateInput = Prisma.Movie_Job_PipelineCreateInput;
+export type MovieJobPipelineCreateInput = Omit<
+    Prisma.Movie_Job_PipelineCreateInput,
+    "movie"
+> & {
+    movie_id: string;
+};
 
 export type MovieJobPipelineType = Prisma.Movie_Job_PipelineGetPayload<{
     select: typeof movieJobPipelineSelect;

@@ -10,7 +10,9 @@ import { AddMovieByTMDBIdUseCase } from "../../features/movies/use-cases/add-mov
 import { ratingQueue } from "..";
 import MovieHandler, { MovieJob } from "./handler";
 import { PrismaGenreRepository } from "../../features/movies/repositories/prisma-genre.repository";
+import { PrismaMovieJobPipelineService } from "../../shared/modules/movie-job-pipeline/services/prisma.service";
 
+const movieJobPipelineService = new PrismaMovieJobPipelineService();
 const tmdbService = new TMDBService();
 const genreRepository = new PrismaGenreRepository();
 const movieRepository = new PrismaMovieRepository();
@@ -63,6 +65,7 @@ movieWorker.on(
             movieId: movie.id,
             slug: movie.slug,
         });
+        await movieJobPipelineService.setRating(movie.id);
         await ratingQueue.add("set-ratings", {
             type: "movie",
             payload: { id: movie.id },

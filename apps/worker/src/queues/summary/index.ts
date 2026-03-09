@@ -8,12 +8,12 @@ import SummaryHandler, { SummaryJob } from "./handler";
 import { MovieRatingsSummaryType } from "../../features/summary/types/db";
 import { logger } from "../../shared/logger";
 import { PrismaSummaryRepository } from "../../features/summary/repositories/prisma-summary.repository";
-import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
 import { ScoreService } from "../../features/summary/services/score.service";
+import { PrismaMovieJobPipelineService } from "../../shared/modules/movie-job-pipeline/services/prisma.service";
 
+const movieJobPipelineService = new PrismaMovieJobPipelineService();
 const aiService = new AIService();
 const scoreService = new ScoreService();
-const movieService = new PrismaMovieRepository();
 const summaryDbService = new PrismaSummaryRepository();
 const generateMovieSummaryUseCase = new GenerateMovieSummaryUseCase(
     aiService,
@@ -63,8 +63,6 @@ summaryWorker.on(
             summary,
             movieId: job.data.payload.id,
         });
-        await movieService.updateMovie(job.data.payload.id, {
-            updated_at: new Date().toISOString(),
-        });
+        await movieJobPipelineService.setComplete(job.data.payload.id);
     },
 );

@@ -42,7 +42,7 @@ model Movie_Job_Pipeline {
   movie_id String @unique
   movie    Movie  @relation(fields: [movie_id], references: [id])
 
-  status        MovieStatus  @default(FETCHING)
+  status        MovieStatus  @default(COMPLETE)
   failed_step   MovieStatus?
   failed_reason String?
   failed_at     DateTime?
