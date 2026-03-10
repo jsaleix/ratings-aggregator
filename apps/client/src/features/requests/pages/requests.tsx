@@ -4,14 +4,13 @@ import { motion, stagger } from "motion/react";
 
 import Button from "../../../shared/ui/button";
 import PageHeader from "../../../shared/ui/page-header";
+import Divider from "../../../shared/ui/divider";
+
 import { useAuthContext } from "../../../core/auth/provider";
 import LastMoviesUpdated from "../../movies/components/movie-posters-section/last-movies-updated";
 import apiRequestService from "../services/api-request.service";
-import RequestListItem from "../components/requests-list-item";
-import { mapApiRequestToMovieRequestModel } from "../types/api-request";
-import useMoviesJobPipeline from "../../pipelines/hooks/use-movie-job-pipeline";
+import useMoviesJobPipeline from "../../pipelines/hooks/use-movies-job-pipeline";
 import MovieJobListItem from "../../pipelines/components/movie-job-list-item";
-import Divider from "../../../shared/ui/divider";
 
 const itemVariants = {
     hidden: {

@@ -2,27 +2,35 @@ import { useEffect, useRef, useState } from "react";
 import { API_ENDPOINT } from "../../../core/config/api";
 import type { MovieJobPipelineType } from "../types";
 
-export default function useMoviesJobPipeline() {
+interface Props {
+    slug: string | undefined;
+    cb?: (status: MovieJobPipelineType | null) => void;
+}
+
+export default function useMovieJobPipeline({ slug, cb }: Props) {
     const sseRef = useRef<EventSource>(null);
-    const [jobs, setJobs] = useState<MovieJobPipelineType[]>([]);
+    const [status, setStatus] = useState<MovieJobPipelineType | null>(null);
 
     const onUpdate = (rawData: any) => {
         const data = JSON.parse(rawData.data) as {
-            jobs: MovieJobPipelineType[];
+            job: MovieJobPipelineType | null;
         };
-        setJobs(data.jobs);
+        setStatus(data.job);
+        cb && cb(data.job);
     };
 
     useEffect(() => {
-        const url = new URL("/pipelines/movies", API_ENDPOINT);
-        const eventSource = new EventSource(url);
+        const url = new URL(`/pipelines/movies/${slug}`, API_ENDPOINT);
+        const eventSource = new EventSource(url, {
+            withCredentials: true,
+        });
         sseRef.current = eventSource;
         eventSource.addEventListener("update", onUpdate);
 
         return () => {
             eventSource.close();
         };
-    }, []);
+    }, [slug]);
 
-    return { jobs };
+    return { status };
 }

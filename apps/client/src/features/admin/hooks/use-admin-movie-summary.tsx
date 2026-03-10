@@ -1,19 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { displayMsg } from "../../../shared/utils/toast";
-import apiSummaryService from "../services/api-summary.service";
-import { useAuthContext } from "../../../core/auth/provider";
-import { ROLES } from "../../../core/auth/constants";
+import apiSummaryService from "../../movies/services/api-summary.service";
 
-export default function useMovieSummary(movieId?: string) {
-    const { isConnected, role } = useAuthContext();
-    const hasAdminRights =
-        !!role && (ROLES.ADMIN === role || ROLES.MOD === role);
-
-    const { data: summary } = useQuery({
+export default function useAdminMovieSummary(movieId?: string) {
+    const { data: summary, refetch: refetchSummary } = useQuery({
         queryKey: ["getMovieRatingsSummary", movieId],
         queryFn: async () => {
-            if (!isConnected) throw new Error("Not authenticated");
             if (!movieId) throw new Error("missing id");
             return apiSummaryService.getMovieRatingSummary(movieId);
         },
@@ -23,7 +16,6 @@ export default function useMovieSummary(movieId?: string) {
 
     const { mutate: refreshSummaryMutation } = useMutation({
         mutationFn: async (movieId: string) => {
-            if (!hasAdminRights) throw new Error("Unauthorized");
             if (!window.confirm("Are you sure?"))
                 throw new Error("Action canceled");
             return apiSummaryService.refresh(movieId);
@@ -36,7 +28,6 @@ export default function useMovieSummary(movieId?: string) {
 
     const { mutate: deleteSummaryMutation } = useMutation({
         mutationFn: async (id: string) => {
-            if (!hasAdminRights) throw new Error("Unauthorized");
             if (!window.confirm("Are you sure?"))
                 throw new Error("Action canceled");
             return apiSummaryService.delete(id);
@@ -47,5 +38,10 @@ export default function useMovieSummary(movieId?: string) {
         },
     });
 
-    return { summary, refreshSummaryMutation, deleteSummaryMutation };
+    return {
+        summary,
+        refreshSummaryMutation,
+        deleteSummaryMutation,
+        refetchSummary,
+    };
 }

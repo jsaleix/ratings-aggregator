@@ -26,7 +26,7 @@ export class PipelineController {
     return interval(1500).pipe(
       switchMap(async (_) => ({
         type: 'update',
-        data: { jobs: await this.movieJobPipelineService.getSpecific(slug) },
+        data: { job: await this.movieJobPipelineService.getSpecific(slug) },
       })),
     );
   }

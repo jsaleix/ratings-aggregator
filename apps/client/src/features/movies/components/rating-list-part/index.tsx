@@ -1,13 +1,9 @@
-import { motion, stagger } from "motion/react";
-
+import { motion, stagger, AnimatePresence } from "motion/react";
 import type { MovieRatingModel } from "../../models/movie-rating";
 import MovieRatingItem from "../movie-rating-item";
-import Button from "../../../../shared/ui/button";
 
 interface Props {
     ratings: MovieRatingModel[];
-    adminOptions: boolean;
-    deleteAction: (id: string) => void;
 }
 
 const itemVariants = {
@@ -41,43 +37,33 @@ const wrapperVariants = {
     },
 };
 
-export default function RatingListPart({
-    ratings,
-    adminOptions,
-    deleteAction,
-}: Props) {
+export default function RatingListPart({ ratings }: Props) {
     return (
-        <div className="flex flex-col">
+        <motion.div className="flex flex-col">
             {ratings.length === 0 && <p>No rating</p>}
-            {ratings.length > 0 && (
-                <motion.ul
-                    className="flex flex-col md:w-[100%]"
-                    animate="visible"
-                    initial="hidden"
-                    variants={wrapperVariants}
-                >
-                    {ratings
-                        ?.filter((rating) => rating.value !== "N/A")
-                        .map((rating) => (
-                            <motion.li
-                                variants={itemVariants}
-                                key={rating.id}
-                                className="flex items-center gap-3"
-                            >
-                                <MovieRatingItem rating={rating} />
-                                {adminOptions && (
-                                    <Button
-                                        className="select-none"
-                                        variant={"danger"}
-                                        onClick={() => deleteAction(rating.id)}
-                                    >
-                                        X
-                                    </Button>
-                                )}
-                            </motion.li>
-                        ))}
-                </motion.ul>
-            )}
-        </div>
+            <AnimatePresence>
+                {ratings.length > 0 && (
+                    <motion.ul
+                        className="flex flex-col md:w-[100%]"
+                        animate="visible"
+                        initial="hidden"
+                        exit={"hidden"}
+                        variants={wrapperVariants}
+                    >
+                        {ratings
+                            .filter((rating) => rating.value !== "N/A")
+                            .map((rating) => (
+                                <motion.li
+                                    variants={itemVariants}
+                                    key={rating.id}
+                                    className="flex items-center gap-3"
+                                >
+                                    <MovieRatingItem rating={rating} />
+                                </motion.li>
+                            ))}
+                    </motion.ul>
+                )}
+            </AnimatePresence>
+        </motion.div>
     );
 }
