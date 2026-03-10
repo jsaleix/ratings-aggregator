@@ -3,6 +3,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { RedisModule } from '@nestjs-modules/ioredis';
+import { CacheModule } from '@nestjs/cache-manager';
 
 import configuration from './core/configuration';
 import { AppController } from './app.controller';
@@ -15,7 +16,7 @@ import { AuthModule } from './auth/auth.module';
 import { SummaryModule } from './summary/summary.module';
 import { CompareModule } from './compare/compare.module';
 import { StatsModule } from './stats/stats.module';
-import { CacheModule } from '@nestjs/cache-manager';
+import { PipelineModule } from './pipelines/pipeline.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { CacheModule } from '@nestjs/cache-manager';
     SummaryModule,
     CompareModule,
     StatsModule,
+    PipelineModule,
   ],
   controllers: [AppController],
   providers: [
