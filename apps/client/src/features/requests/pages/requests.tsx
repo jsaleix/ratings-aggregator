@@ -9,6 +9,9 @@ import LastMoviesUpdated from "../../movies/components/movie-posters-section/las
 import apiRequestService from "../services/api-request.service";
 import RequestListItem from "../components/requests-list-item";
 import { mapApiRequestToMovieRequestModel } from "../types/api-request";
+import useMoviesJobPipeline from "../../pipelines/hooks/use-movie-job-pipeline";
+import MovieJobListItem from "../../pipelines/components/movie-job-list-item";
+import Divider from "../../../shared/ui/divider";
 
 const itemVariants = {
     hidden: {
@@ -55,16 +58,18 @@ export default function RequestsPage() {
         },
     });
 
-    const { data } = useQuery({
-        queryKey: ["getRequests"],
-        queryFn: async () => {
-            const res = await apiRequestService.getAll();
-            return res.map((item) => mapApiRequestToMovieRequestModel(item));
-        },
-        initialData: [],
-        refetchOnWindowFocus: false,
-        refetchInterval: 15000,
-    });
+    // const { data } = useQuery({
+    //     queryKey: ["getRequests"],
+    //     queryFn: async () => {
+    //         const res = await apiRequestService.getAll();
+    //         return res.map((item) => mapApiRequestToMovieRequestModel(item));
+    //     },
+    //     initialData: [],
+    //     refetchOnWindowFocus: false,
+    //     refetchInterval: 15000,
+    // });
+
+    const { jobs } = useMoviesJobPipeline();
 
     return (
         <div className="w-full">
@@ -96,26 +101,28 @@ export default function RequestsPage() {
                         </Button>
                     </Link>
                 </PageHeader>
-                <div className="flex w-full flex-col justify-center px-5 md:px-0 md:py-5">
-                    {data.length === 0 && (
+                <Divider />
+                <div className="flex w-full flex-col justify-center px-5 md:px-0 md:pb-5">
+                    <h2 className="text-xl font-semibold">Current jobs</h2>
+                    {jobs.length === 0 && (
                         <p className="text-center text-text-secondary font-thin">
-                            There is no request pending
+                            There is no movie being added
                         </p>
                     )}
-                    {data.length > 0 && (
+                    {jobs.length > 0 && (
                         <motion.ul
                             className="w-full flex flex-col border-0 border-t-bg-light gap-2"
                             variants={wrapperVariants}
                             animate="visible"
                             initial="hidden"
                         >
-                            {data.map((request) => (
+                            {jobs.map((job) => (
                                 <motion.li
                                     className="list-none"
                                     variants={itemVariants}
-                                    key={request.id}
+                                    key={job.tmdb_id}
                                 >
-                                    <RequestListItem request={request} />
+                                    <MovieJobListItem job={job} />
                                 </motion.li>
                             ))}
                         </motion.ul>
