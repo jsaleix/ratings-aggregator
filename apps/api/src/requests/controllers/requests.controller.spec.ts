@@ -9,6 +9,7 @@ import { PrismaService } from 'src/shared/services/prisma.service';
 import { RequestsQuotaService } from '../services/requests-quota.service';
 import { AppConfigService } from 'src/app-config/app-config.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { MovieJobPipelineService } from 'src/pipelines/services/movie-job-pipeline.service';
 
 describe('RequestsController', () => {
   let controller: RequestsController;
@@ -28,6 +29,7 @@ describe('RequestsController', () => {
           useValue: jest.fn(),
         },
         { provide: getRedisConnectionToken(), useValue: redisMock },
+        MovieJobPipelineService,
       ],
     }).compile();
 

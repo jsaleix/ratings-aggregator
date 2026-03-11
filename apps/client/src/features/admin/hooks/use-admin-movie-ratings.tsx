@@ -1,14 +1,14 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { displayMsg } from "../../../shared/utils/toast";
-import apiRatingsService from "../../movies/services/api-ratings.service";
+import apiAdminRatingsService from "../services/ratings.admin.service";
 
 export default function useAdminMovieRatings(movieId?: string) {
     const { data: ratings, refetch: refetchRatings } = useQuery({
         queryKey: ["getMovieRatings", movieId],
         queryFn: async () => {
             if (!movieId) throw new Error("missing id");
-            return apiRatingsService.getMovieRatings(movieId);
+            return apiAdminRatingsService.getMovieRatings(movieId);
         },
         initialData: [],
         refetchOnWindowFocus: false,
@@ -18,7 +18,7 @@ export default function useAdminMovieRatings(movieId?: string) {
         mutationFn: async (id: string) => {
             if (!window.confirm("Are you sure?"))
                 throw new Error("Action canceled");
-            return apiRatingsService.delete(id);
+            return apiAdminRatingsService.delete(id);
         },
         onSuccess: () => {
             refetchRatings();

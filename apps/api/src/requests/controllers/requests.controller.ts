@@ -7,9 +7,11 @@ import {
   UseGuards,
   HttpException,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
+
+import { Public } from 'src/auth/decorators/public.decorator';
 import { RequestsService } from '../services/requests.service';
 import { CreateRequestDto } from '../dto/create-request.dto';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { LimitRequestsGuard } from '../guards/limit-requests.guard';
 import { RequestAlreadyPendingError } from '../errors/request_already_pending.error';
 import { RequestsQuotaService } from '../services/requests-quota.service';
@@ -21,6 +23,7 @@ export class RequestsController {
     private readonly requestsQuotaService: RequestsQuotaService,
   ) {}
 
+  @Throttle({ default: { limit: 5, ttl: 6000 } })
   @UseGuards(LimitRequestsGuard)
   @Post()
   async create(@Req() req, @Body() createRequestDto: CreateRequestDto) {

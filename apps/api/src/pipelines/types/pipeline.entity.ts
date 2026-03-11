@@ -2,6 +2,7 @@ import { Prisma } from 'generated/prisma/client';
 import { movieSelect } from 'src/movies/entities/movie.entity';
 
 export const movieJobPipelineSelect = {
+  id: true,
   tmdb_id: true,
   status: true,
   movie: {

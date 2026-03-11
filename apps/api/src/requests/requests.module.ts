@@ -7,6 +7,7 @@ import { RequestsQuotaService } from './services/requests-quota.service';
 import { RequestsController } from './controllers/requests.controller';
 import { RequestsAdminController } from './controllers/requests-admin.controller';
 import { AppConfigService } from 'src/app-config/app-config.service';
+import { MovieJobPipelineService } from 'src/pipelines/services/movie-job-pipeline.service';
 
 @Module({
   controllers: [RequestsController, RequestsAdminController],
@@ -16,6 +17,7 @@ import { AppConfigService } from 'src/app-config/app-config.service';
     PrismaService,
     BullmqService,
     RequestsQuotaService,
+    MovieJobPipelineService,
   ],
 })
 export class RequestsModule {}

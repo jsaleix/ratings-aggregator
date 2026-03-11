@@ -30,4 +30,12 @@ export class MovieJobPipelineService {
       },
     });
   }
+
+  async getByTmdbId(tmdb_id: number) {
+    return await this.prisma.movie_Job_Pipeline.findUnique({
+      where: {
+        tmdb_id,
+      },
+    });
+  }
 }

@@ -11,6 +11,7 @@ import LastMoviesUpdated from "../../movies/components/movie-posters-section/las
 import apiRequestService from "../services/api-request.service";
 import useMoviesJobPipeline from "../../pipelines/hooks/use-movies-job-pipeline";
 import MovieJobListItem from "../../pipelines/components/movie-job-list-item";
+import RequestListItem from "../components/requests-list-item";
 
 const itemVariants = {
     hidden: {
@@ -68,7 +69,7 @@ export default function RequestsPage() {
     //     refetchInterval: 15000,
     // });
 
-    const { jobs } = useMoviesJobPipeline();
+    const { jobs, requests } = useMoviesJobPipeline();
 
     return (
         <div className="w-full">
@@ -101,31 +102,68 @@ export default function RequestsPage() {
                     </Link>
                 </PageHeader>
                 <Divider />
-                <div className="flex w-full flex-col justify-center px-5 md:px-0 md:pb-5">
-                    <h2 className="text-xl font-semibold">Current jobs</h2>
-                    {jobs.length === 0 && (
-                        <p className="text-center text-text-secondary font-thin">
-                            There is no movie being added
-                        </p>
-                    )}
-                    {jobs.length > 0 && (
-                        <motion.ul
-                            className="w-full flex flex-col border-0 border-t-bg-light gap-2"
-                            variants={wrapperVariants}
-                            animate="visible"
-                            initial="hidden"
-                        >
-                            {jobs.map((job) => (
-                                <motion.li
-                                    className="list-none"
-                                    variants={itemVariants}
-                                    key={job.tmdb_id}
-                                >
-                                    <MovieJobListItem job={job} />
-                                </motion.li>
-                            ))}
-                        </motion.ul>
-                    )}
+                <div className="w-full flex flex-col md:flex-row gap-3 md:items-start md:justify-start">
+                    <div
+                        id="requests_list"
+                        className="flex w-full flex-col justify-start md:justify-center "
+                    >
+                        <h2 className="text-xl font-semibold pb-3">Requests</h2>
+                        {requests.length === 0 && (
+                            <p className="text-center text-text-secondary font-thin">
+                                There is no movie movie request pending
+                            </p>
+                        )}
+                        {requests.length > 0 && (
+                            <motion.ul
+                                className="w-full flex flex-col border-0 border-t-bg-light gap-2 max-h-[500px] overflow-y-scroll"
+                                variants={wrapperVariants}
+                                animate="visible"
+                                initial="hidden"
+                            >
+                                {requests.map((request) => (
+                                    <motion.li
+                                        className="list-none"
+                                        variants={itemVariants}
+                                        key={request.id}
+                                    >
+                                        <RequestListItem request={request} />
+                                    </motion.li>
+                                ))}
+                            </motion.ul>
+                        )}
+                    </div>
+                    <Divider css={"block md:hidden"} />
+                    <div
+                        id="jobs_list"
+                        className="flex w-full flex-col justify-center px-5 md:px-0 md:pb-5"
+                    >
+                        <h2 className="text-xl font-semibold pb-3">
+                            Current jobs
+                        </h2>
+                        {jobs.length === 0 && (
+                            <p className="text-center text-text-secondary font-thin">
+                                There is no movie being added
+                            </p>
+                        )}
+                        {jobs.length > 0 && (
+                            <motion.ul
+                                className="w-full flex flex-col border-0 border-t-bg-light gap-2 max-h-[500px] overflow-y-scroll"
+                                variants={wrapperVariants}
+                                animate="visible"
+                                initial="hidden"
+                            >
+                                {jobs.map((job) => (
+                                    <motion.li
+                                        className="list-none"
+                                        variants={itemVariants}
+                                        key={job.id}
+                                    >
+                                        <MovieJobListItem job={job} />
+                                    </motion.li>
+                                ))}
+                            </motion.ul>
+                        )}
+                    </div>
                 </div>
             </div>
             <LastMoviesUpdated />

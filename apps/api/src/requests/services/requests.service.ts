@@ -101,4 +101,10 @@ export class RequestsService {
     const total = await this.prisma.movie_Request.count();
     return { total };
   }
+
+  async getAllPending() {
+    return await this.prisma.movie_Request.findMany({
+      where: { processed: false },
+    });
+  }
 }

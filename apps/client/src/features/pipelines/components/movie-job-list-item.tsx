@@ -12,7 +12,7 @@ export default function MovieJobListItem({ job }: Props) {
     );
 
     return (
-        <article className="w-full flex md:flex-row items-center flex-col gap-1 justify-between border-b-1 border-b-bg-light px-5 py-3">
+        <article className="w-full flex items-start md:flex-row md:items-center flex-col gap-1 justify-between border-b-1 border-b-bg-light px-5 py-3">
             <div className="flex flex-row items-center">
                 <Spinner />
                 {!job.movie && (

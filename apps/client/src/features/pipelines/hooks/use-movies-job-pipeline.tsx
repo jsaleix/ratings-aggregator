@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { API_ENDPOINT } from "../../../core/config/api";
 import type { MovieJobPipelineType } from "../types";
+import type { MovieRequestModel } from "../../requests/models/movie-request";
 
 export default function useMoviesJobPipeline() {
     const sseRef = useRef<EventSource>(null);
     const [jobs, setJobs] = useState<MovieJobPipelineType[]>([]);
+    const [requests, setRequests] = useState<MovieRequestModel[]>([]);
 
     const onUpdate = (rawData: any) => {
         const data = JSON.parse(rawData.data) as {
             jobs: MovieJobPipelineType[];
+            requests: MovieRequestModel[];
         };
         setJobs(data.jobs);
+        setRequests(data.requests);
     };
 
     useEffect(() => {
@@ -24,5 +28,5 @@ export default function useMoviesJobPipeline() {
         };
     }, []);
 
-    return { jobs };
+    return { jobs, requests };
 }

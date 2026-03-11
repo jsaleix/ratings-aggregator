@@ -1,6 +1,7 @@
 import type { MovieStatusType } from "../constants";
 
 export type MovieJobPipelineType = {
+    id: string;
     tmdb_id: number;
 
     status: MovieStatusType;
@@ -8,6 +9,6 @@ export type MovieJobPipelineType = {
     movie: null | {
         slug: string;
         title: string;
-        year: number
+        year: number;
     };
 };
