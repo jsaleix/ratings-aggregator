@@ -6,6 +6,8 @@ import {
   Delete,
   Req,
   NotFoundException,
+  Param,
+  NotImplementedException,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
@@ -48,4 +50,9 @@ export class UsersController {
   }
 
   // --> ME
+
+  @Get('profile/:username')
+  async getUserPublic(@Param(':username') username: string) {
+    throw new NotImplementedException();
+  }
 }

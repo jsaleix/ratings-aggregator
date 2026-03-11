@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  NotImplementedException,
-} from '@nestjs/common';
-import { UpdateMovieDto } from '../dto/update-movie.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { SearchMovieQueryDto } from '../dto/search-movie-query.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { Prisma } from 'generated/prisma/client';
@@ -17,7 +12,7 @@ import { AdminFindMoviesDTO } from '../dto/admin/find-movies.dto';
 export class MoviesService {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(id: string): Promise<{ movie: MovieType }> {
+  async findOneById(id: string): Promise<{ movie: MovieType }> {
     const movie = await this.prisma.movie.findUnique({
       where: { id },
       select: movieSelect,
@@ -36,7 +31,7 @@ export class MoviesService {
   }
 
   async remove(id: string) {
-    const { movie } = await this.findOne(id);
+    const { movie } = await this.findOneById(id);
     const deleteRequests = this.prisma.movie_Request.deleteMany({
       where: { tmdb_id: movie.tmdb_id },
     });

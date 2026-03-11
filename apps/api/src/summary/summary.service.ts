@@ -20,6 +20,19 @@ export class SummaryService {
     });
   }
 
+  async findOneByMovieSlug(
+    slug: string,
+  ): Promise<MovieRatingsSummaryType | null> {
+    return await this.prisma.movie_Ratings_Summary.findFirst({
+      where: {
+        Movie: {
+          slug,
+        },
+      },
+      select: movieRatingsSummarySelect,
+    });
+  }
+
   async remove(id: string): Promise<MovieRatingsSummaryType> {
     const res = await this.prisma.movie_Ratings_Summary.delete({
       where: { id },

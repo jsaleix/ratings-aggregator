@@ -54,9 +54,13 @@ export class RatingsService {
     return res;
   }
 
-  async findForMovie(movieId: string): Promise<MovieRatingType[]> {
+  async findForMovie(slug: string): Promise<MovieRatingType[]> {
     const res = await this.prisma.movie_Rating.findMany({
-      where: { movieId },
+      where: {
+        Movie: {
+          slug,
+        },
+      },
       orderBy: {
         Rating_Source: {
           name: 'asc',

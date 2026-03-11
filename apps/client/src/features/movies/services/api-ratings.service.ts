@@ -7,8 +7,8 @@ import {
 } from "../types/movie-rating.api";
 
 class ApiRatingsService {
-    async getMovieRatings(id: string): Promise<MovieRatingModel[]> {
-        const url = new URL(`/ratings/movie/${id}`, API_ENDPOINT);
+    async getMovieRatings(slug: string): Promise<MovieRatingModel[]> {
+        const url = new URL(`/ratings/movie/${slug}`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "GET",
             headers: { ...authHeaders() },
@@ -23,22 +23,6 @@ class ApiRatingsService {
         }
         const response = (await res.json()) as ApiMovieRatingType[];
         return response.map(mapRatingApiToModel);
-    }
-
-    async delete(id: string) {
-        const url = new URL(`/ratings/${id}`, API_ENDPOINT);
-        const res = await fetch(url, {
-            method: "DELETE",
-        });
-        if (!res.ok) {
-            const error = await res
-                .json()
-                .catch(() => ({ message: res.statusText }));
-            throw new Error(
-                error.message ?? `Error deleting rating: ${res.statusText}`,
-            );
-        }
-        return true;
     }
 }
 

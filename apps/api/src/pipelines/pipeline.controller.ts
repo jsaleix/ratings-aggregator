@@ -13,7 +13,7 @@ export class PipelineController {
   @Sse('/movies')
   @Public()
   async all() {
-    return interval(1500).pipe(
+    return interval(2000).pipe(
       switchMap(async (_) => ({
         type: 'update',
         data: { jobs: await this.movieJobPipelineService.getAllRunning() },
@@ -23,7 +23,7 @@ export class PipelineController {
 
   @Sse('/movies/:slug')
   async moviesPipeline(@Param('slug') slug: string) {
-    return interval(1500).pipe(
+    return interval(2000).pipe(
       switchMap(async (_) => ({
         type: 'update',
         data: { job: await this.movieJobPipelineService.getSpecific(slug) },

@@ -91,7 +91,7 @@ class ApiMoviesService {
     }
 
     async getRelated(slug: string): Promise<Array<MovieModel>> {
-        const url = new URL(`/movies/slug/${slug}/related`, API_ENDPOINT);
+        const url = new URL(`/movies/related/${slug}`, API_ENDPOINT);
 
         const res = await fetch(url, {
             method: "GET",
@@ -110,7 +110,7 @@ class ApiMoviesService {
     }
 
     async getBySlug(slug: string) {
-        const url = new URL(`/movies/slug/${slug}`, API_ENDPOINT);
+        const url = new URL(`/movies/${slug}`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "GET",
         });

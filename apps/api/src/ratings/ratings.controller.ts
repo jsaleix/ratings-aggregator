@@ -6,9 +6,9 @@ import { Role } from 'src/auth/decorators/role.decorator';
 export class RatingsController {
   constructor(private readonly ratingsService: RatingsService) {}
 
-  @Get('movie/:movieId')
-  findForMovie(@Param('movieId', ParseUUIDPipe) movieId: string) {
-    return this.ratingsService.findForMovie(movieId);
+  @Get('movie/:slug')
+  findForMovie(@Param('slug') slug: string) {
+    return this.ratingsService.findForMovie(slug);
   }
 
   @Role('admin')

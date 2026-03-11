@@ -8,29 +8,28 @@ export default function useMoviePage(slug: string | undefined) {
     const { isConnected } = useAuthContext();
 
     const { movie, isMovieFetching } = useMovieBySlug(slug);
-    const movieId = movie?.id;
 
     const {
         data: rawRatings,
         refetch: refetchRatings,
         isFetching: isRatingsFetching,
     } = useQuery({
-        queryKey: ["getMovieRatings", movieId],
+        queryKey: ["getMovieRatings", slug],
         queryFn: async () => {
             if (!isConnected) throw new Error("Not authenticated");
-            if (!movieId) throw new Error("missing id");
-            return apiRatingsService.getMovieRatings(movieId);
+            if (!slug) throw new Error("Missing slug");
+            return apiRatingsService.getMovieRatings(slug);
         },
         initialData: [],
         refetchOnWindowFocus: false,
     });
 
     const { data: summary, refetch: refetchSummary } = useQuery({
-        queryKey: ["getMovieRatingsSummary", movieId],
+        queryKey: ["getMovieRatingsSummary", slug],
         queryFn: async () => {
             if (!isConnected) throw new Error("Not authenticated");
-            if (!movieId) throw new Error("missing id");
-            return apiSummaryService.getMovieRatingSummary(movieId);
+            if (!slug) throw new Error("Missing slug");
+            return apiSummaryService.getMovieRatingSummary(slug);
         },
         initialData: undefined,
         refetchOnWindowFocus: false,

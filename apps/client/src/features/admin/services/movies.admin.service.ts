@@ -22,7 +22,7 @@ class ApiAdminMoviesService {
         title,
         year,
     }: AdminFindAllMoviesParams): Promise<PaginatedResult<MovieModel>> {
-        const url = new URL("/movies/admin", API_ENDPOINT);
+        const url = new URL("/movies/admin/all", API_ENDPOINT);
         if (page) url.searchParams.append("page", page.toString());
         if (orderBy) url.searchParams.append("orderBy", orderBy);
         if (order) url.searchParams.append("order", order);

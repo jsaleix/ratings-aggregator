@@ -1,12 +1,12 @@
 import { API_ENDPOINT } from "../../../core/config/api";
 import { authHeaders } from "../../../shared/api/headers";
-import type { RatingsSummaryModel } from "../models/ratings-summary";
+import type { RatingsSummaryModel } from "../../movies/models/ratings-summary";
 import {
-    mapRatingsSummaryApiToModel,
     type ApiRatingsSummaryType,
-} from "../types/ratings-summary.api";
+    mapRatingsSummaryApiToModel,
+} from "../../movies/types/ratings-summary.api";
 
-class ApiSummaryService {
+class ApiAdminSummaryService {
     async getMovieRatingSummary(slug: string): Promise<RatingsSummaryModel> {
         const url = new URL(`/summary/movie/${slug}`, API_ENDPOINT);
         const res = await fetch(url, {
@@ -27,7 +27,7 @@ class ApiSummaryService {
     }
 
     async refresh(movieId: string) {
-        const url = new URL(`/summary/movie/${movieId}/refresh`, API_ENDPOINT);
+        const url = new URL(`/summary/movie/admin/${movieId}/refresh`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "POST",
             headers: { ...authHeaders() },
@@ -41,7 +41,7 @@ class ApiSummaryService {
     }
 
     async delete(id: string) {
-        const url = new URL(`/summary/${id}`, API_ENDPOINT);
+        const url = new URL(`/summary/admin/${id}`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "DELETE",
         });
@@ -54,4 +54,4 @@ class ApiSummaryService {
     }
 }
 
-export default new ApiSummaryService();
+export default new ApiAdminSummaryService();

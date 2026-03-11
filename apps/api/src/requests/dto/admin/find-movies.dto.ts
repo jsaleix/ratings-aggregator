@@ -10,12 +10,14 @@ import {
 import { Transform } from 'class-transformer';
 
 export class AdminFindRequestsDto {
-  @ApiProperty()
+  @ApiProperty({
+    enum: ['id', 'created_at'],
+  })
   @IsString()
   @IsIn(['id', 'created_at'])
   orderBy?: 'id' | 'created_at' = 'created_at';
 
-  @ApiProperty()
+  @ApiProperty({ enum: ['asc', 'desc'] })
   @IsString()
   @IsIn(['asc', 'desc'])
   order?: 'asc' | 'desc' = 'asc';
