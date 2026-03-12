@@ -1,8 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { createContext } from "react";
+import type { Meta, StoryObj } from "@storybook/react";
 
 import Component from "./header";
-import { MemoryRouter } from "react-router";
 
 const authCtx = createContext({});
 
@@ -16,11 +15,9 @@ const meta: Meta<typeof Component> = {
         (Story, { args }) => {
             const { isConnected } = args as { isConnected: boolean };
             return (
-                <MemoryRouter>
-                    <authCtx.Provider value={{ isConnected }}>
-                        <Story />
-                    </authCtx.Provider>
-                </MemoryRouter>
+                <authCtx.Provider value={{ isConnected }}>
+                    <Story />
+                </authCtx.Provider>
             );
         },
     ],
