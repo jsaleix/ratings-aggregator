@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
-import { motion, stagger } from "motion/react";
+import { AnimatePresence, motion, stagger } from "motion/react";
 
 import Button from "../../../shared/ui/button";
 import PageHeader from "../../../shared/ui/page-header";
@@ -58,17 +58,6 @@ export default function RequestsPage() {
         },
     });
 
-    // const { data } = useQuery({
-    //     queryKey: ["getRequests"],
-    //     queryFn: async () => {
-    //         const res = await apiRequestService.getAll();
-    //         return res.map((item) => mapApiRequestToMovieRequestModel(item));
-    //     },
-    //     initialData: [],
-    //     refetchOnWindowFocus: false,
-    //     refetchInterval: 15000,
-    // });
-
     const { jobs, requests } = useMoviesJobPipeline();
 
     return (
@@ -107,7 +96,9 @@ export default function RequestsPage() {
                         id="requests_list"
                         className="flex w-full flex-col justify-start md:justify-center "
                     >
-                        <h2 className="text-xl font-semibold pb-3">Requests</h2>
+                        <h2 className="text-xl font-semibold pb-3">
+                            Requests ({requests.length})
+                        </h2>
                         {requests.length === 0 && (
                             <p className="text-center text-text-secondary font-thin">
                                 There is no movie movie request pending
@@ -120,15 +111,20 @@ export default function RequestsPage() {
                                 animate="visible"
                                 initial="hidden"
                             >
-                                {requests.map((request) => (
-                                    <motion.li
-                                        className="list-none"
-                                        variants={itemVariants}
-                                        key={request.id}
-                                    >
-                                        <RequestListItem request={request} />
-                                    </motion.li>
-                                ))}
+                                <AnimatePresence>
+                                    {requests.map((request) => (
+                                        <motion.li
+                                            className="list-none"
+                                            variants={itemVariants}
+                                            exit={"hidden"}
+                                            key={request.id}
+                                        >
+                                            <RequestListItem
+                                                request={request}
+                                            />
+                                        </motion.li>
+                                    ))}
+                                </AnimatePresence>
                             </motion.ul>
                         )}
                     </div>
@@ -138,7 +134,7 @@ export default function RequestsPage() {
                         className="flex w-full flex-col justify-center px-5 md:px-0 md:pb-5"
                     >
                         <h2 className="text-xl font-semibold pb-3">
-                            Current jobs
+                            Current jobs ({jobs.length})
                         </h2>
                         {jobs.length === 0 && (
                             <p className="text-center text-text-secondary font-thin">
@@ -152,15 +148,18 @@ export default function RequestsPage() {
                                 animate="visible"
                                 initial="hidden"
                             >
-                                {jobs.map((job) => (
-                                    <motion.li
-                                        className="list-none"
-                                        variants={itemVariants}
-                                        key={job.id}
-                                    >
-                                        <MovieJobListItem job={job} />
-                                    </motion.li>
-                                ))}
+                                <AnimatePresence>
+                                    {jobs.map((job) => (
+                                        <motion.li
+                                            className="list-none"
+                                            variants={itemVariants}
+                                            exit={"hidden"}
+                                            key={job.id}
+                                        >
+                                            <MovieJobListItem job={job} />
+                                        </motion.li>
+                                    ))}
+                                </AnimatePresence>
                             </motion.ul>
                         )}
                     </div>
