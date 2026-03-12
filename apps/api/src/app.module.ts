@@ -17,6 +17,7 @@ import { SummaryModule } from './summary/summary.module';
 import { CompareModule } from './compare/compare.module';
 import { StatsModule } from './stats/stats.module';
 import { PipelineModule } from './pipelines/pipeline.module';
+import { SSEModule } from './infra/sse/pipeline.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { PipelineModule } from './pipelines/pipeline.module';
     CompareModule,
     StatsModule,
     PipelineModule,
+    SSEModule,
   ],
   controllers: [AppController],
   providers: [

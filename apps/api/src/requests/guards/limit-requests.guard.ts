@@ -17,7 +17,6 @@ export class LimitRequestsGuard implements CanActivate {
   constructor(
     @Inject(forwardRef(() => MovieJobPipelineService))
     private movieJobPipelineService: MovieJobPipelineService,
-    // private reflector: Reflector,
     private requestsQuotaService: RequestsQuotaService,
   ) {}
 

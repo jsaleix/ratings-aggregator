@@ -18,7 +18,7 @@ export default function useMoviesJobPipeline() {
     };
 
     useEffect(() => {
-        const url = new URL("/pipelines/movies", API_ENDPOINT);
+        const url = new URL("/sse/movies", API_ENDPOINT);
         const eventSource = new EventSource(url);
         sseRef.current = eventSource;
         eventSource.addEventListener("update", onUpdate);

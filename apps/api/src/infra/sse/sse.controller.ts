@@ -1,12 +1,14 @@
 import { Controller, Param, Sse } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { interval, switchMap } from 'rxjs';
 
 import { Public } from 'src/auth/decorators/public.decorator';
-import { MovieJobPipelineService } from './services/movie-job-pipeline.service';
+import { MovieJobPipelineService } from 'src/pipelines/services/movie-job-pipeline.service';
 import { RequestsService } from 'src/requests/services/requests.service';
 
-@Controller('pipelines')
-export class PipelineController {
+@ApiTags('SSE')
+@Controller('sse')
+export class SSEController {
   constructor(
     private readonly movieJobPipelineService: MovieJobPipelineService,
     private readonly requestsService: RequestsService,

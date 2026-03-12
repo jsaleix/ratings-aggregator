@@ -20,7 +20,7 @@ export default function useMovieJobPipeline({ slug, cb }: Props) {
     };
 
     useEffect(() => {
-        const url = new URL(`/pipelines/movies/${slug}`, API_ENDPOINT);
+        const url = new URL(`/sse/movies/${slug}`, API_ENDPOINT);
         const eventSource = new EventSource(url, {
             withCredentials: true,
         });
