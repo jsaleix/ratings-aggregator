@@ -1,14 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Link, useParams } from "react-router";
 import { formatDistanceToNow } from "date-fns";
 
 import { BASE_POSTER_URL } from "../../../core/config/misc";
 import { useAuthContext } from "../../../core/auth/provider";
 import { setPageTitle } from "../../../shared/utils/page";
-import { displayMsg } from "../../../shared/utils/toast";
 import Button from "../../../shared/ui/button";
-import ArrowIcon from "../../../shared/ui/icons/arrow-icon";
-import Spinner from "../../../shared/ui/spinner";
 
 import MoviePageSkeleton from "../components/movie-page-skeleton";
 import LastMoviesAdded from "../components/movie-posters-section/last-movies-added";
@@ -17,43 +14,25 @@ import RatingListPart from "../components/rating-list-part";
 import GenresLabelsPart from "../components/genres-labels-part";
 import SimilarMovies from "../components/movie-posters-section/similar-movies";
 import MovieSummaryItem from "../components/movie-summary-item";
+import QuickRequestBtn from "../components/quick-request-btn";
 
-import useRequest from "../../requests/hooks/use-request";
 import useMovieJobPipeline from "../../pipelines/hooks/use-movie-job-pipeline";
 import useMoviePage from "../hooks/use-movie-page";
 
 export default function MoviePage() {
     const { isConnected } = useAuthContext();
     let { slug } = useParams();
-    const [disableRequestBtn, setDisableRequestBtn] = useState(false);
     const { movie, isMovieFetching, ratings, summary, refetchAll } =
         useMoviePage(slug);
 
     const lastStatus = useRef<any>(null);
-    const { status } = useMovieJobPipeline({
+    const { status: jobStatus } = useMovieJobPipeline({
         slug,
         cb: (status) => {
             if (status === null && lastStatus.current !== null) refetchAll();
             lastStatus.current = status;
-            setDisableRequestBtn(false);
         },
     });
-
-    const { createRequestMutation } = useRequest({
-        successCb: () => {
-            displayMsg("Request added to the queue!", "success");
-        },
-        errorCb: (e) => {
-            displayMsg(e.message, "error");
-            setDisableRequestBtn(false);
-        },
-    });
-
-    const handleCreateRequest = () => {
-        if (!movie) return;
-        setDisableRequestBtn(true);
-        createRequestMutation({ tmdbId: movie.tmdbId });
-    };
 
     const lastUpdatedStr = useMemo(() => {
         if (!movie) return "";
@@ -165,7 +144,7 @@ export default function MoviePage() {
                         <h1 className="text-xl font-bold uppercase text-white">
                             <span className="text-secondary">R</span>atings
                         </h1>
-                        {!status ? (
+                        {!jobStatus ? (
                             <p className="text-text-secondary">
                                 Updated {lastUpdatedStr}
                             </p>
@@ -178,19 +157,13 @@ export default function MoviePage() {
                             <RatingListPart ratings={ratings} />
                             {summary && <MovieSummaryItem data={summary} />}
                             {/* <CompareBtn movieId={movie.id} /> */}
-                            <Button
-                                disabled={status !== null || disableRequestBtn}
-                                className="text-black flex items-center gap-3 w-fit"
-                                variant={"secondary"}
-                                onClick={handleCreateRequest}
-                            >
-                                Quick request
-                                {status !== null || disableRequestBtn ? (
-                                    <Spinner />
-                                ) : (
-                                    <ArrowIcon className="fill-black group-hover:translate-x-1.5 duration-150" />
-                                )}
-                            </Button>
+                            {(ratings || summary) && (
+                                <QuickRequestBtn
+                                    movie={movie}
+                                    jobStatus={jobStatus}
+                                    key={lastUpdatedStr}
+                                />
+                            )}
                         </>
                     ) : (
                         <div className="w-full flex flex-col items-center justify-center gap-3">
