@@ -35,7 +35,7 @@ function App() {
 
     useEffect(() => {
         document.title =
-            "Aggregator - Show movie ratings accross popular websites";
+            "Aggregator - Show movie ratings across popular websites";
     }, [pathname]);
 
     return (

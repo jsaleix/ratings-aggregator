@@ -56,7 +56,7 @@ summaryWorker.on("failed", async (job, error) => {
 
     await movieJobPipelineService.setFailed(
         job.data.payload.tmdb_id,
-        MOVIE_STATUS.RATING,
+        MOVIE_STATUS.SUMMARIZING,
         error.message,
     );
 });

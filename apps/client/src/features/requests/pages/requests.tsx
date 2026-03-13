@@ -101,7 +101,7 @@ export default function RequestsPage() {
                         </h2>
                         {requests.length === 0 && (
                             <p className="text-center text-text-secondary font-thin">
-                                There is no movie movie request pending
+                                There is no movie request pending
                             </p>
                         )}
                         {requests.length > 0 && (
