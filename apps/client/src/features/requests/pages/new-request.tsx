@@ -13,19 +13,6 @@ export default function NewRequestPage() {
     const navigate = useNavigate();
     const [searchBy, setSearchBy] = useState<"title" | "tmdbId">("title");
 
-    // const { mutateAsync: createRequest } = useMutation({
-    //     mutationFn: async (request: CreateRequestType) => {
-    //         return await apiRequestService.create(request);
-    //     },
-    //     onSuccess: () => {
-    //         displayMsg("Request successfuly added!", "success");
-    //         navigate("/requests");
-    //     },
-    //     onError: (e) => {
-    //         displayMsg(e.message, "error");
-    //     },
-    // });
-
     const { createRequestMutation } = useRequest({
         successCb: () => {
             displayMsg("Request successfuly added!", "success");
@@ -59,7 +46,7 @@ export default function NewRequestPage() {
                         </Button>
                     </div>
                 </PageHeader>
-                <div className="flex md:w-2/3">
+                <div className="flex md:w-96">
                     {searchBy === "title" && (
                         <RequestPremiumForm
                             label="Create"

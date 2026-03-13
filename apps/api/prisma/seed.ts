@@ -2,7 +2,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { RatingUnit } from 'generated/prisma/enums';
 import { PrismaClient } from '../generated/prisma/client';
 
-import { RequestsQuotaService } from 'src/requests/services/requests-quota.service';
+import { RequestsQuotaService } from 'src/modules/requests/services/requests-quota.service';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });

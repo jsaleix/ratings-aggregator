@@ -1,14 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
-import { motion, stagger } from "motion/react";
+import { AnimatePresence, motion, stagger } from "motion/react";
 
 import Button from "../../../shared/ui/button";
 import PageHeader from "../../../shared/ui/page-header";
+import Divider from "../../../shared/ui/divider";
+
 import { useAuthContext } from "../../../core/auth/provider";
 import LastMoviesUpdated from "../../movies/components/movie-posters-section/last-movies-updated";
 import apiRequestService from "../services/api-request.service";
+import useMoviesJobPipeline from "../../pipelines/hooks/use-movies-job-pipeline";
+import MovieJobListItem from "../../pipelines/components/movie-job-list-item";
 import RequestListItem from "../components/requests-list-item";
-import { mapApiRequestToMovieRequestModel } from "../types/api-request";
 
 const itemVariants = {
     hidden: {
@@ -55,16 +58,7 @@ export default function RequestsPage() {
         },
     });
 
-    const { data } = useQuery({
-        queryKey: ["getRequests"],
-        queryFn: async () => {
-            const res = await apiRequestService.getAll();
-            return res.map((item) => mapApiRequestToMovieRequestModel(item));
-        },
-        initialData: [],
-        refetchOnWindowFocus: false,
-        refetchInterval: 15000,
-    });
+    const { jobs, requests } = useMoviesJobPipeline();
 
     return (
         <div className="w-full">
@@ -96,30 +90,79 @@ export default function RequestsPage() {
                         </Button>
                     </Link>
                 </PageHeader>
-                <div className="flex w-full flex-col justify-center px-5 md:px-0 md:py-5">
-                    {data.length === 0 && (
-                        <p className="text-center text-text-secondary font-thin">
-                            There is no request pending
-                        </p>
-                    )}
-                    {data.length > 0 && (
-                        <motion.ul
-                            className="w-full flex flex-col border-0 border-t-bg-light gap-2"
-                            variants={wrapperVariants}
-                            animate="visible"
-                            initial="hidden"
-                        >
-                            {data.map((request) => (
-                                <motion.li
-                                    className="list-none"
-                                    variants={itemVariants}
-                                    key={request.id}
-                                >
-                                    <RequestListItem request={request} />
-                                </motion.li>
-                            ))}
-                        </motion.ul>
-                    )}
+                <Divider />
+                <div className="w-full flex flex-col md:flex-row gap-3 md:items-start md:justify-start">
+                    <div
+                        id="requests_list"
+                        className="flex w-full flex-col justify-start md:justify-center "
+                    >
+                        <h2 className="text-xl font-semibold pb-3">
+                            Requests ({requests.length})
+                        </h2>
+                        {requests.length === 0 && (
+                            <p className="text-center text-text-secondary font-thin">
+                                There is no movie request pending
+                            </p>
+                        )}
+                        {requests.length > 0 && (
+                            <motion.ul
+                                className="w-full flex flex-col border-0 border-t-bg-light gap-2 max-h-[500px] overflow-y-scroll"
+                                variants={wrapperVariants}
+                                animate="visible"
+                                initial="hidden"
+                            >
+                                <AnimatePresence>
+                                    {requests.map((request) => (
+                                        <motion.li
+                                            className="list-none"
+                                            variants={itemVariants}
+                                            exit={"hidden"}
+                                            key={request.id}
+                                        >
+                                            <RequestListItem
+                                                request={request}
+                                            />
+                                        </motion.li>
+                                    ))}
+                                </AnimatePresence>
+                            </motion.ul>
+                        )}
+                    </div>
+                    <Divider css={"block md:hidden"} />
+                    <div
+                        id="jobs_list"
+                        className="flex w-full flex-col justify-center px-5 md:px-0 md:pb-5"
+                    >
+                        <h2 className="text-xl font-semibold pb-3">
+                            Current jobs ({jobs.length})
+                        </h2>
+                        {jobs.length === 0 && (
+                            <p className="text-center text-text-secondary font-thin">
+                                There is no movie being added
+                            </p>
+                        )}
+                        {jobs.length > 0 && (
+                            <motion.ul
+                                className="w-full flex flex-col border-0 border-t-bg-light gap-2 max-h-[500px] overflow-y-scroll"
+                                variants={wrapperVariants}
+                                animate="visible"
+                                initial="hidden"
+                            >
+                                <AnimatePresence>
+                                    {jobs.map((job) => (
+                                        <motion.li
+                                            className="list-none"
+                                            variants={itemVariants}
+                                            exit={"hidden"}
+                                            key={job.id}
+                                        >
+                                            <MovieJobListItem job={job} />
+                                        </motion.li>
+                                    ))}
+                                </AnimatePresence>
+                            </motion.ul>
+                        )}
+                    </div>
                 </div>
             </div>
             <LastMoviesUpdated />

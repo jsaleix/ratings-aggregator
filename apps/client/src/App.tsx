@@ -18,7 +18,7 @@ const SearchMoviesPage = lazy(() => import("./features/movies/pages/search"));
 
 const RequestsPage = lazy(() => import("./features/requests/pages/requests"));
 const CreateRequestsPage = lazy(
-    () => import("./features/requests/pages/new-request")
+    () => import("./features/requests/pages/new-request"),
 );
 
 const AuthPage = lazy(() => import("./features/auth/pages/auth"));
@@ -34,7 +34,8 @@ function App() {
     const { pathname } = useLocation();
 
     useEffect(() => {
-        document.title = "Aggregator";
+        document.title =
+            "Aggregator - Show movie ratings across popular websites";
     }, [pathname]);
 
     return (

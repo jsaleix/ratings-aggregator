@@ -1,18 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import Component from ".";
-import { MemoryRouter } from "react-router";
 
 const meta: Meta<typeof Component> = {
     title: "Movies/CompareBtn",
     component: Component,
     decorators: [
         (Story) => (
-            <MemoryRouter>
-                <div style={{ width: "100vw", height: "100vh" }}>
-                    <Story />
-                </div>
-            </MemoryRouter>
+            <div style={{ width: "100vw", height: "100vh" }}>
+                <Story />
+            </div>
         ),
     ],
     args: { movieId: "123" },

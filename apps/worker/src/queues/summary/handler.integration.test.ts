@@ -19,7 +19,7 @@ describe("SummaryHandler Integration", () => {
         summaryQueue = new Queue(queueName, { connection });
 
         const handler = new SummaryHandler(
-            mockUseCaseService as unknown as GenerateMovieSummaryUseCase
+            mockUseCaseService as unknown as GenerateMovieSummaryUseCase,
         );
 
         worker = new Worker(
@@ -27,7 +27,7 @@ describe("SummaryHandler Integration", () => {
             async (job: Job) => {
                 await handler.handle(job);
             },
-            { connection }
+            { connection },
         );
     });
 
@@ -51,7 +51,7 @@ describe("SummaryHandler Integration", () => {
 
         await summaryQueue.add("generate-movie-summary-test-1", {
             type: "movie",
-            payload: { id: "42" },
+            payload: { movie_id: "42" },
         });
 
         await completed;
@@ -67,7 +67,7 @@ describe("SummaryHandler Integration", () => {
 
         await summaryQueue.add("generate-movie-summary-test-2", {
             type: "anime",
-            payload: { id: "47" },
+            payload: { movie_id: "47" },
         });
 
         await failed;
@@ -83,7 +83,7 @@ describe("SummaryHandler Integration", () => {
 
         await summaryQueue.add("generate-movie-summary-test-3", {
             type: "movie",
-            payload: { id: "" },
+            payload: { movie_id: "" },
         });
 
         await failed;

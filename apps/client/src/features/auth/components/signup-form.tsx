@@ -2,20 +2,21 @@ import { Link } from "react-router";
 import { useForm, useStore } from "@tanstack/react-form";
 import clsx from "clsx";
 
+import { LEGALS_LINKS } from "../../../core/config/links";
 import Button from "../../../shared/ui/button";
 import Input from "../../../shared/ui/input";
 import { signupSchema } from "../types/auth";
 import { displayMsg } from "../../../shared/utils/toast";
 import userService from "../services/user.service";
-import { LEGALS_LINKS } from "../../../core/config/links";
 
 import FieldInfo from "./field-info";
 
 interface Props {
     containerCss?: string;
+    onSuccess?: () => void;
 }
 
-export default function SignupForm({ containerCss }: Props) {
+export default function SignupForm({ containerCss, onSuccess }: Props) {
     const containerStyle = clsx("flex flex-col gap-5 rounded-md", containerCss);
 
     const form = useForm({
@@ -31,6 +32,7 @@ export default function SignupForm({ containerCss }: Props) {
                 await userService.signup(value);
                 form.reset();
                 displayMsg("Account created! You can login now", "success");
+                onSuccess && onSuccess();
             } catch (e) {
                 if (e instanceof Error) displayMsg(e.message, "error");
                 else displayMsg("Could not create your account", "error");

@@ -22,7 +22,7 @@ describe("SummaryHandler Unit", () => {
         );
 
         const jobMock = {
-            data: { type: "movie", payload: { id: "42" } },
+            data: { type: "movie", payload: { movie_id: "42" } },
         } as Job<SummaryJob>;
 
         const result = await handler.handle(jobMock);
@@ -33,7 +33,7 @@ describe("SummaryHandler Unit", () => {
 
     test("should throw if id is missing", async () => {
         const jobMock = {
-            data: { type: "movie", payload: { id: "" } },
+            data: { type: "movie", payload: { movie_id: "" } },
         } as Job<SummaryJob>;
 
         await expect(handler.handle(jobMock)).rejects.toThrow("Missing id");
@@ -41,7 +41,7 @@ describe("SummaryHandler Unit", () => {
 
     test("should throw for series type", async () => {
         const jobMock = {
-            data: { type: "series", payload: { id: "42" } },
+            data: { type: "series", payload: { movie_id: "42" } },
         } as Job<SummaryJob>;
 
         await expect(handler.handle(jobMock)).rejects.toThrow(
@@ -53,7 +53,7 @@ describe("SummaryHandler Unit", () => {
         const jobMock = {
             data: {
                 type: "anime" as SummaryJob["type"],
-                payload: { id: "42" },
+                payload: { movie_id: "42" },
             },
         } as Job<SummaryJob>;
 

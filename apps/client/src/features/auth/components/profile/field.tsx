@@ -15,7 +15,7 @@ export default function Field({ name, subTitle, children }: Props) {
                     </p>
                 )}
             </div>
-            <div className="w-full md:w-1/2">{children}</div>
+            <div className="w-full md:max-w-96">{children}</div>
         </div>
     );
 }
