@@ -1,20 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Component from "./index";
-import { MemoryRouter } from "react-router";
 import { fn } from "storybook/test";
+import Component from "./index";
 
 const meta: Meta<typeof Component> = {
     title: "Shared/HeaderSearchInput",
     component: Component,
-    decorators: [
-        (Story, { args }) => {
-            return (
-                <MemoryRouter>
-                    <Story {...args} />
-                </MemoryRouter>
-            );
-        },
-    ],
 };
 
 export default meta;

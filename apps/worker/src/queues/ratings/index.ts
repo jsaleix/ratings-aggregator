@@ -1,17 +1,21 @@
-import { Worker } from "bullmq";
+import { Job, Worker } from "bullmq";
 
 import { QUEUES, RedisMqConnection } from "../../config/bullmq";
 import { logger } from "../../shared/logger";
+import { MOVIE_STATUS } from "../../shared/modules/movie-job-pipeline/constants";
+import { PrismaMovieJobPipelineService } from "../../shared/modules/movie-job-pipeline/services/prisma.service";
 
 import PrismaMovieRepository from "../../features/movies/repositories/prisma-movie.repository";
 import PrismaRatingRepository from "../../features/ratings/repositories/prisma-rating.repository";
 import { PrismaRatingSourceRepository } from "../../features/ratings/repositories/prisma-rating-source.repository";
 import { SetMovieRatings } from "../../features/ratings/use-cases/set-movie-ratings";
 import { RatingCollectorService } from "../../features/ratings/services/rating-collector.service";
+import { RatingSourceService } from "../../features/ratings/services/rating-source.service";
 
 import { summaryQueue } from "..";
-import RatingHandler from "./handler";
-import { RatingSourceService } from "../../features/ratings/services/rating-source.service";
+import RatingHandler, { RatingJob } from "./handler";
+
+const movieJobPipelineService = new PrismaMovieJobPipelineService();
 
 const movieRepository = new PrismaMovieRepository();
 const ratingSourceRepository = new PrismaRatingSourceRepository();
@@ -43,31 +47,27 @@ export const ratingWorker = new Worker(
     },
 );
 
-ratingWorker.on("active", (job) => {
+ratingWorker.on("active", (job: Job<RatingJob>) => {
     logger.info("Rating worker active", {
         tags: ["rating-worker", "worker"],
         payload: job.data.payload,
-        movieId: job.data.payload.id,
     });
 });
 
-ratingWorker.on("completed", async (job) => {
+ratingWorker.on("completed", async (job: Job<RatingJob>) => {
     logger.info("Rating worker completed", {
         tags: ["rating-worker", "worker"],
         payload: job.data.payload,
-        movieId: job.data.payload.id,
     });
 
-    const { id } = job.data.payload;
-    if (!id) throw new Error("No id found in payload");
+    const { movie_id, movie_slug, tmdb_id } = job.data.payload;
+    if (!movie_id) throw new Error("No id found in payload");
 
-    await movieRepository.updateMovie(id, {
-        updated_at: new Date().toISOString(),
-    });
+    await movieJobPipelineService.setSummarizing(tmdb_id);
     await summaryQueue.add(
         "generate-summary",
         {
-            payload: { id },
+            payload: { movie_id, tmdb_id, movie_slug },
             type: "movie",
             removeOnComplete: true,
             removeOnFail: true,
@@ -82,11 +82,17 @@ ratingWorker.on("completed", async (job) => {
     );
 });
 
-ratingWorker.on("failed", (job, error) => {
+ratingWorker.on("failed", async (job, error) => {
     logger.error("Rating worker failed", {
         tags: ["rating-worker", "worker"],
         payload: job?.data.payload,
-        movieId: job?.data.payload.id,
         error: error,
     });
+    if (job?.data == undefined) return;
+
+    await movieJobPipelineService.setFailed(
+        job.data.payload.tmdb_id,
+        MOVIE_STATUS.RATING,
+        error.message,
+    );
 });

@@ -5,28 +5,29 @@ import { GenerateMovieSummaryUseCase } from "../../features/summary/use-cases/ge
 export type SummaryJob = {
     type: "movie" | "series";
     payload: {
-        id: string;
+        movie_id: string;
+        movie_slug: string;
+        tmdb_id: number;
     };
 };
 
 class SummaryHandler {
     constructor(
-        private generateMovieSummaryUseCase: GenerateMovieSummaryUseCase
+        private generateMovieSummaryUseCase: GenerateMovieSummaryUseCase,
     ) {}
 
     async handle(job: Job<SummaryJob>) {
         const {
             type,
-            payload: { id },
+            payload: { movie_id },
         } = job.data;
-        if (!id) throw new Error("Missing id");
+        if (!movie_id) throw new Error("Missing id");
         switch (type) {
             case "movie":
-                return await this.generateMovieSummaryUseCase.execute(id);
-                break;
+                return await this.generateMovieSummaryUseCase.execute(movie_id);
             case "series":
                 throw new Error(
-                    "Generating series ratings summary is not implemented yet"
+                    "Generating series ratings summary is not implemented yet",
                 );
             default:
                 throw new Error(`Unhandled job type: ${type}`);

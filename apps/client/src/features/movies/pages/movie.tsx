@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Link, useParams } from "react-router";
 import { formatDistanceToNow } from "date-fns";
 
 import { BASE_POSTER_URL } from "../../../core/config/misc";
 import { useAuthContext } from "../../../core/auth/provider";
-import { ROLES } from "../../../core/auth/constants";
 import { setPageTitle } from "../../../shared/utils/page";
 import Button from "../../../shared/ui/button";
 
@@ -12,43 +11,28 @@ import MoviePageSkeleton from "../components/movie-page-skeleton";
 import LastMoviesAdded from "../components/movie-posters-section/last-movies-added";
 import LastMoviesUpdated from "../components/movie-posters-section/last-movies-updated";
 import RatingListPart from "../components/rating-list-part";
-import MovieSummaryPart from "../components/movie-summary-part";
-
-import useMovieRatings from "../hooks/use-movie-ratings";
-import useMovieSummary from "../hooks/use-movie-summary";
-import useMovieBySlug from "../hooks/use-movie-by-slug";
 import GenresLabelsPart from "../components/genres-labels-part";
 import SimilarMovies from "../components/movie-posters-section/similar-movies";
-import useRequest from "../../requests/hooks/use-request";
-import { displayMsg } from "../../../shared/utils/toast";
-import ArrowIcon from "../../../shared/ui/icons/arrow-icon";
+import MovieSummaryItem from "../components/movie-summary-item";
+import QuickRequestBtn from "../components/quick-request-btn";
+
+import useMovieJobPipeline from "../../pipelines/hooks/use-movie-job-pipeline";
+import useMoviePage from "../hooks/use-movie-page";
 
 export default function MoviePage() {
-    const { isConnected, role } = useAuthContext();
-    const hasAdminRights =
-        !!role && (ROLES.ADMIN === role || ROLES.MOD === role);
+    const { isConnected } = useAuthContext();
     let { slug } = useParams();
-    const [disableRequestBtn, setDisableRequestBtn] = useState(false);
-    const { movie, isMovieFetching } = useMovieBySlug(slug);
-    const { ratings, deleteRatingMutation } = useMovieRatings(movie?.id);
-    const { summary, deleteSummaryMutation, refreshSummaryMutation } =
-        useMovieSummary(movie?.id);
+    const { movie, isMovieFetching, ratings, summary, refetchAll } =
+        useMoviePage(slug);
 
-    const { createRequestMutation } = useRequest({
-        successCb: () => {
-            displayMsg("Request added to the queue!", "success");
-        },
-        errorCb: (e) => {
-            displayMsg(e.message, "error");
-            setDisableRequestBtn(false);
+    const lastStatus = useRef<any>(null);
+    const { status: jobStatus } = useMovieJobPipeline({
+        slug,
+        cb: (status) => {
+            if (status === null && lastStatus.current !== null) refetchAll();
+            lastStatus.current = status;
         },
     });
-
-    const handleCreateRequest = () => {
-        if (!movie) return;
-        setDisableRequestBtn(true);
-        createRequestMutation({ tmdbId: movie.tmdbId });
-    };
 
     const lastUpdatedStr = useMemo(() => {
         if (!movie) return "";
@@ -160,33 +144,26 @@ export default function MoviePage() {
                         <h1 className="text-xl font-bold uppercase text-white">
                             <span className="text-secondary">R</span>atings
                         </h1>
-                        <p className="text-text-secondary">
-                            Updated {lastUpdatedStr}
-                        </p>
+                        {!jobStatus ? (
+                            <p className="text-text-secondary">
+                                Updated {lastUpdatedStr}
+                            </p>
+                        ) : (
+                            <p className="text-text-secondary">Updating...</p>
+                        )}
                     </div>
                     {isConnected ? (
                         <>
-                            <RatingListPart
-                                ratings={ratings}
-                                adminOptions={hasAdminRights}
-                                deleteAction={deleteRatingMutation}
-                            />
-                            <MovieSummaryPart
-                                summary={summary}
-                                adminOptions={hasAdminRights}
-                                deleteAction={deleteSummaryMutation}
-                                refreshAction={refreshSummaryMutation}
-                            />
+                            <RatingListPart ratings={ratings} />
+                            {summary && <MovieSummaryItem data={summary} />}
                             {/* <CompareBtn movieId={movie.id} /> */}
-                            <Button
-                                disabled={disableRequestBtn}
-                                className="text-black flex items-center gap-3 w-fit"
-                                variant={"secondary"}
-                                onClick={handleCreateRequest}
-                            >
-                                Quick request
-                                <ArrowIcon className="fill-black group-hover:translate-x-1.5 duration-150" />
-                            </Button>
+                            {(ratings || summary) && (
+                                <QuickRequestBtn
+                                    movie={movie}
+                                    jobStatus={jobStatus}
+                                    key={lastUpdatedStr}
+                                />
+                            )}
                         </>
                     ) : (
                         <div className="w-full flex flex-col items-center justify-center gap-3">

@@ -7,8 +7,8 @@ import {
 } from "../types/ratings-summary.api";
 
 class ApiSummaryService {
-    async getMovieRatingSummary(movieId: string): Promise<RatingsSummaryModel> {
-        const url = new URL(`/summary/movie/${movieId}`, API_ENDPOINT);
+    async getMovieRatingSummary(slug: string): Promise<RatingsSummaryModel> {
+        const url = new URL(`/summary/movie/${slug}`, API_ENDPOINT);
         const res = await fetch(url, {
             method: "GET",
             headers: { ...authHeaders() },
@@ -18,7 +18,8 @@ class ApiSummaryService {
                 .json()
                 .catch(() => ({ message: res.statusText }));
             throw new Error(
-                error.message ?? `Error fetching movie summary: ${res.statusText}`,
+                error.message ??
+                    `Error fetching movie summary: ${res.statusText}`,
             );
         }
         const response = (await res.json()) as ApiRatingsSummaryType;

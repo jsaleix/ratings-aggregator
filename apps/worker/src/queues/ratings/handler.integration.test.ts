@@ -19,7 +19,7 @@ describe("RatingHandler Integration", () => {
         ratingQueue = new Queue(queueName, { connection });
 
         const handler = new RatingHandler(
-            mockUseCaseService as unknown as SetMovieRatings
+            mockUseCaseService as unknown as SetMovieRatings,
         );
 
         worker = new Worker(
@@ -27,7 +27,7 @@ describe("RatingHandler Integration", () => {
             async (job: Job) => {
                 await handler.handle(job);
             },
-            { connection }
+            { connection },
         );
     });
 
@@ -51,7 +51,7 @@ describe("RatingHandler Integration", () => {
 
         await ratingQueue.add("save-movie-ratings-test-1", {
             type: "movie",
-            payload: { id: "42" },
+            payload: { movie_id: "42" },
         });
 
         await completed;
@@ -67,7 +67,7 @@ describe("RatingHandler Integration", () => {
 
         await ratingQueue.add("save-movie-ratings-test-2", {
             type: "series",
-            payload: { id: "47" },
+            payload: { movie_id: "47" },
         });
 
         await failed;
@@ -83,7 +83,7 @@ describe("RatingHandler Integration", () => {
 
         await ratingQueue.add("save-movie-ratings-test-3", {
             type: "movie",
-            payload: { id: "" },
+            payload: { movie_id: "" },
         });
 
         await failed;
