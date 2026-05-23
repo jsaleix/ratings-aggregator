@@ -1,6 +1,10 @@
 import puppeteer from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
 import { logger } from "../../../shared/logger";
+import {
+    AllocineRatingType,
+    RatingProviderInterface,
+} from "../interfaces/providers";
 // import { writeFileSync } from "fs";
 
 const userAgent =
@@ -16,7 +20,7 @@ export const getAllocineScore = async (name: string, year: number) => {
     await page.setUserAgent(userAgent);
     try {
         const searchUrl = `https://www.allocine.fr/rechercher/?q=${encodeURIComponent(
-            `${name} ${year}`
+            `${name} ${year}`,
         )}`;
         console.log(searchUrl);
 
@@ -34,7 +38,7 @@ export const getAllocineScore = async (name: string, year: number) => {
 
         let scores = await page.evaluate((targetYear: number) => {
             const rows = document.querySelectorAll(
-                "section.movies-results > ul > li"
+                "section.movies-results > ul > li",
             );
 
             if (rows.length === 0) return null;
@@ -59,8 +63,14 @@ export const getAllocineScore = async (name: string, year: number) => {
         });
         if (error instanceof Error) console.error("❌ Erreur :", error.message);
         else console.error(error);
-        return null;
+        throw error;
     } finally {
         await browser.close();
     }
 };
+
+export class AllocineProvider implements RatingProviderInterface<AllocineRatingType> {
+    async getRatings(name: string, year: number) {
+        return getAllocineScore(name, year);
+    }
+}

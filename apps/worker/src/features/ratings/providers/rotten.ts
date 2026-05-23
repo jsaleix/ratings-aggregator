@@ -1,5 +1,9 @@
 import puppeteer from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
+import {
+    RatingProviderInterface,
+    RottenRatingType,
+} from "../interfaces/providers";
 
 export const getRottenTomatoesScores = async (name: string, year: number) => {
     const browser = await puppeteer.launch({
@@ -11,7 +15,7 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
 
     try {
         const searchUrl = `https://www.rottentomatoes.com/search?search=${encodeURIComponent(
-            name
+            name,
         )}`;
         console.log("searchUrl:", searchUrl);
         await page.goto(searchUrl, { waitUntil: "domcontentloaded" });
@@ -22,12 +26,12 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
 
         const movieUrl = await page.evaluate((targetYear) => {
             const movieResultSection = document.querySelector(
-                "search-page-result[type='movie']"
+                "search-page-result[type='movie']",
             );
             if (!movieResultSection) return null;
 
             const rows = Array.from(
-                movieResultSection.querySelectorAll("search-page-media-row")
+                movieResultSection.querySelectorAll("search-page-media-row"),
             );
 
             for (const row of rows) {
@@ -56,11 +60,11 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
 
         let criticsRatings = await page.$eval(
             criticsSelector,
-            (el) => el.textContent?.trim() || "N/A"
+            (el) => el.textContent?.trim() || "N/A",
         );
         let audienceRatings = await page.$eval(
             audienceSelector,
-            (el) => el.textContent?.trim() || "N/A"
+            (el) => el.textContent?.trim() || "N/A",
         );
 
         if (criticsRatings.indexOf("%") == -1) criticsRatings = "N/A";
@@ -85,3 +89,9 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
         await browser.close();
     }
 };
+
+export class RottenProvider implements RatingProviderInterface<RottenRatingType> {
+    async getRatings(name: string, year: number) {
+        return getRottenTomatoesScores(name, year);
+    }
+}

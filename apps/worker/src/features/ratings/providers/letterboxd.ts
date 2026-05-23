@@ -1,6 +1,10 @@
 import puppeteer from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
 import { logger } from "../../../shared/logger";
+import {
+    LetterboxdRatingType,
+    RatingProviderInterface,
+} from "../interfaces/providers";
 
 const userAgent =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36";
@@ -89,7 +93,14 @@ export const getLetterBoxdScore = async (name: string, year: number) => {
             name,
         });
         if (error instanceof Error) console.error("❌ Erreur :", error.message);
+        throw error;
     } finally {
         await browser.close();
     }
 };
+
+export class LetterboxdProvider implements RatingProviderInterface<LetterboxdRatingType> {
+    async getRatings(name: string, year: number) {
+        return getLetterBoxdScore(name, year);
+    }
+}

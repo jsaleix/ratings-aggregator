@@ -1,6 +1,10 @@
 import puppeteer from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
 import { logger } from "../../../shared/logger";
+import {
+    ImdbRatingType,
+    RatingProviderInterface,
+} from "../interfaces/providers";
 // import { writeFileSync } from "fs";
 
 const userAgent =
@@ -10,7 +14,7 @@ const baseUrl = "https://imdb.com";
 export const getIMDBScore = async (
     name: string,
     year: number,
-    imdbId?: string
+    imdbId?: string,
 ) => {
     const browser = await puppeteer.launch({
         headless: "shell",
@@ -24,14 +28,14 @@ export const getIMDBScore = async (
 
         if (!imdbId) {
             const searchUrl = `https://www.imdb.com/find/?exact=true&s=tt&q=${encodeURIComponent(
-                `${name} ${year}`
+                `${name} ${year}`,
             )}`;
             console.log(searchUrl);
 
             await page.goto(searchUrl, { waitUntil: "domcontentloaded" });
             await page.waitForSelector(
                 "ul.ipc-metadata-list.ipc-metadata-list--dividers-after.ipc-metadata-list--base > li",
-                { timeout: 10000 }
+                { timeout: 10000 },
             );
 
             // const screenshotPath = `./debug-imdb-${Date.now()}.png`;
@@ -43,7 +47,7 @@ export const getIMDBScore = async (
 
             let movieUrl = await page.evaluate((targetYear: number) => {
                 const rows = document.querySelectorAll(
-                    "ul.ipc-metadata-list.ipc-metadata-list--dividers-after.ipc-metadata-list--base > li"
+                    "ul.ipc-metadata-list.ipc-metadata-list--dividers-after.ipc-metadata-list--base > li",
                 );
 
                 for (const row of rows) {
@@ -62,7 +66,7 @@ export const getIMDBScore = async (
 
             if (!movieUrl)
                 throw new Error(
-                    "Aucun lien de film trouvé dans le premier résultat"
+                    "Aucun lien de film trouvé dans le premier résultat",
                 );
 
             imdbUrl = `${baseUrl}${movieUrl}`;
@@ -77,7 +81,7 @@ export const getIMDBScore = async (
 
         const score = await page.evaluate(() => {
             const ratingDiv = document.querySelector(
-                "[data-testid='hero-rating-bar__aggregate-rating__score']"
+                "[data-testid='hero-rating-bar__aggregate-rating__score']",
             );
             const score = ratingDiv?.getElementsByTagName("span")[0];
             return score?.textContent;
@@ -96,8 +100,14 @@ export const getIMDBScore = async (
         });
         if (error instanceof Error) console.error("❌ Erreur :", error.message);
         else console.error(error);
-        return null;
+        throw error;
     } finally {
         await browser.close();
     }
 };
+
+export class IMDBProvider implements RatingProviderInterface<ImdbRatingType> {
+    async getRatings(name: string, year: number) {
+        return getIMDBScore(name, year);
+    }
+}

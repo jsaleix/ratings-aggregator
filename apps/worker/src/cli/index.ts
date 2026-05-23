@@ -18,7 +18,7 @@
 // main();
 
 import { Command } from "@commander-js/extra-typings";
-import { ratingsByImdbIdHandler, ratingsCommandHandler } from "./handlers";
+import { ratingsCommandHandler } from "./handlers";
 
 const program = new Command();
 program.description("Rating Aggregator CLI");
@@ -30,17 +30,7 @@ program
     .argument("provider", "values: allocine | imdb | letterboxd | rotten ")
     .argument("year", "blabla", parseInt)
     .action((name, provider, year) => {
-        console.log(name, provider, year);
         ratingsCommandHandler(name, provider, year);
-    });
-
-program
-    .command("ratingsByImdb")
-    .description("Fetch rating(s) from a provider by Imdb Id")
-    .argument("imdbId")
-    .argument("provider", "values: allocine | imdb | letterboxd | rotten ")
-    .action((imdbId, provider) => {
-        ratingsByImdbIdHandler(imdbId, provider);
     });
 
 program.parse();

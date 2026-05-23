@@ -1,15 +1,36 @@
-const PROVIDERS = ["allocine", "imdb", "letterboxd", "rotten"];
+import { AllocineProvider } from "../../features/ratings/providers/allocine";
+import { IMDBProvider } from "../../features/ratings/providers/imdb";
+import { LetterboxdProvider } from "../../features/ratings/providers/letterboxd";
+import { RottenProvider } from "../../features/ratings/providers/rotten";
+import {
+    AllocineRatingType,
+    ImdbRatingType,
+    LetterboxdRatingType,
+    RottenRatingType,
+    type RatingProviderInterface,
+} from "../../features/ratings/interfaces/providers";
+
+// const PROVIDERS = ["allocine", "imdb", "letterboxd", "rotten"];
+
+type RatingType =
+    | AllocineRatingType
+    | ImdbRatingType
+    | LetterboxdRatingType
+    | RottenRatingType;
+
+const PROVIDER_MAP: Record<string, RatingProviderInterface<RatingType>> = {
+    allocine: new AllocineProvider(),
+    imdb: new IMDBProvider(),
+    letterboxd: new LetterboxdProvider(),
+    rotten: new RottenProvider(),
+};
 
 export function ratingsCommandHandler(
     name: string,
     provider: string,
     year: number,
 ) {
-    if (!PROVIDERS.includes(provider)) throw new Error("Invalid provider");
-    console.log("salut");
-}
-
-export function ratingsByImdbIdHandler(imdbId: string, provider: string) {
-    if (!PROVIDERS.includes(provider)) throw new Error("Invalid provider");
-    console.log("salut");
+    const p = PROVIDER_MAP[provider];
+    if (!p) throw new Error("Invalid provider");
+    return p.getRatings(name, year);
 }
