@@ -1,12 +1,11 @@
 import { RATING_SOURCES } from "../../../config/ratings";
 import { MovieType } from "../../movies/types/db";
-import {
-    RatingCollectorServiceI,
-} from "../interfaces/services";
-import { getAllocineScore } from "../providers/allocine";
-import { getIMDBScore } from "../providers/imdb";
-import { getLetterBoxdScore } from "../providers/letterboxd";
-import { getRottenTomatoesScores } from "../providers/rotten";
+import { RatingCollectorServiceI } from "../interfaces/services";
+import { AllocineProvider } from "../providers/allocine";
+import { IMDBProvider } from "../providers/imdb";
+import { LetterboxdProvider } from "../providers/letterboxd";
+import { RottenProvider } from "../providers/rotten";
+import { AllocineRatingType } from "../providers/types";
 import { RatingCollectorResult } from "../types/rating";
 
 export class RatingCollectorService implements RatingCollectorServiceI {
@@ -14,16 +13,17 @@ export class RatingCollectorService implements RatingCollectorServiceI {
 
     async collectAllocine(movie: MovieType): Promise<RatingCollectorResult[]> {
         const { title, id: movieId, year, language, original_title } = movie;
+        const provider = new AllocineProvider();
 
-        let values: Awaited<ReturnType<typeof getAllocineScore>>;
+        let values: Awaited<AllocineRatingType>;
         if (language === "fr") {
-            values = await getAllocineScore(original_title, year);
+            values = await provider.getRatings(original_title, year);
             if (!values)
                 throw new Error(
                     `Allociné ratings for ${original_title} not found`,
                 );
         } else {
-            values = await getAllocineScore(title, year);
+            values = await provider.getRatings(title, year);
             if (!values)
                 throw new Error(`Allociné ratings for ${title} not found`);
         }
@@ -45,8 +45,9 @@ export class RatingCollectorService implements RatingCollectorServiceI {
     }
 
     async collectIMDB(movie: MovieType): Promise<RatingCollectorResult> {
-        const { title, id: movieId, year, imdb_id } = movie;
-        const value = await getIMDBScore(title, year, imdb_id);
+        const { title, id: movieId, imdb_id } = movie;
+        const provider = new IMDBProvider();
+        const value = await provider.getRatingsById(imdb_id);
         if (!value) throw new Error(`IMDB rating for ${title} not found`);
 
         const { score, url } = value;
@@ -61,7 +62,8 @@ export class RatingCollectorService implements RatingCollectorServiceI {
 
     async collectRotten(movie: MovieType): Promise<RatingCollectorResult[]> {
         const { title, id: movieId, year } = movie;
-        const values = await getRottenTomatoesScores(title, year);
+        const provider = new RottenProvider();
+        const values = await provider.getRatings(title, year);
         if (!values)
             throw new Error(`Rotten Tomatoes rating for ${title} not found`);
 
@@ -85,7 +87,8 @@ export class RatingCollectorService implements RatingCollectorServiceI {
 
     async collectLetterboxd(movie: MovieType): Promise<RatingCollectorResult> {
         const { title, id: movieId, year } = movie;
-        const value = await getLetterBoxdScore(title, year);
+        const provider = new LetterboxdProvider();
+        const value = await provider.getRatings(title, year);
         if (!value) throw new Error(`Letterboxd score for ${title} not found`);
         if (value.score === "N/A")
             throw new Error(`Letterboxd score not available for ${title}`);
