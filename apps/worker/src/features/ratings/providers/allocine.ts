@@ -1,16 +1,22 @@
-import puppeteer from "puppeteer";
+import puppeteer, { Page } from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
 import { logger } from "../../../shared/logger";
-import {
-    AllocineRatingType,
-    RatingProviderInterface,
-} from "../interfaces/providers";
-// import { writeFileSync } from "fs";
+import { AllocineRatingType, RatingProviderInterface } from "./types";
+import { makePuppeterScreenshot as ms } from "./utils";
 
 const userAgent =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36";
 
-export const getAllocineScore = async (name: string, year: number) => {
+const makeScreenshot = async (page: Page) => {
+    await ms(page, "allocine");
+};
+
+export const getAllocineScore = async (
+    name: string,
+    year: number,
+    debug: boolean = false,
+) => {
+    console.log("debug", debug);
     const browser = await puppeteer.launch({
         headless: "shell",
         args: ["--no-sandbox"],
@@ -25,16 +31,25 @@ export const getAllocineScore = async (name: string, year: number) => {
         console.log(searchUrl);
 
         await page.goto(searchUrl, { waitUntil: "domcontentloaded" });
+
+        if (debug) await makeScreenshot(page);
+
+        // <-- Cookies pop-up
+        await page.waitForSelector(
+            "#cmp-main > button.jad_cmp_paywall_button.jad_cmp_paywall_button-cookies.jad_cmp_paywall_cookies.didomi-components-button.didomi-button.didomi-dismiss-button.didomi-components-button--color.didomi-button-highlight.highlight-button",
+            { timeout: 10000 },
+        );
+
+        await page.click(
+            "#cmp-main > button.jad_cmp_paywall_button.jad_cmp_paywall_button-cookies.jad_cmp_paywall_cookies.didomi-components-button.didomi-button.didomi-dismiss-button.didomi-components-button--color.didomi-button-highlight.highlight-button > span",
+        );
+        // -->
+
         await page.waitForSelector("section.movies-results > ul > li", {
             timeout: 10000,
         });
 
-        // const screenshotPath = `./debug-imdb-${Date.now()}.png`;
-        // await page.screenshot({
-        //     path: screenshotPath as `${string}.png`,
-        //     fullPage: true,
-        // });
-        // console.log(`📸 Screenshot sauvegardé dans : ${screenshotPath}`);
+        if (debug) await makeScreenshot(page);
 
         let scores = await page.evaluate((targetYear: number) => {
             const rows = document.querySelectorAll(
@@ -43,17 +58,29 @@ export const getAllocineScore = async (name: string, year: number) => {
 
             if (rows.length === 0) return null;
 
-            const shouldBeTheOne = rows[0];
+            for (const row of rows) {
+                const rawYear = row?.getElementsByClassName("date")[0];
+                if (!rawYear) continue;
+                const year = rawYear.textContent?.split(" ")[2];
 
-            const vals = shouldBeTheOne.querySelectorAll(".stareval-note");
-            const [press, audience] = vals;
+                if (year && +year === targetYear) {
+                    const vals = row.querySelectorAll(".stareval-note");
+                    const [press, audience] = vals;
+                    // const baseUrl = row
+                    //     .querySelector("a")
+                    //     ?.getAttribute("href");
 
-            return {
-                press: press.textContent ?? "N/A",
-                audience: audience.textContent ?? "N/A",
-            };
+                    // const url = `https://www.allocine.fr${baseUrl}` || null;
+                    return {
+                        press: press.textContent ?? "N/A",
+                        audience: audience.textContent ?? "N/A",
+                        // url,
+                    };
+                }
+            }
         }, year);
 
+        if (debug) await makeScreenshot(page);
         if (!scores) throw new Error("Score not found");
         return scores;
     } catch (error) {
@@ -70,7 +97,7 @@ export const getAllocineScore = async (name: string, year: number) => {
 };
 
 export class AllocineProvider implements RatingProviderInterface<AllocineRatingType> {
-    async getRatings(name: string, year: number) {
-        return getAllocineScore(name, year);
+    async getRatings(name: string, year: number, debug: boolean) {
+        return getAllocineScore(name, year, debug);
     }
 }

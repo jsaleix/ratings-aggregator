@@ -29,8 +29,10 @@ program
     .argument("movie")
     .argument("provider", "values: allocine | imdb | letterboxd | rotten ")
     .argument("year", "blabla", parseInt)
-    .action((name, provider, year) => {
-        ratingsCommandHandler(name, provider, year);
+    .option("--debug", "", false)
+    .action(async (name, provider, year, options) => {
+        const { debug } = options;
+        console.log(await ratingsCommandHandler(name, provider, year, debug));
     });
 
 program.parse();

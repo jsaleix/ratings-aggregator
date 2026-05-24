@@ -8,7 +8,7 @@ import {
     LetterboxdRatingType,
     RottenRatingType,
     type RatingProviderInterface,
-} from "../../features/ratings/interfaces/providers";
+} from "../../features/ratings/providers/types";
 
 // const PROVIDERS = ["allocine", "imdb", "letterboxd", "rotten"];
 
@@ -29,8 +29,9 @@ export function ratingsCommandHandler(
     name: string,
     provider: string,
     year: number,
+    debug: boolean,
 ) {
     const p = PROVIDER_MAP[provider];
     if (!p) throw new Error("Invalid provider");
-    return p.getRatings(name, year);
+    return p.getRatings(name, year, debug);
 }

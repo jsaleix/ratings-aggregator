@@ -1,11 +1,17 @@
-import puppeteer from "puppeteer";
+import puppeteer, { Page } from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
-import {
-    RatingProviderInterface,
-    RottenRatingType,
-} from "../interfaces/providers";
+import { RatingProviderInterface, RottenRatingType } from "./types";
+import { makePuppeterScreenshot as ms } from "./utils";
 
-export const getRottenTomatoesScores = async (name: string, year: number) => {
+const makeScreenshot = async (page: Page) => {
+    await ms(page, "rotten");
+};
+
+export const getRottenTomatoesScores = async (
+    name: string,
+    year: number,
+    debug: boolean = false,
+) => {
     const browser = await puppeteer.launch({
         headless: "shell",
         args: ["--no-sandbox"],
@@ -19,6 +25,8 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
         )}`;
         console.log("searchUrl:", searchUrl);
         await page.goto(searchUrl, { waitUntil: "domcontentloaded" });
+
+        if (debug) await makeScreenshot(page);
 
         const mediaRowSelector =
             "#search-results search-page-result:nth-child(2) search-page-media-row";
@@ -51,6 +59,7 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
         console.log(`🔗 Redirection vers : ${fullMovieUrl}`);
 
         await page.goto(movieUrl, { waitUntil: "domcontentloaded" });
+        if (debug) await makeScreenshot(page);
 
         const criticsSelector =
             "#modules-wrap > div.media-scorecard.no-border > media-scorecard > rt-text:nth-child(3)";
@@ -91,7 +100,7 @@ export const getRottenTomatoesScores = async (name: string, year: number) => {
 };
 
 export class RottenProvider implements RatingProviderInterface<RottenRatingType> {
-    async getRatings(name: string, year: number) {
-        return getRottenTomatoesScores(name, year);
+    async getRatings(name: string, year: number, debug: boolean) {
+        return getRottenTomatoesScores(name, year, debug);
     }
 }

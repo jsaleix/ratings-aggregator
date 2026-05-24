@@ -1,5 +1,5 @@
 export interface RatingProviderInterface<T extends unknown> {
-    getRatings(name: string, year: number): Promise<T>;
+    getRatings(name: string, year: number, debug: boolean): Promise<T>;
 }
 
 export interface AllocineRatingType {

@@ -1,10 +1,7 @@
 import puppeteer from "puppeteer";
 import { browserExecutablePath } from "../../../config/scrapping";
 import { logger } from "../../../shared/logger";
-import {
-    ImdbRatingType,
-    RatingProviderInterface,
-} from "../interfaces/providers";
+import { ImdbRatingType, RatingProviderInterface } from "./types";
 // import { writeFileSync } from "fs";
 
 const userAgent =
@@ -33,10 +30,10 @@ export const getIMDBScore = async (
             console.log(searchUrl);
 
             await page.goto(searchUrl, { waitUntil: "domcontentloaded" });
-            await page.waitForSelector(
-                "ul.ipc-metadata-list.ipc-metadata-list--dividers-after.ipc-metadata-list--base > li",
-                { timeout: 10000 },
-            );
+
+            const selector =
+                "#__next > main > div.ipc-page-content-container.ipc-page-content-container--full.sc-83693c0c-0.jgGVpD > div.ipc-page-content-container.ipc-page-content-container--center > section > div > div.ipc-page-grid__item.ipc-page-grid__item--span-2 > section.ipc-page-section.ipc-page-section--base.sc-8c0e77b7-0.fEqeJk > div.sc-8c0e77b7-2.cPxGvJ > ul > li";
+            await page.waitForSelector(selector, { timeout: 10000 });
 
             // const screenshotPath = `./debug-imdb-${Date.now()}.png`;
             // await page.screenshot({
@@ -47,16 +44,15 @@ export const getIMDBScore = async (
 
             let movieUrl = await page.evaluate((targetYear: number) => {
                 const rows = document.querySelectorAll(
-                    "ul.ipc-metadata-list.ipc-metadata-list--dividers-after.ipc-metadata-list--base > li",
+                    "#__next > main > div.ipc-page-content-container.ipc-page-content-container--full.sc-83693c0c-0.jgGVpD > div.ipc-page-content-container.ipc-page-content-container--center > section > div > div.ipc-page-grid__item.ipc-page-grid__item--span-2 > section.ipc-page-section.ipc-page-section--base.sc-8c0e77b7-0.fEqeJk > div.sc-8c0e77b7-2.cPxGvJ > ul > li",
                 );
 
                 for (const row of rows) {
                     const anchor = row.querySelector("a");
                     const url = anchor?.getAttribute("href");
                     const year = row
-                        .getElementsByTagName("ul")[0]
-                        ?.getElementsByTagName("li")[0]
-                        ?.querySelector("span")?.textContent;
+                        .getElementsByTagName("ul")[1]
+                        ?.getElementsByTagName("li")[0]?.textContent;
 
                     if (year && +year === targetYear) return url;
                 }
@@ -64,10 +60,7 @@ export const getIMDBScore = async (
                 return null;
             }, year);
 
-            if (!movieUrl)
-                throw new Error(
-                    "Aucun lien de film trouvé dans le premier résultat",
-                );
+            if (!movieUrl) throw new Error("Aucun lien de film trouvé");
 
             imdbUrl = `${baseUrl}${movieUrl}`;
         } else {
