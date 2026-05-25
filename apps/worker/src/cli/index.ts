@@ -1,18 +1,45 @@
-import { getLetterBoxdScore } from "../features/ratings/providers/letterboxd";
+import { Command } from "@commander-js/extra-typings";
+import {
+    addtoQueueCommandHandler,
+    imdbCommandHandler,
+    ratingsCommandHandler,
+} from "./handlers";
 
-const args = process.argv.slice(2);
+const program = new Command();
+program.description("Rating Aggregator CLI");
 
-async function main() {
-    try {
-        console.log("RUNNING LETTERBOXD GATHERING");
-        const [name, year] = args;
-        if (!name) throw new Error("No name provided");
-        if (!year) throw new Error("No year provided");
-        console.log(`Gathering letterboxd score for ${name} - ${year}`);
-        console.log(await getLetterBoxdScore(name, +year));
-    } catch (e) {
-        console.error(e);
-    }
-}
+program
+    .command("ratings")
+    .description("Fetch rating(s) from a provider")
+    .argument("movie")
+    .argument("provider", "values: allocine | imdb | letterboxd | rotten ")
+    .argument("year", "blabla", parseInt)
+    .option("--debug", "", false)
+    .action(async (name, provider, year, options) => {
+        const { debug } = options;
+        console.log(await ratingsCommandHandler(name, provider, year, debug));
+        return;
+    });
 
-main();
+program
+    .command("imdb")
+    .description("Fetch rating(s) from a IMDB using an identifier")
+    .argument("imdbId")
+    .option("--debug", "", false)
+    .action(async (imdbId, options) => {
+        const { debug } = options;
+        console.log(await imdbCommandHandler(imdbId, debug));
+        return;
+    });
+
+program
+    .command("add")
+    .description("Add movie to queue")
+    .argument("tmdbId", "Tmdb ID", parseInt)
+    .action(async (tmdbId) => {
+        await addtoQueueCommandHandler(tmdbId);
+        console.log(`Movie ${tmdbId} added to queue!`);
+        return;
+    });
+
+program.parse();

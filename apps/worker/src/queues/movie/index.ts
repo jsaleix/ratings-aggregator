@@ -55,16 +55,22 @@ movieWorker.on(
             tags: ["movie-worker", "worker"],
             payload: { request_id, tmdb_id, movie_id, movie_slug },
         });
-        try {
-            await movieRequestRepository.updateRequestState(request_id, true);
-        } catch (e) {
-            logger.warn(
-                "Could not update request state, may have been deleted",
-                {
-                    tags: ["movie-worker", "worker"],
-                    payload: { request_id, tmdb_id, movie_id, movie_slug },
-                },
-            );
+
+        if (request_id) {
+            try {
+                await movieRequestRepository.updateRequestState(
+                    request_id,
+                    true,
+                );
+            } catch (e) {
+                logger.warn(
+                    "Could not update request state, may have been deleted",
+                    {
+                        tags: ["movie-worker", "worker"],
+                        payload: { request_id, tmdb_id, movie_id, movie_slug },
+                    },
+                );
+            }
         }
         await movieJobPipelineService.setRating(tmdb_id);
         await ratingQueue.add("set-ratings", {
