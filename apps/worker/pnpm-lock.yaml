@@ -29,9 +29,6 @@ importers:
       dotenv:
         specifier: ^17.2.0
         version: 17.2.0
-      extra-typings:
-        specifier: link:@types/@commander-js/extra-typings
-        version: link:@types/@commander-js/extra-typings
       ioredis:
         specifier: ^5.6.1
         version: 5.6.1
