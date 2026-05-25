@@ -22,7 +22,7 @@ export class IMDBProvider implements RatingProviderInterface<ImdbRatingType> {
         const page = await browser.newPage();
         await page.setUserAgent(userAgent);
         try {
-            const searchUrl = `https://www.imdb.com/find/?exact=true&s=tt&q=${encodeURIComponent(
+            const searchUrl = `https://www.imdb.com/find/?s=tt&q=${encodeURIComponent(
                 `${name} ${year}`,
             )}`;
             console.log(searchUrl);
@@ -83,8 +83,8 @@ export class IMDBProvider implements RatingProviderInterface<ImdbRatingType> {
         const page = await browser.newPage();
         await page.setUserAgent(userAgent);
         try {
-            const imdbUrl = `${baseUrl}/title/${id}`;
-            return await this.scrapFromPage(page, imdbUrl, debug);
+            const url = `${baseUrl}/title/${id}`;
+            return await this.scrapFromPage(page, url, debug);
         } catch (error) {
             logger.error("providers/getIMDBScore error", {
                 error,
@@ -107,6 +107,7 @@ export class IMDBProvider implements RatingProviderInterface<ImdbRatingType> {
         await page.goto(url, {
             timeout: 10000,
         });
+        await new Promise((r) => setTimeout(r, 2 * 1000));
         if (debug) await makeScreenshot(page);
 
         const score = await page.evaluate(() => {
